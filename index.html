@@ -1394,7 +1394,7 @@ button { font-family: inherit; }
 .clinic-inner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 48px 40px 60px;
+  padding: 20px 40px 60px;
 }
 .clinic-back {
   display: inline-flex;
@@ -1406,7 +1406,7 @@ button { font-family: inherit; }
   border: none;
   background: none;
   padding: 0;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   font-family: inherit;
   transition: color 0.12s;
 }
@@ -1421,7 +1421,7 @@ button { font-family: inherit; }
 .clinic-section-sub {
   font-size: 14px;
   color: var(--ink-3);
-  margin: 0 0 36px;
+  margin: 0 0 28px;
 }
 
 /* ── Dashboard tiles ──────────────────────────────────────────────────────── */
@@ -1992,6 +1992,516 @@ button { font-family: inherit; }
 .sched-empty-icon { font-size: 36px; opacity: 0.35; }
 .sched-empty-text { font-size: 14px; text-align: center; }
 @keyframes skelPulse { 0%,100% { opacity: 0.35; } 50% { opacity: 0.7; } }
+
+/* ── Insurance Authorization ─────────────────────────────────────────────── */
+.ins-view { display: flex; flex-direction: column; height: 100%; }
+.ins-picker {
+  max-width: 760px; margin: 0 auto; padding: 48px 40px;
+  display: flex; flex-direction: column; gap: 32px;
+}
+.ins-picker-title { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.ins-picker-sub { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+.ins-patient-select {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ins-patient-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-4); }
+.ins-patient-input {
+  padding: 10px 14px; border: 1px solid var(--hair); border-radius: var(--radius);
+  font-family: inherit; font-size: 14px; color: var(--ink); background: var(--surface);
+  outline: none; transition: border-color 0.15s;
+}
+.ins-patient-input:focus { border-color: var(--teal); }
+.ins-flow-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ins-flow-card {
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: var(--radius-lg); padding: 24px; cursor: pointer;
+  transition: all 0.15s; display: flex; flex-direction: column; gap: 14px;
+}
+.ins-flow-card:hover { border-color: var(--teal); box-shadow: var(--shadow); transform: translateY(-2px); }
+.ins-flow-card.active { border-color: var(--teal); background: var(--teal-soft); }
+.ins-flow-icon {
+  width: 44px; height: 44px; border-radius: 12px; background: var(--teal-soft);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.ins-flow-card.active .ins-flow-icon { background: oklch(90% 0.06 250); }
+.ins-flow-title { font-size: 16px; font-weight: 600; }
+.ins-flow-desc { font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+.ins-flow-meta { font-size: 12px; color: var(--ink-4); display: flex; gap: 12px; flex-wrap: wrap; }
+.ins-start-btn {
+  padding: 13px 28px; border-radius: var(--radius); border: none; cursor: pointer;
+  background: linear-gradient(135deg, oklch(50% 0.14 250), oklch(42% 0.12 255));
+  color: white; font-family: inherit; font-size: 14px; font-weight: 600;
+  transition: box-shadow 0.15s, transform 0.15s; align-self: flex-start;
+}
+.ins-start-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -4px oklch(45% 0.14 250 / 0.4); }
+.ins-start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Agent shell */
+.ins-shell {
+  display: grid; grid-template-columns: 280px 1fr; flex: 1; overflow: hidden;
+  border-top: 1px solid var(--hair);
+}
+.ins-sidebar {
+  background: var(--bg-tint); border-right: 1px solid var(--hair);
+  display: flex; flex-direction: column; overflow-y: auto; padding: 24px 16px;
+  gap: 8px;
+}
+.ins-sidebar::-webkit-scrollbar { width: 4px; }
+.ins-sidebar::-webkit-scrollbar-thumb { background: var(--hair-strong); border-radius: 2px; }
+.ins-sb-header { margin-bottom: 8px; }
+.ins-sb-patient {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+  margin-bottom: 4px;
+}
+.ins-sb-av {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: var(--teal-soft); display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600; color: var(--teal);
+}
+.ins-sb-name { font-size: 13px; font-weight: 600; }
+.ins-sb-sub { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.ins-step-section { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-4); padding: 0 4px; margin-top: 8px; margin-bottom: 4px; }
+.ins-step {
+  display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px;
+  border-radius: var(--radius); transition: background 0.2s;
+}
+.ins-step.active { background: var(--surface); box-shadow: var(--shadow-sm); }
+.ins-step-dot-col { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; padding-top: 2px; }
+.ins-step-dot {
+  width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--hair-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--ink-4); transition: all 0.3s;
+}
+.ins-step.active .ins-step-dot { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); box-shadow: 0 0 0 3px oklch(95% 0.03 250); }
+.ins-step.done .ins-step-dot { border-color: var(--sage); background: var(--sage-soft); color: var(--sage); }
+.ins-step-conn { width: 1px; height: 14px; background: var(--hair); margin-top: 3px; }
+.ins-step-body { flex: 1; min-width: 0; }
+.ins-step-label { font-size: 12.5px; font-weight: 500; color: var(--ink-3); transition: color 0.2s; }
+.ins-step.active .ins-step-label { color: var(--ink); font-weight: 600; }
+.ins-step.done .ins-step-label { color: var(--ink-3); }
+.ins-step-subs { display: none; flex-direction: column; gap: 3px; margin-top: 5px; }
+.ins-step.active .ins-step-subs, .ins-step.done .ins-step-subs { display: flex; }
+.ins-sub { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-4); padding: 1px 0; }
+.ins-sub.done { color: var(--sage); }
+.ins-sub.active { color: var(--teal); }
+.ins-sub-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--hair-strong); flex-shrink: 0; transition: background 0.2s; }
+.ins-sub.active .ins-sub-dot { background: var(--teal); }
+.ins-sub.done .ins-sub-dot { background: var(--sage); }
+.ins-step-badge {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 5px;
+  padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+}
+.ins-badge-auto { background: var(--teal-soft); color: var(--teal-deep); border: 1px solid oklch(85% 0.05 250); }
+.ins-badge-human { background: oklch(96% 0.04 80); color: oklch(55% 0.12 80); border: 1px solid oklch(88% 0.08 80); }
+.ins-sb-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--hair); display: flex; flex-direction: column; gap: 4px; }
+.ins-sf-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; }
+.ins-sf-label { font-size: 11px; color: var(--ink-4); }
+.ins-sf-val { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+.ins-sf-val.teal { color: var(--teal-deep); }
+.ins-sf-val.amber { color: oklch(58% 0.12 70); }
+
+/* Chat area */
+.ins-chat { display: flex; flex-direction: column; flex: 1; overflow: hidden; background: var(--bg); }
+.ins-chat-header {
+  padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--hair);
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.ins-chat-av {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--teal), var(--sage));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700; color: white;
+}
+.ins-chat-name { font-size: 14px; font-weight: 600; }
+.ins-chat-tagline { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.ins-chat-live { margin-left: auto; display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--sage); }
+.ins-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); animation: blink 2s infinite; }
+.ins-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.ins-messages::-webkit-scrollbar { width: 4px; }
+.ins-messages::-webkit-scrollbar-thumb { background: var(--hair-strong); border-radius: 2px; }
+.ins-msg { display: flex; gap: 10px; animation: fadeIn 0.3s ease; }
+.ins-msg.user { flex-direction: row-reverse; }
+.ins-msg-av {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+}
+.ins-agent-av { background: var(--teal-soft); color: var(--teal); }
+.ins-user-av { background: oklch(94% 0.04 80); color: oklch(55% 0.12 70); }
+.ins-bubble {
+  max-width: 72%; padding: 10px 14px; border-radius: 14px;
+  font-size: 13.5px; line-height: 1.6;
+}
+.ins-msg.agent .ins-bubble {
+  background: var(--surface); border: 1px solid var(--hair); color: var(--ink-2);
+  border-radius: 4px 14px 14px 14px; box-shadow: var(--shadow-sm);
+}
+.ins-msg.user .ins-bubble {
+  background: var(--teal-soft); border: 1px solid oklch(87% 0.05 250);
+  color: var(--teal-deep); border-radius: 14px 4px 14px 14px;
+}
+.ins-typing { background: var(--surface); border: 1px solid var(--hair); padding: 12px 16px; border-radius: 4px 14px 14px 14px; display: flex; gap: 4px; align-items: center; box-shadow: var(--shadow-sm); }
+.ins-typing-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--hair-strong); animation: bounce 0.9s infinite; }
+.ins-typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.ins-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-4px); } }
+.ins-sys-msg { text-align: center; font-size: 11px; color: var(--ink-4); padding: 4px 0; font-style: italic; }
+
+/* Agent cards */
+.ins-card {
+  max-width: 88%; background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 4px 14px 14px 14px; overflow: hidden;
+  box-shadow: var(--shadow-sm); animation: fadeIn 0.3s ease;
+}
+.ins-card-header {
+  padding: 10px 14px; background: var(--bg-tint); border-bottom: 1px solid var(--hair);
+  display: flex; align-items: center; gap: 9px;
+}
+.ins-card-title { font-size: 12px; font-weight: 700; color: var(--ink-2); }
+.ins-card-sub { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.ins-card-badge { margin-left: auto; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+.ins-badge-source { background: oklch(93% 0.04 60); color: oklch(50% 0.12 60); border: 1px solid oklch(86% 0.08 60); }
+.ins-badge-payer { background: oklch(94% 0.04 280); color: oklch(50% 0.12 280); border: 1px solid oklch(87% 0.06 280); }
+.ins-badge-ok { background: var(--sage-soft); color: var(--sage); border: 1px solid oklch(86% 0.04 200); }
+.ins-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.ins-card-grid { padding: 12px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ins-cg-item { background: var(--bg-tint); border: 1px solid var(--hair); border-radius: var(--radius-sm); padding: 8px 10px; }
+.ins-cg-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-4); margin-bottom: 3px; }
+.ins-cg-val { font-size: 13px; font-weight: 600; color: var(--ink); }
+.ins-cg-val.teal { color: var(--teal-deep); }
+.ins-cg-val.amber { color: oklch(55% 0.12 70); }
+.ins-cg-val.red { color: oklch(50% 0.18 25); }
+.ins-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--hair); font-size: 12.5px; }
+.ins-row:last-child { border-bottom: none; }
+.ins-row-key { color: var(--ink-3); }
+.ins-row-val { font-weight: 600; color: var(--ink); }
+.ins-row-val.teal { color: var(--teal-deep); }
+.ins-row-val.amber { color: oklch(55% 0.12 70); }
+.ins-criteria-row {
+  display: flex; align-items: flex-start; gap: 8px; padding: 7px 10px;
+  border-radius: var(--radius-sm); background: var(--bg-tint); border: 1px solid var(--hair);
+  font-size: 12px; color: var(--ink-2);
+}
+.ins-criteria-row.met { background: var(--sage-soft); border-color: oklch(86% 0.04 200); }
+.ins-crit-icon { flex-shrink: 0; font-size: 13px; }
+.ins-crit-text { flex: 1; line-height: 1.4; }
+.ins-crit-status { font-size: 10px; font-weight: 700; color: var(--sage); flex-shrink: 0; }
+
+/* Scan progress card */
+.ins-scan-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 12px; color: var(--ink-4); transition: color 0.3s; }
+.ins-scan-row:last-child { border-bottom: none; }
+.ins-scan-row.active { color: var(--ink); }
+.ins-scan-row.done { color: var(--sage); }
+.ins-scan-spinner { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--hair); border-top-color: var(--teal); animation: spin360 0.7s linear infinite; flex-shrink: 0; }
+.ins-scan-bar-wrap { width: 56px; height: 3px; background: var(--hair); border-radius: 2px; flex-shrink: 0; margin-left: auto; }
+.ins-scan-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--teal), var(--sage)); border-radius: 2px; transition: width 1.1s ease; }
+
+/* Result banner */
+.ins-result-banner {
+  max-width: 88%; padding: 16px; border-radius: 4px 14px 14px 14px; overflow: hidden;
+  display: flex; align-items: center; gap: 14px; animation: fadeIn 0.4s ease;
+}
+.ins-result-banner.approved { background: var(--sage-soft); border: 1px solid oklch(85% 0.05 200); }
+.ins-result-banner.validated { background: var(--teal-soft); border: 1px solid oklch(87% 0.05 250); }
+.ins-result-icon { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.ins-result-banner.approved .ins-result-icon { background: oklch(90% 0.04 200); }
+.ins-result-banner.validated .ins-result-icon { background: oklch(90% 0.04 250); }
+.ins-result-title { font-size: 14px; font-weight: 700; }
+.ins-result-banner.approved .ins-result-title { color: var(--sage); }
+.ins-result-banner.validated .ins-result-title { color: var(--teal-deep); }
+.ins-result-sub { font-size: 12.5px; color: var(--ink-3); margin-top: 3px; line-height: 1.5; }
+.ins-ref { display: inline-block; margin-top: 6px; padding: 2px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; background: var(--teal-soft); border: 1px solid oklch(87% 0.05 250); color: var(--teal-deep); }
+
+/* Poll track */
+.ins-poll-track { padding: 14px; display: flex; gap: 0; align-items: stretch; position: relative; }
+.ins-poll-track::before { content: ''; position: absolute; top: 25px; left: 28px; right: 28px; height: 2px; background: var(--hair); z-index: 0; }
+.ins-pt-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; z-index: 1; }
+.ins-pt-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--hair); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--ink-4); background: var(--surface); }
+.ins-pt-step.done .ins-pt-dot { border-color: var(--sage); color: var(--sage); background: var(--sage-soft); }
+.ins-pt-step.pending .ins-pt-dot { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+.ins-pt-label { font-size: 10px; color: var(--ink-4); text-align: center; line-height: 1.35; }
+
+.ins-input-bar { padding: 14px 20px; background: var(--surface); border-top: 1px solid var(--hair); display: flex; gap: 10px; flex-shrink: 0; }
+.ins-input { flex: 1; padding: 9px 14px; border: 1px solid var(--hair); border-radius: var(--radius); font-family: inherit; font-size: 13.5px; color: var(--ink); background: var(--bg); outline: none; transition: border-color 0.15s; }
+.ins-input:focus { border-color: var(--teal); }
+.ins-send-btn { width: 38px; height: 38px; border-radius: var(--radius); background: linear-gradient(135deg, var(--teal), var(--sage)); border: none; color: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.15s; flex-shrink: 0; }
+.ins-send-btn:hover { transform: scale(1.06); }
+
+/* ── Clinical Chart Overlay ──────────────────────────────────────────────── */
+.chart-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(10, 18, 28, 0.72);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+.chart-panel {
+  width: 100%; max-width: 1180px; height: 92vh;
+  background: var(--surface);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(20,30,40,0.08);
+  animation: chartSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes chartSlideUp { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+/* Chart header bar */
+.chart-header {
+  background: oklch(20% 0.018 240);
+  padding: 0 20px;
+  height: 56px;
+  display: flex; align-items: center; gap: 16px;
+  flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.chart-mrn { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.chart-pt-name { font-size: 17px; font-weight: 600; color: white; letter-spacing: -0.01em; }
+.chart-pt-meta { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+.chart-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+.chart-encounter-badge {
+  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  background: oklch(55% 0.14 250 / 0.2); color: oklch(75% 0.1 250);
+  border: 1px solid oklch(55% 0.14 250 / 0.3);
+}
+.chart-ai-badge {
+  display: flex; align-items: center; gap: 5px; padding: 4px 10px;
+  border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  background: oklch(55% 0.08 200 / 0.15); color: oklch(72% 0.08 200);
+  border: 1px solid oklch(55% 0.08 200 / 0.3);
+}
+.chart-ai-dot { width: 5px; height: 5px; border-radius: 50%; background: oklch(72% 0.08 200); animation: blink 2s infinite; }
+.chart-close {
+  margin-left: auto; width: 32px; height: 32px; border-radius: 8px; border: none;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.55);
+  cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s; flex-shrink: 0;
+}
+.chart-close:hover { background: rgba(255,255,255,0.12); color: white; }
+
+/* Patient banner */
+.chart-pt-banner {
+  background: oklch(15% 0.02 240);
+  padding: 10px 20px;
+  display: flex; align-items: center; gap: 20px;
+  flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  flex-wrap: wrap;
+}
+.chart-banner-item { display: flex; flex-direction: column; gap: 1px; }
+.chart-banner-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+.chart-banner-val { font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.75); }
+.chart-banner-val.alert { color: oklch(72% 0.16 25); }
+.chart-banner-val.ok { color: oklch(72% 0.1 200); }
+.chart-banner-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.07); flex-shrink: 0; }
+
+/* Body layout */
+.chart-body { display: flex; flex: 1; overflow: hidden; }
+
+/* Left nav */
+.chart-nav {
+  width: 170px; flex-shrink: 0;
+  background: oklch(17% 0.018 240);
+  border-right: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column;
+  overflow-y: auto; padding: 8px 0;
+}
+.chart-nav-section { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.2); padding: 10px 14px 4px; }
+.chart-nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 14px; cursor: pointer;
+  font-size: 12.5px; color: rgba(255,255,255,0.45);
+  transition: background 0.15s, color 0.15s; border: none; background: none;
+  width: 100%; text-align: left; font-family: inherit;
+}
+.chart-nav-item:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.7); }
+.chart-nav-item.active { background: oklch(55% 0.14 250 / 0.15); color: oklch(78% 0.1 250); border-right: 2px solid oklch(60% 0.14 250); }
+.chart-nav-icon { font-size: 13px; flex-shrink: 0; opacity: 0.7; }
+.chart-nav-item.active .chart-nav-icon { opacity: 1; }
+.chart-nav-badge { margin-left: auto; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; background: oklch(55% 0.14 250 / 0.2); color: oklch(72% 0.1 250); }
+
+/* Main content */
+.chart-main { flex: 1; overflow-y: auto; background: var(--bg); padding: 20px 24px; }
+.chart-main::-webkit-scrollbar { width: 5px; }
+.chart-main::-webkit-scrollbar-thumb { background: var(--hair-strong); border-radius: 3px; }
+
+/* Section headers */
+.chart-sec-title {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--hair); display: flex; align-items: center; gap: 8px;
+}
+.chart-sec-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: none; letter-spacing: 0; }
+.chart-sec-badge.ethizo { background: oklch(93% 0.04 60); color: oklch(48% 0.12 60); border: 1px solid oklch(86% 0.08 60); }
+.chart-sec-badge.ai { background: var(--teal-soft); color: var(--teal-deep); border: 1px solid oklch(87% 0.05 250); }
+
+/* Data tables */
+.chart-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+.chart-table th { text-align: left; padding: 7px 12px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-4); background: var(--bg-tint); border-bottom: 1px solid var(--hair); }
+.chart-table td { padding: 9px 12px; border-bottom: 1px solid var(--hair); vertical-align: top; color: var(--ink-2); line-height: 1.4; }
+.chart-table tr:last-child td { border-bottom: none; }
+.chart-table tr:hover td { background: var(--bg-tint); }
+.ct-status-active { display: inline-block; padding: 1px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; background: var(--sage-soft); color: var(--sage); border: 1px solid oklch(86% 0.04 200); }
+.ct-status-resolved { display: inline-block; padding: 1px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; background: var(--bg-tint); color: var(--ink-4); border: 1px solid var(--hair); }
+.ct-status-alert { display: inline-block; padding: 1px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; background: oklch(95% 0.05 25); color: oklch(48% 0.18 25); border: 1px solid oklch(88% 0.08 25); }
+.ct-status-pending { display: inline-block; padding: 1px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; background: oklch(96% 0.04 80); color: oklch(52% 0.12 70); border: 1px solid oklch(88% 0.08 80); }
+
+/* Vitals grid */
+.chart-vitals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.chart-vital-card {
+  background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;
+}
+.chart-vital-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-4); }
+.chart-vital-val { font-size: 22px; font-weight: 300; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+.chart-vital-unit { font-size: 11px; color: var(--ink-4); }
+.chart-vital-trend { font-size: 11px; margin-top: 2px; }
+.chart-vital-trend.normal { color: var(--sage); }
+.chart-vital-trend.elevated { color: oklch(52% 0.12 70); }
+.chart-vital-trend.low { color: oklch(48% 0.18 250); }
+
+/* Allergy tags */
+.chart-allergy-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; margin: 3px 4px 3px 0;
+}
+.chart-allergy-tag.severe { background: oklch(95% 0.05 25); color: oklch(45% 0.18 25); border: 1px solid oklch(88% 0.08 25); }
+.chart-allergy-tag.moderate { background: oklch(96% 0.04 80); color: oklch(50% 0.12 70); border: 1px solid oklch(88% 0.08 80); }
+.chart-allergy-tag.mild { background: var(--bg-tint); color: var(--ink-3); border: 1px solid var(--hair); }
+
+/* Timeline / visits */
+.chart-timeline { display: flex; flex-direction: column; gap: 0; }
+.chart-visit {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px solid var(--hair); cursor: pointer; transition: background 0.15s;
+}
+.chart-visit:hover { background: var(--bg-tint); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: var(--radius-sm); }
+.chart-visit-date { width: 80px; flex-shrink: 0; }
+.chart-visit-date-main { font-size: 13px; font-weight: 600; color: var(--ink); }
+.chart-visit-date-sub { font-size: 11px; color: var(--ink-4); margin-top: 1px; }
+.chart-visit-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 5px; box-shadow: 0 0 0 3px var(--teal-soft); }
+.chart-visit-body { flex: 1; }
+.chart-visit-type { font-size: 13px; font-weight: 600; color: var(--ink); }
+.chart-visit-provider { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+.chart-visit-summary { font-size: 12px; color: var(--ink-2); margin-top: 5px; line-height: 1.5; }
+.chart-visit-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+.chart-visit-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--bg-tint); color: var(--ink-4); border: 1px solid var(--hair); font-weight: 500; }
+
+/* Summary cards row */
+.chart-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.chart-summary-card { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); padding: 14px; }
+.chart-summary-card-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-4); margin-bottom: 8px; }
+.chart-summary-item { font-size: 12.5px; color: var(--ink-2); padding: 3px 0; border-bottom: 1px solid var(--hair); display: flex; align-items: baseline; gap: 6px; }
+.chart-summary-item:last-child { border-bottom: none; }
+.chart-summary-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+/* AI Loading state */
+.chart-loading {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; gap: 20px; padding: 40px;
+}
+.chart-loading-orb {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--sage));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; position: relative;
+  box-shadow: 0 0 0 12px var(--teal-soft);
+  animation: chartOrbPulse 1.8s ease-in-out infinite;
+}
+@keyframes chartOrbPulse { 0%,100%{box-shadow:0 0 0 12px var(--teal-soft);} 50%{box-shadow:0 0 0 20px oklch(96% 0.02 250);} }
+.chart-loading-title { font-size: 16px; font-weight: 600; color: var(--ink); }
+.chart-loading-sub { font-size: 13px; color: var(--ink-3); margin-top: -10px; }
+.chart-loading-steps { display: flex; flex-direction: column; gap: 8px; width: 320px; }
+.chart-load-row { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--ink-3); }
+.chart-load-row.done { color: var(--sage); }
+.chart-load-row.active { color: var(--ink); }
+.chart-load-icon { font-size: 13px; width: 16px; flex-shrink: 0; }
+.chart-load-bar { flex: 1; height: 3px; background: var(--hair); border-radius: 2px; overflow: hidden; }
+.chart-load-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--sage)); border-radius: 2px; transition: width 1s ease; }
+
+/* Notes editor */
+.chart-notes-area {
+  width: 100%; min-height: 160px; padding: 12px 14px;
+  border: 1px solid var(--hair); border-radius: var(--radius);
+  font-family: inherit; font-size: 13.5px; color: var(--ink); background: var(--surface);
+  outline: none; resize: vertical; line-height: 1.6; transition: border-color 0.15s;
+  margin-bottom: 10px;
+}
+.chart-notes-area:focus { border-color: var(--teal); }
+.chart-notes-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.chart-note-type-btn {
+  padding: 5px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600;
+  border: 1px solid var(--hair); background: var(--surface); color: var(--ink-3);
+  cursor: pointer; transition: all 0.15s; font-family: inherit;
+}
+.chart-note-type-btn.active { background: var(--teal-soft); border-color: var(--teal); color: var(--teal-deep); }
+.chart-note-save-btn {
+  padding: 8px 20px; border-radius: var(--radius); border: none; cursor: pointer;
+  background: linear-gradient(135deg, oklch(50% 0.14 250), oklch(42% 0.12 255));
+  color: white; font-family: inherit; font-size: 13px; font-weight: 600;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.chart-note-save-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -4px oklch(45% 0.14 250 / 0.45); }
+.chart-saved-note {
+  background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+  padding: 12px 14px; margin-bottom: 10px;
+  animation: fadeIn 0.25s ease;
+}
+.chart-saved-note-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 11px; color: var(--ink-4); }
+.chart-saved-note-type { font-weight: 700; color: var(--teal-deep); background: var(--teal-soft); padding: 1px 7px; border-radius: 20px; border: 1px solid oklch(87% 0.05 250); }
+.chart-saved-note-body { font-size: 13px; color: var(--ink-2); line-height: 1.6; white-space: pre-wrap; }
+
+/* Lab results */
+.chart-lab-row { display: flex; align-items: center; gap: 0; padding: 8px 12px; border-bottom: 1px solid var(--hair); font-size: 12.5px; }
+.chart-lab-row:hover { background: var(--bg-tint); }
+.chart-lab-name { flex: 2; color: var(--ink-2); font-weight: 500; }
+.chart-lab-val { flex: 1; font-weight: 600; }
+.chart-lab-val.normal { color: var(--ink); }
+.chart-lab-val.high { color: oklch(48% 0.18 25); }
+.chart-lab-val.low { color: oklch(48% 0.15 250); }
+.chart-lab-range { flex: 1.5; font-size: 11px; color: var(--ink-4); }
+.chart-lab-flag { padding: 1px 7px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+.chart-lab-flag.H { background: oklch(95% 0.05 25); color: oklch(48% 0.18 25); border: 1px solid oklch(88% 0.08 25); }
+.chart-lab-flag.L { background: oklch(95% 0.04 250); color: oklch(45% 0.15 250); border: 1px solid oklch(87% 0.06 250); }
+.chart-lab-flag.N { background: var(--sage-soft); color: var(--sage); border: 1px solid oklch(86% 0.04 200); }
+.chart-lab-date { flex: 1; font-size: 11px; color: var(--ink-4); }
+
+/* ── Unified page navigation bar ────────────────────────────────────────── */
+.page-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 0 28px;
+  flex-shrink: 0;
+}
+.pn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  border: 1px solid var(--hair);
+  background: var(--surface);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.pn-btn:hover { color: var(--ink); border-color: var(--hair-strong); background: var(--bg-tint); }
+.pn-btn.pn-home:hover { color: var(--teal-deep); border-color: var(--teal); background: var(--teal-soft); }
+.pn-sep { color: var(--hair-strong); font-size: 13px; user-select: none; line-height: 1; }
+.pn-crumb { font-size: 12px; color: var(--ink-4); }
+
+/* inline nav strip used inside fixed-header views (InsPreAuth, InsValidate, SchedulesView) */
+.view-strip-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 </style>
 </head>
 <body>
@@ -4166,7 +4676,7 @@ function buildDocSections(intakeCtx) {
   };
 }
 
-function DocListPage({ onBack, onSwitchToAI, patient = PATIENT, intakeCtx = null }) {
+function DocListPage({ onBack, onHome, onSwitchToAI, patient = PATIENT, intakeCtx = null }) {
   const [viewingForm, setViewingForm] = React.useState(null);
   const [localStatus, setLocalStatus] = React.useState({});
 
@@ -4203,7 +4713,11 @@ function DocListPage({ onBack, onSwitchToAI, patient = PATIENT, intakeCtx = null
         />
       )}
       <div className="doclist-main">
-        <button className="back-btn" onClick={onBack}><I.back /> Back</button>
+        <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:24}}>
+          <button className="pn-btn" onClick={onBack}>← Back</button>
+          <span className="pn-sep">/</span>
+          <button className="pn-btn pn-home" onClick={onHome || onBack}>⌂ Home</button>
+        </div>
         <h1>Your forms for <em>{apptType}</em></h1>
         <p className="lede">
           Click any form to open and complete it. Your progress saves automatically,
@@ -4375,7 +4889,7 @@ function FormCard({ form, active, done, formFields, justFilled }) {
   );
 }
 
-function AIIntakePage({ onBack, intakeCtx, patient = PATIENT }) {
+function AIIntakePage({ onBack, onHome, intakeCtx, patient = PATIENT }) {
   // Helper: given a script form_id (e.g. 'i693'), return the patient_form UUID from intakeCtx
   const getPatientFormId = (scriptFormId) => {
     if (!intakeCtx) return null;
@@ -4498,7 +5012,11 @@ function AIIntakePage({ onBack, intakeCtx, patient = PATIENT }) {
   return (
     <div className="ai-page">
       <aside className="ai-side">
-        <button className="ai-back" onClick={onBack}><I.back /> Change intake method</button>
+        <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:16}}>
+          <button className="pn-btn" onClick={onBack}>← Back</button>
+          <span className="pn-sep">/</span>
+          <button className="pn-btn pn-home" onClick={onHome || onBack}>⌂ Home</button>
+        </div>
         <h2>Intake for <em>{patient.name}</em></h2>
         <div className="ai-appt">{patient.appt}</div>
 
@@ -4661,7 +5179,7 @@ function downloadExcel(rows, filename) {
 }
 
 /* Create Appointment panel */
-function CreateAppointmentView({ onBack, onCreated }) {
+function CreateAppointmentView({ onBack, onHome, onCreated }) {
   const [step, setStep]               = React.useState(0); // 0=patient 1=appt 2=success
   const [mode, setMode]               = React.useState('new'); // new | existing
   const [pData, setPData]             = React.useState({ gender:'Female' });
@@ -4753,7 +5271,7 @@ function CreateAppointmentView({ onBack, onCreated }) {
           onClose={() => { setShowNotify(false); setNotified(true); }}
         />
       )}
-      <button className="clinic-back" onClick={onBack}>← Back to dashboard</button>
+      <PageNav onBack={onBack} onHome={onHome} crumb="Create Appointment" />
       <div className="clinic-section-title">Appointment created</div>
       <div className="clinic-section-sub">Send the intake link to the patient to complete their forms.</div>
       <div className="ca-success">
@@ -4786,7 +5304,7 @@ function CreateAppointmentView({ onBack, onCreated }) {
 
   return (
     <div className="clinic-inner ca-panel">
-      <button className="clinic-back" onClick={onBack}>← Back to dashboard</button>
+      <PageNav onBack={onBack} onHome={onHome} crumb="Create Appointment" />
       <div className="clinic-section-title">{step === 0 ? 'Patient details' : 'Appointment details'}</div>
       <div className="clinic-section-sub">{step === 0 ? 'Find an existing patient or register a new one.' : 'Set the appointment type, time, and reason for visit.'}</div>
 
@@ -5074,7 +5592,7 @@ function ReminderButton({ appt }) {
 }
 
 /* Appointments list */
-function AppointmentsListView({ onBack }) {
+function AppointmentsListView({ onBack, onHome }) {
   const [appts, setAppts]     = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [filter, setFilter]   = React.useState('all');
@@ -5104,7 +5622,7 @@ function AppointmentsListView({ onBack }) {
 
   return (
     <div className="clinic-inner">
-      <button className="clinic-back" onClick={onBack}>← Back to dashboard</button>
+      <PageNav onBack={onBack} onHome={onHome} crumb="Upcoming Appointments" />
       <div className="clinic-section-title">Upcoming appointments</div>
       <div className="clinic-section-sub">All scheduled visits, sorted by date.</div>
 
@@ -5217,12 +5735,584 @@ function AppointmentsListView({ onBack }) {
   );
 }
 
+/* ── Shared page navigation ──────────────────────────────────────────────── */
+function PageNav({ onBack, onHome, backLabel, homeLabel, crumb }) {
+  return (
+    <div className="page-nav">
+      <button className="pn-btn" onClick={onBack}>{backLabel || '← Back'}</button>
+      <span className="pn-sep">/</span>
+      <button className="pn-btn pn-home" onClick={onHome}>{homeLabel || '⌂ Dashboard'}</button>
+      {crumb && <><span className="pn-sep">/</span><span className="pn-crumb">{crumb}</span></>}
+    </div>
+  );
+}
+
+/* ── Clinical Chart Overlay ──────────────────────────────────────────────── */
+function genChartData(patient) {
+  // Deterministic mock data seeded from patient name
+  const seed = patient.full_name.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
+  const rnd = (n) => seed % n;
+  const genderM = (patient.gender || '').toLowerCase().startsWith('m');
+  const apptType = patient.next_appointment_type || 'primary_care';
+  const isImmigration = apptType === 'immigration_medical_exam';
+
+  const allProblems = [
+    { name:'Hypothyroidism', icd:'E03.9', onset:'2019-03', status:'Active', severity:'Mild' },
+    { name:'Hypertension', icd:'I10', onset:'2021-07', status:'Active', severity:'Moderate' },
+    { name:'Type 2 Diabetes Mellitus', icd:'E11.9', onset:'2020-01', status:'Active', severity:'Moderate' },
+    { name:'Hyperlipidemia', icd:'E78.5', onset:'2022-03', status:'Active', severity:'Mild' },
+    { name:'Anxiety disorder', icd:'F41.1', onset:'2018-09', status:'Active', severity:'Mild' },
+    { name:'Allergic rhinitis', icd:'J30.9', onset:'2015-05', status:'Active', severity:'Mild' },
+    { name:'GERD', icd:'K21.0', onset:'2017-11', status:'Active', severity:'Mild' },
+    { name:'Vitamin D deficiency', icd:'E55.9', onset:'2023-01', status:'Active', severity:'Mild' },
+    { name:'Acute URI', icd:'J06.9', onset:'2024-11', status:'Resolved', severity:'Mild' },
+    { name:'Asthma', icd:'J45.20', onset:'2010-04', status:'Active', severity:'Moderate' },
+    { name:'Pre-diabetes', icd:'R73.09', onset:'2022-08', status:'Active', severity:'Mild' },
+    { name:'Obesity, BMI 31.2', icd:'E66.09', onset:'2021-02', status:'Active', severity:'Mild' },
+  ];
+  const problems = allProblems.filter((_, i) => (seed + i * 7) % 5 !== 0).slice(0, 4 + rnd(3));
+
+  const allMeds = [
+    { name:'Levothyroxine', dose:'75 mcg', freq:'Daily', route:'Oral', prescriber:'Dr. Desai', since:'2019-03' },
+    { name:'Lisinopril', dose:'10 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Thornton', since:'2021-07' },
+    { name:'Metformin', dose:'500 mg', freq:'BID', route:'Oral', prescriber:'Dr. Kapoor', since:'2020-02' },
+    { name:'Atorvastatin', dose:'20 mg', freq:'Nightly', route:'Oral', prescriber:'Dr. Desai', since:'2022-04' },
+    { name:'Sertraline', dose:'50 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Thornton', since:'2018-10' },
+    { name:'Vitamin D3', dose:'2000 IU', freq:'Daily', route:'Oral', prescriber:'Self', since:'2023-01' },
+    { name:'Cetirizine', dose:'10 mg', freq:'PRN', route:'Oral', prescriber:'Dr. Kapoor', since:'2015-05' },
+    { name:'Omeprazole', dose:'20 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Desai', since:'2017-12' },
+    { name:'Albuterol inhaler', dose:'90 mcg', freq:'PRN', route:'Inhaled', prescriber:'Dr. Kapoor', since:'2010-04' },
+    { name:'Metoprolol succinate', dose:'25 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Thornton', since:'2022-01' },
+  ];
+  const meds = allMeds.filter((_, i) => (seed + i * 3) % 4 !== 0).slice(0, 3 + rnd(3));
+
+  const allAllergies = [
+    { substance:'Penicillin', reaction:'Rash, urticaria', severity:'Moderate', verified:'Yes' },
+    { substance:'Sulfa drugs', reaction:'Anaphylaxis', severity:'Severe', verified:'Yes' },
+    { substance:'Latex', reaction:'Contact dermatitis', severity:'Mild', verified:'No' },
+    { substance:'Ibuprofen', reaction:'GI upset, hives', severity:'Mild', verified:'No' },
+    { substance:'Shellfish', reaction:'Hives', severity:'Moderate', verified:'Yes' },
+    { substance:'Codeine', reaction:'Nausea, vomiting', severity:'Mild', verified:'No' },
+    { substance:'Aspirin', reaction:'Bronchospasm', severity:'Moderate', verified:'Yes' },
+    { substance:'NKDA', reaction:'—', severity:'none', verified:'—' },
+  ];
+  const allergyIdx = rnd(allAllergies.length);
+  const allergies = allergyIdx === 7 ? [allAllergies[7]] : allAllergies.filter((_, i) => (seed + i*5) % 3 !== 0).slice(0,2+rnd(2));
+
+  const bpSys = 118 + rnd(24); const bpDia = 72 + rnd(18);
+  const hr = 64 + rnd(22); const bmi = 22.4 + (seed % 120) / 10;
+  const temp = (98.0 + rnd(12) / 10).toFixed(1); const spo2 = 96 + rnd(4);
+  const vitals = {
+    bp: `${bpSys}/${bpDia}`, bpFlag: bpSys > 130 ? 'elevated' : 'normal',
+    hr: hr, hrFlag: hr > 90 ? 'elevated' : 'normal',
+    bmi: bmi.toFixed(1), bmiFlag: bmi > 30 ? 'elevated' : 'normal',
+    temp: temp, tempFlag: parseFloat(temp) > 99.4 ? 'elevated' : 'normal',
+    spo2: spo2, spo2Flag: spo2 < 95 ? 'low' : 'normal',
+    weight: (130 + rnd(80)) + ' lbs', rr: 14 + rnd(6),
+  };
+
+  const labs = [
+    { name:'HbA1c', val: (5.6 + (seed%14)/10).toFixed(1) + '%', range:'< 5.7%', flag: seed%3===0?'H':'N', date:'Mar 2026' },
+    { name:'TSH', val: (1.8 + (seed%28)/10).toFixed(2) + ' mIU/L', range:'0.4–4.0', flag: seed%7===0?'H':'N', date:'Mar 2026' },
+    { name:'LDL Cholesterol', val: (88 + rnd(60)) + ' mg/dL', range:'< 100', flag: rnd(2)===0?'H':'N', date:'Feb 2026' },
+    { name:'HDL Cholesterol', val: (45 + rnd(25)) + ' mg/dL', range:'> 40', flag: rnd(3)===0?'L':'N', date:'Feb 2026' },
+    { name:'Fasting Glucose', val: (88 + rnd(40)) + ' mg/dL', range:'70–99', flag: rnd(4)===0?'H':'N', date:'Mar 2026' },
+    { name:'Creatinine', val: (0.78 + rnd(4)/10).toFixed(2) + ' mg/dL', range:'0.6–1.2', flag:'N', date:'Mar 2026' },
+    { name:'ALT', val: (22 + rnd(28)) + ' U/L', range:'7–56', flag:'N', date:'Jan 2026' },
+    { name:'CBC — WBC', val: (5.8 + rnd(30)/10).toFixed(1) + ' K/µL', range:'4.5–11.0', flag:'N', date:'Mar 2026' },
+  ];
+
+  const VISIT_TYPES = ['Primary Care Follow-up', 'Immigration Medical Exam', 'Annual Physical', 'Urgent Care Visit', 'Pre-Placement Physical', 'Telehealth — Medication Review', 'Lab Follow-up', 'Preventive Care'];
+  const PROVIDERS = ['Dr. Anjali Desai, MD', 'Dr. James Thornton, MD', 'Dr. Priya Kapoor, MD'];
+  const SUMMARIES = [
+    'Patient reports stable symptoms. BP within acceptable range. Medication refills provided.',
+    'Immigration medical exam completed. All required vaccinations documented. Chest X-ray reviewed.',
+    'Annual wellness visit. Labs reviewed. Counseled on diet and exercise. Referral placed.',
+    'Patient presents with acute respiratory symptoms. Started on short-course antibiotic therapy.',
+    'Pre-placement physical for occupational health clearance. EKG normal. Cleared for duty.',
+    'Telehealth — reviewed recent lab results. Adjusted Levothyroxine dose to 88 mcg.',
+    'Lab results reviewed. TSH within therapeutic range. Continue current dose.',
+    'Preventive care. Updated vaccination record. Flu and COVID boosters administered.',
+  ];
+  const visits = Array.from({length: 5 + rnd(4)}, (_, i) => {
+    const daysAgo = 30 + i * (40 + (seed * (i+1) % 30));
+    const d = new Date(); d.setDate(d.getDate() - daysAgo);
+    const month = d.toLocaleDateString('en-US', { month:'short' });
+    const day = d.getDate(); const year = d.getFullYear();
+    return {
+      dateStr: `${month} ${day}, ${year}`,
+      year,
+      type: VISIT_TYPES[(seed + i * 3) % VISIT_TYPES.length],
+      provider: PROVIDERS[(seed + i) % PROVIDERS.length],
+      summary: SUMMARIES[(seed + i * 7) % SUMMARIES.length],
+      tags: ['Completed', i===0?'Most Recent':'', i<2?'Notes Available':''].filter(Boolean),
+    };
+  });
+
+  const immunizations = isImmigration ? [
+    { vaccine:'MMR', date:'Documented', series:'Complete', source:'Records on file' },
+    { vaccine:'Varicella', date:'Documented', series:'Complete', source:'Records on file' },
+    { vaccine:'Hepatitis B', date:'Documented', series:'Complete (3-dose)', source:'Records on file' },
+    { vaccine:'Tdap', date:'Jun 2021', series:'Complete', source:'Administered' },
+    { vaccine:'Influenza', date:'Oct 2025', series:'Annual', source:'Administered' },
+    { vaccine:'COVID-19', date:'Sep 2024', series:'Updated booster', source:'Records on file' },
+    { vaccine:'Meningococcal', date:'Pending', series:'Recommended', source:'Pending' },
+  ] : [
+    { vaccine:'Influenza', date:'Oct 2025', series:'Annual', source:'Administered' },
+    { vaccine:'COVID-19', date:'Sep 2024', series:'Booster', source:'Records on file' },
+    { vaccine:'Tdap', date:'Jun 2021', series:'Complete', source:'Administered' },
+    { vaccine:'Hepatitis B', date:'Documented', series:'Complete', source:'Records on file' },
+  ];
+
+  return { problems, meds, allergies, vitals, labs, visits, immunizations, dob: patient.dob, name: patient.full_name };
+}
+
+const CHART_NAV = [
+  { id:'summary',    icon:'⬡', label:'Chart Summary' },
+  { id:'problems',   icon:'⚕', label:'Problems',  section:'CLINICAL' },
+  { id:'meds',       icon:'💊', label:'Medications' },
+  { id:'allergies',  icon:'⚠', label:'Allergies' },
+  { id:'vitals',     icon:'📈', label:'Vitals' },
+  { id:'labs',       icon:'🧪', label:'Lab Results' },
+  { id:'visits',     icon:'📅', label:'Visit History', section:'ENCOUNTERS' },
+  { id:'immunization',icon:'💉',label:'Immunizations' },
+  { id:'notes',      icon:'📝', label:'Clinical Notes', section:'DOCUMENTATION' },
+];
+
+function ClinicalChartOverlay({ patient, onClose }) {
+  const [loading, setLoading] = React.useState(true);
+  const [loadStep, setLoadStep] = React.useState(0);
+  const [loadBars, setLoadBars] = React.useState([0,0,0,0]);
+  const [tab, setTab] = React.useState('summary');
+  const [chartData, setChartData] = React.useState(null);
+  const [noteType, setNoteType] = React.useState('Progress Note');
+  const [noteText, setNoteText] = React.useState('');
+  const [savedNotes, setSavedNotes] = React.useState([]);
+  const [noteSaved, setNoteSaved] = React.useState(false);
+
+  const LOAD_STEPS = [
+    'Connecting to Ethizo EHR…',
+    'Pulling patient record & problem list…',
+    'Loading medications, labs & vitals…',
+    'Generating AI chart summary…',
+  ];
+
+  React.useEffect(() => {
+    const data = genChartData(patient);
+    const timers = [
+      setTimeout(() => { setLoadStep(1); setLoadBars(b => { const n=[...b]; n[0]=100; return n; }); }, 400),
+      setTimeout(() => { setLoadStep(2); setLoadBars(b => { const n=[...b]; n[1]=100; return n; }); }, 1100),
+      setTimeout(() => { setLoadStep(3); setLoadBars(b => { const n=[...b]; n[2]=100; return n; }); }, 1850),
+      setTimeout(() => { setLoadStep(4); setLoadBars(b => { const n=[...b]; n[3]=100; return n; }); }, 2600),
+      setTimeout(() => { setChartData(data); setLoading(false); }, 3200),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  const dob = patient.dob ? new Date(patient.dob + 'T12:00:00') : null;
+  const age = dob ? Math.floor((Date.now() - dob) / (365.25 * 24 * 3600 * 1000)) : null;
+  const dobStr = dob ? dob.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
+  const mrn = 'MRN-' + (patient.id || 'UNKNOWN').toString().slice(-6).toUpperCase().replace(/-/g,'').slice(0,8);
+  const providers = ['Dr. Anjali Desai, MD', 'Dr. James Thornton, MD', 'Dr. Priya Kapoor, MD'];
+  const assignedProvider = providers[(patient.full_name.charCodeAt(0) + patient.full_name.length) % 3];
+
+  const renderSection = () => {
+    if (!chartData) return null;
+    const { problems, meds, allergies, vitals, labs, visits, immunizations } = chartData;
+
+    if (tab === 'summary') return (
+      <div>
+        <div style={{background:'linear-gradient(135deg, var(--teal-soft), var(--sage-soft))',border:'1px solid var(--hair)',borderRadius:'var(--radius)',padding:'14px 16px',marginBottom:16,display:'flex',alignItems:'flex-start',gap:12}}>
+          <div style={{fontSize:22,flexShrink:0}}>🤖</div>
+          <div>
+            <div style={{fontSize:12,fontWeight:700,color:'var(--teal-deep)',marginBottom:4,textTransform:'uppercase',letterSpacing:'0.05em'}}>AI Chart Summary — Generated by Elevia · Sourced from Ethizo EHR</div>
+            <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.65}}>
+              <strong>{patient.full_name}</strong>{age ? `, ${age}yo` : ''}{patient.gender ? ` ${patient.gender}` : ''}, presents with {problems.slice(0,2).map(p=>p.name).join(' and ')}. Currently on {meds.length} active medications. {allergies[0]?.substance !== 'NKDA' ? `Known allergy to ${allergies[0]?.substance}.` : 'No known drug allergies.'} Last seen {visits[0]?.dateStr} for {visits[0]?.type}. Vitals at last visit: BP {vitals.bp} mmHg, BMI {vitals.bmi}. {parseInt(vitals.bmi) > 29 ? 'BMI elevated.' : ''} Labs from March 2026 reviewed — {labs.filter(l=>l.flag==='H').length > 0 ? `${labs.filter(l=>l.flag==='H').map(l=>l.name).join(', ')} flagged above reference range.` : 'all within reference range.'}
+            </div>
+          </div>
+        </div>
+        <div className="chart-summary-grid">
+          <div className="chart-summary-card">
+            <div className="chart-summary-card-title">Active Problems</div>
+            {problems.filter(p=>p.status==='Active').slice(0,5).map(p => (
+              <div key={p.icd} className="chart-summary-item"><div className="chart-summary-dot"/>{p.name}</div>
+            ))}
+          </div>
+          <div className="chart-summary-card">
+            <div className="chart-summary-card-title">Current Medications</div>
+            {meds.slice(0,5).map(m => (
+              <div key={m.name} className="chart-summary-item"><div className="chart-summary-dot"/>{m.name} {m.dose}</div>
+            ))}
+          </div>
+          <div className="chart-summary-card">
+            <div className="chart-summary-card-title">Allergies</div>
+            {allergies.map(a => (
+              <div key={a.substance} className="chart-summary-item">
+                <div style={{width:5,height:5,borderRadius:'50%',background: a.severity==='Severe'?'oklch(48% 0.18 25)':a.severity==='Moderate'?'oklch(55% 0.12 70)':'var(--sage)',flexShrink:0}}/>
+                {a.substance}{a.substance!=='NKDA'?' — '+a.reaction.split(',')[0]:''}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="chart-sec-title">Recent Vitals <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-vitals-grid">
+          {[
+            { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag },
+            { label:'Heart Rate', val:vitals.hr, unit:'bpm', trend: vitals.hrFlag },
+            { label:'BMI', val:vitals.bmi, unit:'kg/m²', trend: vitals.bmiFlag },
+            { label:'Temperature', val:vitals.temp, unit:'°F', trend: vitals.tempFlag },
+            { label:'SpO₂', val:vitals.spo2+'%', unit:'', trend: vitals.spo2Flag },
+            { label:'Resp. Rate', val:vitals.rr, unit:'breaths/min', trend:'normal' },
+          ].map(v => (
+            <div key={v.label} className="chart-vital-card">
+              <div className="chart-vital-label">{v.label}</div>
+              <div className="chart-vital-val">{v.val}</div>
+              {v.unit && <div className="chart-vital-unit">{v.unit}</div>}
+              <div className={`chart-vital-trend ${v.trend}`}>{v.trend==='normal'?'✓ Normal':v.trend==='elevated'?'↑ Elevated':'↓ Low'}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    if (tab === 'problems') return (
+      <div>
+        <div className="chart-sec-title">Problem List <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <table className="chart-table">
+          <thead><tr><th>Problem</th><th>ICD-10</th><th>Onset</th><th>Status</th><th>Severity</th></tr></thead>
+          <tbody>
+            {problems.map(p => (
+              <tr key={p.icd}>
+                <td style={{fontWeight:500}}>{p.name}</td>
+                <td style={{fontFamily:'monospace',fontSize:12}}>{p.icd}</td>
+                <td>{p.onset}</td>
+                <td><span className={`ct-status-${p.status.toLowerCase()}`}>{p.status}</span></td>
+                <td style={{color:'var(--ink-3)'}}>{p.severity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    if (tab === 'meds') return (
+      <div>
+        <div className="chart-sec-title">Medication List <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <table className="chart-table">
+          <thead><tr><th>Medication</th><th>Dose</th><th>Frequency</th><th>Route</th><th>Prescriber</th><th>Since</th></tr></thead>
+          <tbody>
+            {meds.map(m => (
+              <tr key={m.name}>
+                <td style={{fontWeight:600}}>{m.name}</td>
+                <td>{m.dose}</td>
+                <td><span className="ct-status-active">{m.freq}</span></td>
+                <td style={{color:'var(--ink-3)'}}>{m.route}</td>
+                <td style={{color:'var(--ink-3)'}}>{m.prescriber}</td>
+                <td style={{color:'var(--ink-4)'}}>{m.since}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    if (tab === 'allergies') return (
+      <div>
+        <div className="chart-sec-title">Allergy &amp; Adverse Reactions <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div style={{marginBottom:16}}>
+          {allergies.map(a => (
+            <span key={a.substance} className={`chart-allergy-tag ${a.severity.toLowerCase()}`}>
+              {a.severity==='Severe'?'🚨':a.severity==='Moderate'?'⚠️':'ℹ️'} {a.substance}
+            </span>
+          ))}
+        </div>
+        <table className="chart-table">
+          <thead><tr><th>Substance</th><th>Reaction</th><th>Severity</th><th>Verified</th></tr></thead>
+          <tbody>
+            {allergies.map(a => (
+              <tr key={a.substance}>
+                <td style={{fontWeight:600}}>{a.substance}</td>
+                <td style={{color:'var(--ink-2)'}}>{a.reaction}</td>
+                <td><span className={a.severity==='Severe'?'ct-status-alert':a.severity==='Moderate'?'ct-status-pending':'ct-status-resolved'}>{a.severity}</span></td>
+                <td style={{color:'var(--ink-3)'}}>{a.verified}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    if (tab === 'vitals') return (
+      <div>
+        <div className="chart-sec-title">Vitals — Last Recorded <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-vitals-grid" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
+          {[
+            { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag, note: parseInt(vitals.bp)>130?'Stage 1 hypertension range':'' },
+            { label:'Heart Rate', val:vitals.hr, unit:'bpm', trend: vitals.hrFlag },
+            { label:'Body Temperature', val:vitals.temp, unit:'°F', trend: vitals.tempFlag },
+            { label:'SpO₂ (Pulse Ox)', val:vitals.spo2+'%', unit:'', trend: vitals.spo2Flag },
+            { label:'BMI', val:vitals.bmi, unit:'kg/m²', trend: vitals.bmiFlag, note: parseFloat(vitals.bmi)>30?'Obesity class I':parseFloat(vitals.bmi)>25?'Overweight':'' },
+            { label:'Weight', val:vitals.weight, unit:'', trend:'normal' },
+            { label:'Resp. Rate', val:vitals.rr, unit:'breaths/min', trend:'normal' },
+            { label:'Last Recorded', val:visits[0]?.dateStr||'—', unit:'', trend:'normal' },
+          ].map(v => (
+            <div key={v.label} className="chart-vital-card">
+              <div className="chart-vital-label">{v.label}</div>
+              <div className="chart-vital-val" style={{fontSize:v.val?.length>6?16:22}}>{v.val}</div>
+              {v.unit && <div className="chart-vital-unit">{v.unit}</div>}
+              <div className={`chart-vital-trend ${v.trend}`}>{v.trend==='normal'?'✓ Normal':v.trend==='elevated'?'↑ Elevated':'↓ Low'}</div>
+              {v.note && <div style={{fontSize:10,color:'oklch(55% 0.12 70)',marginTop:2}}>{v.note}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    if (tab === 'labs') return (
+      <div>
+        <div className="chart-sec-title">Laboratory Results <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div style={{background:'var(--surface)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',overflow:'hidden',marginBottom:16}}>
+          <div style={{display:'flex',padding:'7px 12px',background:'var(--bg-tint)',borderBottom:'1px solid var(--hair)',fontSize:10.5,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:'var(--ink-4)',gap:0}}>
+            <span style={{flex:2}}>Test Name</span><span style={{flex:1}}>Result</span><span style={{flex:1.5}}>Reference Range</span><span style={{flex:0.5}}>Flag</span><span style={{flex:1}}>Date</span>
+          </div>
+          {labs.map(l => (
+            <div key={l.name} className="chart-lab-row">
+              <div className="chart-lab-name">{l.name}</div>
+              <div className={`chart-lab-val ${l.flag==='H'?'high':l.flag==='L'?'low':'normal'}`}>{l.val}</div>
+              <div className="chart-lab-range">{l.range}</div>
+              <div><span className={`chart-lab-flag ${l.flag}`}>{l.flag}</span></div>
+              <div className="chart-lab-date">{l.date}</div>
+            </div>
+          ))}
+        </div>
+        {labs.filter(l=>l.flag!=='N').length > 0 && (
+          <div style={{background:'oklch(96% 0.04 80)',border:'1px solid oklch(88% 0.08 80)',borderRadius:'var(--radius)',padding:'10px 14px',fontSize:12,color:'oklch(50% 0.12 70)'}}>
+            ⚠ {labs.filter(l=>l.flag!=='N').length} value{labs.filter(l=>l.flag!=='N').length>1?'s':''} outside reference range: {labs.filter(l=>l.flag!=='N').map(l=>l.name).join(', ')}
+          </div>
+        )}
+      </div>
+    );
+
+    if (tab === 'visits') return (
+      <div>
+        <div className="chart-sec-title">Visit History <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-timeline">
+          {visits.map((v,i) => (
+            <div key={i} className="chart-visit">
+              <div className="chart-visit-date">
+                <div className="chart-visit-date-main">{v.dateStr.split(',')[0]}</div>
+                <div className="chart-visit-date-sub">{v.dateStr.split(', ')[1]}</div>
+              </div>
+              <div className="chart-visit-dot" style={{background:i===0?'var(--teal)':'var(--hair-strong)',boxShadow:i===0?'0 0 0 3px var(--teal-soft)':'none'}}/>
+              <div className="chart-visit-body">
+                <div className="chart-visit-type">{v.type}</div>
+                <div className="chart-visit-provider">{v.provider}</div>
+                <div className="chart-visit-summary">{v.summary}</div>
+                <div className="chart-visit-tags">
+                  {v.tags.map(t => <span key={t} className="chart-visit-tag">{t}</span>)}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    if (tab === 'immunization') return (
+      <div>
+        <div className="chart-sec-title">Immunization Record <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <table className="chart-table">
+          <thead><tr><th>Vaccine</th><th>Date / Status</th><th>Series</th><th>Source</th></tr></thead>
+          <tbody>
+            {immunizations.map(imm => (
+              <tr key={imm.vaccine}>
+                <td style={{fontWeight:600}}>{imm.vaccine}</td>
+                <td>{imm.date}</td>
+                <td><span className={imm.series==='Pending'||imm.series==='Recommended'?'ct-status-pending':'ct-status-active'}>{imm.series}</span></td>
+                <td style={{color:'var(--ink-3)'}}>{imm.source}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    if (tab === 'notes') return (
+      <div>
+        <div className="chart-sec-title">Clinical Notes <span className="chart-sec-badge ai">AI-Assisted</span></div>
+
+        {/* New note composer */}
+        <div style={{background:'var(--surface)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',padding:'16px',marginBottom:20}}>
+          <div style={{fontSize:12,fontWeight:700,color:'var(--ink-3)',marginBottom:10,textTransform:'uppercase',letterSpacing:'0.06em'}}>Add Clinical Note</div>
+          <div className="chart-notes-toolbar">
+            {['Progress Note','SOAP Note','Referral','Order Note','Telephone Note'].map(t => (
+              <button key={t} className={`chart-note-type-btn${noteType===t?' active':''}`} onClick={() => setNoteType(t)}>{t}</button>
+            ))}
+          </div>
+          <div style={{fontSize:11,color:'var(--ink-4)',marginBottom:6}}>
+            {noteType === 'SOAP Note' ? 'Subjective / Objective / Assessment / Plan:' : `${noteType} for ${patient.full_name}:`}
+          </div>
+          {noteType === 'SOAP Note' ? (
+            <textarea className="chart-notes-area"
+              placeholder={"S: Patient reports…\nO: Vitals: BP…\nA: Assessment…\nP: Plan…"}
+              value={noteText} onChange={e => setNoteText(e.target.value)}
+              style={{minHeight:200}} />
+          ) : (
+            <textarea className="chart-notes-area"
+              placeholder={`Enter ${noteType.toLowerCase()} for ${patient.full_name}…`}
+              value={noteText} onChange={e => setNoteText(e.target.value)} />
+          )}
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <button className="chart-note-save-btn" onClick={() => {
+              if (!noteText.trim()) return;
+              setSavedNotes(n => [{ type:noteType, text:noteText, author:assignedProvider, ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) }, ...n]);
+              setNoteText(''); setNoteSaved(true);
+              setTimeout(() => setNoteSaved(false), 2500);
+            }}>Save Note</button>
+            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to Ethizo EHR</span>}
+            <span style={{fontSize:11,color:'var(--ink-4)',marginLeft:'auto'}}>Signed as: {assignedProvider}</span>
+          </div>
+        </div>
+
+        {/* Existing notes */}
+        {savedNotes.length > 0 && (
+          <div style={{marginBottom:16}}>
+            <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Session Notes</div>
+            {savedNotes.map((n, i) => (
+              <div key={i} className="chart-saved-note">
+                <div className="chart-saved-note-header">
+                  <span className="chart-saved-note-type">{n.type}</span>
+                  <span>{n.author}</span>
+                  <span>·</span>
+                  <span>{n.ts}</span>
+                </div>
+                <div className="chart-saved-note-body">{n.text}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Mock historical notes */}
+        <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Prior Notes — From Ethizo EHR</div>
+        {[
+          { type:'Progress Note', author: assignedProvider, date:'Apr 8, 2026 · 10:30 AM', text:`${patient.full_name} seen today for follow-up. Patient reports feeling well. BP ${chartData.vitals.bp} mmHg — slight improvement since last visit. Medications reviewed and continued without changes. Counseled on low-sodium diet. Return to clinic in 3 months or sooner PRN.` },
+          { type:'SOAP Note', author:'Dr. James Thornton, MD', date:'Feb 12, 2026 · 2:15 PM', text:`S: Patient c/o mild fatigue and occasional headaches. No chest pain or shortness of breath.\nO: BP 136/88, HR 74, Wt stable. Labs reviewed — LDL slightly elevated.\nA: Hypertension, controlled. Hyperlipidemia.\nP: Continue current antihypertensive. Increase atorvastatin to 40 mg. Dietary counseling provided. F/U in 6 weeks.` },
+          { type:'Telephone Note', author:'Dr. Anjali Desai, MD', date:'Jan 5, 2026 · 11:45 AM', text:`Patient called to report mild GI upset since starting metformin. Advised to take with food. Patient agrees to continue and monitor. No medication changes at this time.` },
+        ].map((n, i) => (
+          <div key={i} className="chart-saved-note">
+            <div className="chart-saved-note-header">
+              <span className="chart-saved-note-type">{n.type}</span>
+              <span>{n.author}</span>
+              <span>·</span>
+              <span>{n.date}</span>
+            </div>
+            <div className="chart-saved-note-body">{n.text}</div>
+          </div>
+        ))}
+      </div>
+    );
+    return null;
+  };
+
+  return (
+    <div className="chart-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="chart-panel">
+        {/* Header */}
+        <div className="chart-header">
+          <div>
+            <div className="chart-mrn">{mrn}</div>
+            <div className="chart-pt-name">{patient.full_name}</div>
+          </div>
+          <div className="chart-divider"/>
+          <div>
+            <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>DOB</div>
+            <div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{dobStr}{age ? ` · ${age}yo` : ''}</div>
+          </div>
+          {patient.gender && <><div className="chart-divider"/><div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Gender</div><div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{patient.gender}</div></div></>}
+          <div className="chart-divider"/>
+          <div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Provider</div><div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{assignedProvider}</div></div>
+          <div className="chart-divider"/>
+          <div className="chart-encounter-badge">{apptTypeLabel(patient.next_appointment_type || 'primary_care')}</div>
+          <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI · Ethizo EHR</div>
+          <button className="chart-close" onClick={onClose}>✕</button>
+        </div>
+
+        {/* Patient banner */}
+        {!loading && chartData && (
+          <div className="chart-pt-banner">
+            <div className="chart-banner-item"><div className="chart-banner-label">Phone</div><div className="chart-banner-val">{patient.phone || '—'}</div></div>
+            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Email</div><div className="chart-banner-val">{patient.email || '—'}</div></div>
+            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Active Problems</div><div className="chart-banner-val">{chartData.problems.filter(p=>p.status==='Active').length}</div></div>
+            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Medications</div><div className="chart-banner-val">{chartData.meds.length}</div></div>
+            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Allergies</div><div className={`chart-banner-val${chartData.allergies[0]?.severity==='Severe'?' alert':chartData.allergies[0]?.substance==='NKDA'?' ok':''}`}>{chartData.allergies[0]?.substance==='NKDA'?'NKDA':chartData.allergies.map(a=>a.substance).join(', ')}</div></div>
+            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Last Visit</div><div className="chart-banner-val">{chartData.visits[0]?.dateStr}</div></div>
+            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Total Visits</div><div className="chart-banner-val">{patient.appointment_count || chartData.visits.length}</div></div>
+          </div>
+        )}
+
+        {/* Body */}
+        <div className="chart-body">
+          {loading ? (
+            <div className="chart-loading" style={{width:'100%'}}>
+              <div className="chart-loading-orb">🏥</div>
+              <div className="chart-loading-title">Loading clinical chart…</div>
+              <div className="chart-loading-sub">Pulling data from Ethizo EHR · AI processing</div>
+              <div className="chart-loading-steps">
+                {LOAD_STEPS.map((s, i) => (
+                  <div key={i} className={`chart-load-row${loadStep>i?' done':loadStep===i?' active':''}`}>
+                    <span className="chart-load-icon">{loadStep>i?'✓':loadStep===i?'↻':'○'}</span>
+                    <span style={{flex:1}}>{s}</span>
+                    <div className="chart-load-bar"><div className="chart-load-fill" style={{width:loadBars[i]+'%'}}/></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              <nav className="chart-nav">
+                {CHART_NAV.map((item, i) => (
+                  <React.Fragment key={item.id}>
+                    {item.section && <div className="chart-nav-section">{item.section}</div>}
+                    <button className={`chart-nav-item${tab===item.id?' active':''}`} onClick={() => setTab(item.id)}>
+                      <span className="chart-nav-icon">{item.icon}</span>
+                      {item.label}
+                      {item.id==='labs' && chartData.labs.filter(l=>l.flag!=='N').length>0 && (
+                        <span className="chart-nav-badge">{chartData.labs.filter(l=>l.flag!=='N').length}</span>
+                      )}
+                    </button>
+                  </React.Fragment>
+                ))}
+              </nav>
+              <main className="chart-main">
+                {renderSection()}
+              </main>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* Patients list */
-function PatientsListView({ onBack }) {
+function PatientsListView({ onBack, onHome }) {
   const [patients, setPatients] = React.useState([]);
   const [loading, setLoading]   = React.useState(true);
   const [searchQ, setSearchQ]   = React.useState('');
   const [debouncedQ, setDebouncedQ] = React.useState('');
+  const [chartPatient, setChartPatient] = React.useState(null);
   const searchTimer = React.useRef(null);
 
   React.useEffect(() => {
@@ -5240,7 +6330,7 @@ function PatientsListView({ onBack }) {
 
   return (
     <div className="clinic-inner">
-      <button className="clinic-back" onClick={onBack}>← Back to dashboard</button>
+      <PageNav onBack={onBack} onHome={onHome} crumb="Patient Registry" />
       <div className="clinic-section-title">Patient registry</div>
       <div className="clinic-section-sub">All patients on file.</div>
 
@@ -5289,6 +6379,7 @@ function PatientsListView({ onBack }) {
                 <th>Next Appointment</th>
                 <th>Pending Forms</th>
                 <th>Reminder</th>
+                <th>Clinical Chart</th>
               </tr>
             </thead>
             <tbody>
@@ -5354,12 +6445,32 @@ function PatientsListView({ onBack }) {
                         : <span style={{fontSize:12,color:'var(--ink-4)',fontStyle:'italic'}}>No upcoming appt</span>
                       }
                     </td>
+                    <td>
+                      <button
+                        onClick={() => setChartPatient(p)}
+                        style={{
+                          display:'flex',alignItems:'center',gap:5,
+                          padding:'6px 11px',borderRadius:'var(--radius-sm)',
+                          border:'1px solid var(--hair)',background:'var(--surface)',
+                          color:'var(--ink-2)',fontSize:12,fontWeight:600,
+                          cursor:'pointer',fontFamily:'inherit',whiteSpace:'nowrap',
+                          transition:'all 0.15s',
+                        }}
+                        onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--teal)';e.currentTarget.style.color='var(--teal-deep)';e.currentTarget.style.background='var(--teal-soft)';}}
+                        onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--hair)';e.currentTarget.style.color='var(--ink-2)';e.currentTarget.style.background='var(--surface)';}}
+                      >
+                        🏥 View Chart
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
         </div>
+      )}
+      {chartPatient && (
+        <ClinicalChartOverlay patient={chartPatient} onClose={() => setChartPatient(null)} />
       )}
     </div>
   );
@@ -5404,7 +6515,7 @@ function schedAssignProvider(appt) {
   return SCHED_PROVIDERS[h % SCHED_PROVIDERS.length].id;
 }
 
-function SchedulesView({ onBack }) {
+function SchedulesView({ onBack, onHome }) {
   const [selProv, setSelProv]   = React.useState(SCHED_PROVIDERS[0]);
   const [weekStart, setWeekStart] = React.useState(() => schedGetMonday(new Date()));
   const [appointments, setAppointments] = React.useState([]);
@@ -5480,7 +6591,11 @@ function SchedulesView({ onBack }) {
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="sched-header">
         <div className="sched-header-left">
-          <button className="back-btn" onClick={onBack}>← Back</button>
+          <div className="view-strip-nav">
+            <button className="pn-btn" onClick={onBack}>← Back</button>
+            <span className="pn-sep">/</span>
+            <button className="pn-btn pn-home" onClick={onHome}>⌂ Dashboard</button>
+          </div>
           <div className="sched-title-row">
             <span className="sched-title-text">Schedules</span>
             {syncState === 'syncing' && (
@@ -5656,6 +6771,592 @@ function SchedulesView({ onBack }) {
   );
 }
 
+/* ── Insurance Authorization View ─────────────────────────────────────────── */
+const INS_PATIENTS = [
+  { id: 'p1', name: 'Paranjit Kaur',    initials: 'PK', insurance: 'UnitedHealthcare PPO', appt: 'Immigration Medical Exam',    dob: 'Mar 12, 1991', authComplexity: 'Standard' },
+  { id: 'p2', name: 'Harold Mercer',    initials: 'HM', insurance: 'Aetna HMO',            appt: 'Primary Care Follow-up',      dob: 'Jun 4, 1966',  authComplexity: 'Complex' },
+  { id: 'p3', name: 'Sofia Delgado',    initials: 'SD', insurance: 'Cigna PPO',             appt: 'Pre-Placement Physical',      dob: 'Sep 22, 1988', authComplexity: 'Standard' },
+];
+
+function InsuranceAuthView({ onBack, onHome }) {
+  const [phase, setPhase] = React.useState('picker'); // picker | preauth | validate
+  const [selPat, setSelPat] = React.useState(INS_PATIENTS[0]);
+  const [selFlow, setSelFlow] = React.useState('preauth');
+
+  if (phase === 'preauth') return <InsPreAuth patient={selPat} onBack={() => setPhase('picker')} onHome={onHome} />;
+  if (phase === 'validate') return <InsValidate patient={selPat} onBack={() => setPhase('picker')} onHome={onHome} />;
+
+  return (
+    <div className="ins-view">
+      <div className="clinic-inner">
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:24}}>
+          <div style={{display:'flex',flexDirection:'column',gap:4}}>
+            <PageNav onBack={onBack} onHome={onHome} crumb="Insurance Authorization" />
+            <div className="clinic-section-title" style={{fontSize:22,marginBottom:0}}>Select patient &amp; workflow</div>
+          </div>
+        </div>
+
+        <div style={{display:'flex',flexDirection:'column',gap:24,maxWidth:680}}>
+          {/* Patient picker */}
+          <div>
+            <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'var(--ink-4)',marginBottom:10}}>Select Patient</div>
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              {INS_PATIENTS.map(p => (
+                <div key={p.id}
+                  onClick={() => setSelPat(p)}
+                  style={{
+                    display:'flex',alignItems:'center',gap:14,padding:'12px 16px',
+                    background:selPat.id===p.id?'var(--teal-soft)':'var(--surface)',
+                    border:`1px solid ${selPat.id===p.id?'var(--teal)':'var(--hair)'}`,
+                    borderRadius:'var(--radius)',cursor:'pointer',transition:'all 0.15s'
+                  }}
+                >
+                  <div style={{width:36,height:36,borderRadius:10,flexShrink:0,
+                    background:'var(--teal-soft)',display:'flex',alignItems:'center',
+                    justifyContent:'center',fontWeight:700,fontSize:13,color:'var(--teal)'}}>
+                    {p.initials}
+                  </div>
+                  <div style={{flex:1}}>
+                    <div style={{fontWeight:600,fontSize:14}}>{p.name}</div>
+                    <div style={{fontSize:12,color:'var(--ink-3)',marginTop:2}}>{p.appt} · {p.insurance}</div>
+                  </div>
+                  <div style={{fontSize:11,padding:'2px 8px',borderRadius:20,fontWeight:600,
+                    background:p.authComplexity==='Standard'?'var(--sage-soft)':'oklch(96% 0.04 80)',
+                    color:p.authComplexity==='Standard'?'var(--sage)':'oklch(55% 0.12 70)',
+                    border:`1px solid ${p.authComplexity==='Standard'?'oklch(86% 0.04 200)':'oklch(88% 0.08 80)'}`}}>
+                    {p.authComplexity}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Flow picker */}
+          <div>
+            <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'var(--ink-4)',marginBottom:10}}>Select Workflow</div>
+            <div className="ins-flow-cards">
+              <div className={`ins-flow-card${selFlow==='preauth'?' active':''}`} onClick={() => setSelFlow('preauth')}>
+                <div className="ins-flow-icon">📋</div>
+                <div>
+                  <div className="ins-flow-title">Submit Pre-Authorization</div>
+                  <div className="ins-flow-desc">AI agent gathers clinical data, checks payer rules, assembles and submits the prior auth packet automatically.</div>
+                </div>
+                <div className="ins-flow-meta">
+                  <span>🤖 Fully automated</span>
+                  <span>⏱ ~3 min</span>
+                  <span>📤 Submits to payer</span>
+                </div>
+              </div>
+              <div className={`ins-flow-card${selFlow==='validate'?' active':''}`} onClick={() => setSelFlow('validate')}>
+                <div className="ins-flow-icon">🛡</div>
+                <div>
+                  <div className="ins-flow-title">Validate Insurance</div>
+                  <div className="ins-flow-desc">Pull insurance details from Ethizo EHR, verify active coverage, determine copay and deductible amounts for the visit.</div>
+                </div>
+                <div className="ins-flow-meta">
+                  <span>🔗 Ethizo EHR sync</span>
+                  <span>⏱ ~1 min</span>
+                  <span>💰 Copay determination</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button className="ins-start-btn" onClick={() => setPhase(selFlow)}>
+            {selFlow==='preauth'?'Start Pre-Authorization':'Validate Insurance'} for {selPat.name} →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Pre-Auth flow */
+function InsPreAuth({ patient, onBack, onHome }) {
+  const [step, setStep] = React.useState(0);
+  const [subStep, setSubStep] = React.useState(0);
+  const [msgs, setMsgs] = React.useState([]);
+  const [typing, setTyping] = React.useState(false);
+  const msgsRef = React.useRef(null);
+
+  const STEPS = [
+    { label: 'Auth Request Triggered', subs: ['EHR order detected', 'CPT code auth check', 'Payer rule match confirmed'], badge: 'auto' },
+    { label: 'Clinical Data Extraction', subs: ['Pull labs & diagnosis codes', 'Pull prior visit history', 'Verify ordering provider NPI'], badge: 'auto' },
+    { label: 'Payer Rules Lookup', subs: ['Query coverage policy', 'Validate criteria met', 'Confirm submission channel'], badge: 'auto' },
+    { label: 'Auth Packet Submission', subs: ['Assemble clinical packet', 'Submit via payer portal API', 'Reference number issued'], badge: 'auto' },
+    { label: 'Status Polling', subs: ['Day 1–3: polling daily', 'Day 4: no decision yet', 'Auto-escalate — P2P request'], badge: 'auto' },
+    { label: 'Decision Received', subs: ['Auth decision logged', 'Syncing to Ethizo EHR', 'Scheduling triggered'], badge: 'auto' },
+  ];
+
+  const addMsg = (role, content) => setMsgs(m => [...m, { role, content, id: Date.now() + Math.random() }]);
+
+  React.useEffect(() => {
+    if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
+  }, [msgs, typing]);
+
+  React.useEffect(() => {
+    const seq = [
+      [600, () => { setTyping(true); }],
+      [1800, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Hello — I'm the Pre-Authorization agent. I'll handle the prior auth for ${patient.name}'s upcoming ${patient.appt} with ${patient.insurance}. Starting now.` }); }],
+      [2400, () => { setStep(1); setSubStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Auth Request', items: ['EHR order detected', 'CPT code auth check', 'Payer rule match confirmed'], delays: [0, 900, 1800] }); }],
+      [5200, () => { setSubStep(3); setStep(2); setSubStep(1); addMsg('agent', { type: 'text', text: 'Auth trigger confirmed. Pulling clinical data from Ethizo EHR now.' }); }],
+      [5800, () => { addMsg('agent', { type: 'scan', title: 'Step 2 · Clinical Extraction (Ethizo)', items: ['Pull labs & diagnosis codes', 'Pull prior visit history', 'Verify ordering provider NPI'], delays: [0, 1000, 2100] }); }],
+      [9000, () => { setStep(3); setSubStep(1); addMsg('agent', { type: 'clinical', patient }); }],
+      [10200, () => { setStep(4); setSubStep(1); addMsg('agent', { type: 'payer', patient }); }],
+      [11800, () => { setStep(5); setSubStep(1); addMsg('agent', { type: 'text', text: 'Payer criteria verified. Assembling auth packet and submitting to ' + patient.insurance + '.' }); }],
+      [12600, () => { addMsg('agent', { type: 'packet', patient }); }],
+      [14000, () => { setStep(6); setSubStep(1); addMsg('agent', { type: 'poll' }); }],
+      [17000, () => { addMsg('agent', { type: 'approved', patient }); }],
+    ];
+    const timers = seq.map(([delay, fn]) => setTimeout(fn, delay));
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const renderMsg = (m) => {
+    if (m.role === 'agent') {
+      if (m.content.type === 'text') return (
+        <div className="ins-msg agent">
+          <div className="ins-msg-av ins-agent-av">E</div>
+          <div className="ins-bubble">{m.content.text}</div>
+        </div>
+      );
+      if (m.content.type === 'scan') return (
+        <div className="ins-msg agent" style={{flexDirection:'column',gap:6}}>
+          <div style={{display:'flex',gap:10,alignItems:'flex-start'}}>
+            <div className="ins-msg-av ins-agent-av">E</div>
+            <div className="ins-card" style={{maxWidth:'100%'}}>
+              <div className="ins-card-header">
+                <span style={{fontSize:13}}>⚙️</span>
+                <div><div className="ins-card-title">{m.content.title}</div></div>
+                <div className="ins-card-badge ins-badge-auto" style={{marginLeft:'auto'}}>Auto</div>
+              </div>
+              <div className="ins-card-body">
+                {m.content.items.map((item, i) => (
+                  <ScanRow key={i} label={item} delay={m.content.delays[i]} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+      if (m.content.type === 'clinical') return (
+        <div className="ins-msg agent">
+          <div className="ins-msg-av ins-agent-av">E</div>
+          <div className="ins-card">
+            <div className="ins-card-header">
+              <span style={{fontSize:13}}>🏥</span>
+              <div><div className="ins-card-title">Clinical Data — Extracted from Ethizo EHR</div><div className="ins-card-sub">{m.content.patient.name} · {m.content.patient.dob}</div></div>
+              <div className="ins-card-badge ins-badge-source">Ethizo</div>
+            </div>
+            <div className="ins-card-grid">
+              <div className="ins-cg-item"><div className="ins-cg-label">Appointment</div><div className="ins-cg-val">{m.content.patient.appt}</div></div>
+              <div className="ins-cg-item"><div className="ins-cg-label">Insurance</div><div className="ins-cg-val teal">{m.content.patient.insurance}</div></div>
+              <div className="ins-cg-item"><div className="ins-cg-label">Primary DX</div><div className="ins-cg-val">Z02.89</div></div>
+              <div className="ins-cg-item"><div className="ins-cg-label">CPT Code</div><div className="ins-cg-val">99213</div></div>
+            </div>
+            <div className="ins-card-body" style={{borderTop:'1px solid var(--hair)'}}>
+              <div className="ins-cg-label" style={{marginBottom:6}}>Auth Criteria Check</div>
+              {['Referral on file — verified','Medical necessity confirmed','Prior auth required for CPT 99213','Patient active on plan'].map((c,i) => (
+                <div key={i} className="ins-criteria-row met">
+                  <span className="ins-crit-icon">✓</span>
+                  <span className="ins-crit-text">{c}</span>
+                  <span className="ins-crit-status">Met</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+      if (m.content.type === 'payer') return (
+        <div className="ins-msg agent">
+          <div className="ins-msg-av ins-agent-av">E</div>
+          <div className="ins-card">
+            <div className="ins-card-header">
+              <span style={{fontSize:13}}>📜</span>
+              <div><div className="ins-card-title">Payer Rules — {m.content.patient.insurance}</div><div className="ins-card-sub">Coverage policy for CPT 99213</div></div>
+              <div className="ins-card-badge ins-badge-payer">Payer</div>
+            </div>
+            <div className="ins-card-body">
+              {[
+                ['Auth Required', 'Yes — CPT 99213', false],
+                ['Submission Channel', 'Portal API', false],
+                ['Turnaround', '3–5 business days', false],
+                ['Status', 'All criteria met', true],
+              ].map(([k,v,ok]) => (
+                <div key={k} className="ins-row">
+                  <span className="ins-row-key">{k}</span>
+                  <span className={`ins-row-val${ok?' teal':''}`}>{v}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{padding:'10px 14px',borderTop:'1px solid var(--hair)',background:'var(--sage-soft)'}}>
+              <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Ready to submit — all payer criteria met</span>
+            </div>
+          </div>
+        </div>
+      );
+      if (m.content.type === 'packet') return (
+        <div className="ins-msg agent">
+          <div className="ins-msg-av ins-agent-av">E</div>
+          <div className="ins-card">
+            <div className="ins-card-header">
+              <span style={{fontSize:13}}>📦</span>
+              <div><div className="ins-card-title">Auth Packet — Submitted</div><div className="ins-card-sub">Sent to {m.content.patient.insurance} portal API</div></div>
+              <div className="ins-card-badge ins-badge-ok">Submitted</div>
+            </div>
+            <div className="ins-card-body">
+              {[['Patient','Paranjit Kaur'],['CPT','99213'],['DX Code','Z02.89'],['Provider','Dr. Anjali Desai, MD'],['Ref #','UHC-PA-2026-0421'],['Submitted','Apr 22, 2026 · 10:14 AM']].map(([k,v]) => (
+                <div key={k} className="ins-row"><span className="ins-row-key">{k}</span><span className="ins-row-val">{v}</span></div>
+              ))}
+            </div>
+            <div className="ins-card-body" style={{borderTop:'1px solid var(--hair)'}}>
+              <div className="ins-cg-label" style={{marginBottom:6}}>Documents Attached</div>
+              {['Medical history summary','Lab results (last 6 mo)','Provider order — CPT 99213','USCIS referral letter'].map(d => (
+                <div key={d} style={{fontSize:12,color:'var(--ink-3)',padding:'2px 0'}}>📎 {d}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+      if (m.content.type === 'poll') return (
+        <div className="ins-msg agent">
+          <div className="ins-msg-av ins-agent-av">E</div>
+          <div className="ins-card">
+            <div className="ins-card-header">
+              <span style={{fontSize:13,animation:'spin360 1s linear infinite',display:'inline-block'}}>⟳</span>
+              <div><div className="ins-card-title">Status Polling — UHC Portal</div></div>
+              <span style={{marginLeft:'auto',fontSize:11,fontWeight:700,color:'var(--teal-deep)'}}>UHC-PA-2026-0421</span>
+            </div>
+            <div className="ins-poll-track">
+              {['Submitted','Day 1','Day 2','Day 3','Decision'].map((label, i) => (
+                <div key={label} className={`ins-pt-step${i<3?' done':i===3?' pending':''}`}>
+                  <div className="ins-pt-dot">{i<3?'✓':i===3?'…':'?'}</div>
+                  <div className="ins-pt-label">{label}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{padding:'8px 14px',fontSize:12,color:'oklch(55% 0.12 70)',background:'oklch(96% 0.04 80)',borderTop:'1px solid var(--hair)'}}>
+              ⏳ Awaiting payer decision — auto-escalation ready if no response by Day 5
+            </div>
+          </div>
+        </div>
+      );
+      if (m.content.type === 'approved') return (
+        <div className="ins-msg agent">
+          <div className="ins-msg-av ins-agent-av">E</div>
+          <div className="ins-result-banner approved">
+            <div className="ins-result-icon">✅</div>
+            <div>
+              <div className="ins-result-title">Authorization Approved</div>
+              <div className="ins-result-sub">{m.content.patient.insurance} has approved prior auth for CPT 99213.<br/>Authorization synced to Ethizo EHR. Procedure scheduling triggered.</div>
+              <div className="ins-ref">Auth #: UHC-AUTH-2026-99213-PK</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div className="ins-view" style={{height:'calc(100vh - 70px)'}}>
+      <div style={{display:'flex',alignItems:'center',gap:10,padding:'10px 20px',background:'var(--surface)',borderBottom:'1px solid var(--hair)',flexShrink:0}}>
+        <div className="view-strip-nav">
+          <button className="pn-btn" onClick={onBack}>← Back</button>
+          <span className="pn-sep">/</span>
+          <button className="pn-btn pn-home" onClick={onHome}>⌂ Dashboard</button>
+        </div>
+        <span className="pn-sep" style={{marginLeft:6}}>/</span>
+        <span style={{fontSize:13,fontWeight:600,color:'var(--ink-2)'}}>Pre-Authorization</span>
+        <span style={{fontSize:13,color:'var(--ink-4)'}}>·</span>
+        <span style={{fontSize:13,fontWeight:600,color:'var(--ink)'}}>{patient.name}</span>
+        <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
+          <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:'var(--teal-soft)',color:'var(--teal-deep)',border:'1px solid oklch(87% 0.05 250)',fontWeight:600}}>{patient.insurance}</span>
+        </div>
+      </div>
+      <div className="ins-shell" style={{height:'calc(100% - 49px)'}}>
+        {/* Sidebar */}
+        <div className="ins-sidebar">
+          <div className="ins-sb-patient">
+            <div className="ins-sb-av">{patient.initials}</div>
+            <div><div className="ins-sb-name">{patient.name}</div><div className="ins-sb-sub">{patient.appt}</div></div>
+          </div>
+          <div className="ins-step-section">Pre-Auth Workflow</div>
+          {STEPS.map((s, i) => (
+            <div key={i} className={`ins-step${step===i+1?' active':step>i+1?' done':''}`}>
+              <div className="ins-step-dot-col">
+                <div className="ins-step-dot">{step>i+1?'✓':i+1}</div>
+                {i < STEPS.length-1 && <div className="ins-step-conn" />}
+              </div>
+              <div className="ins-step-body">
+                <div className="ins-step-label">{s.label}</div>
+                <div className="ins-step-subs">
+                  {s.subs.map((sub, j) => (
+                    <div key={j} className={`ins-sub${step>i+1||subStep>j+1?' done':step===i+1&&subStep===j+1?' active':''}`}>
+                      <div className="ins-sub-dot"/>{sub}
+                    </div>
+                  ))}
+                </div>
+                {step>i+1 && <div className={`ins-step-badge ins-badge-${s.badge}`}>{s.badge==='auto'?'Auto':'Human Review'}</div>}
+              </div>
+            </div>
+          ))}
+          <div className="ins-sb-footer">
+            <div className="ins-sf-row"><span className="ins-sf-label">Auth Complexity</span><span className={`ins-sf-val${patient.authComplexity==='Standard'?' teal':' amber'}`}>{patient.authComplexity}</span></div>
+            <div className="ins-sf-row"><span className="ins-sf-label">Insurance</span><span className="ins-sf-val">{patient.insurance}</span></div>
+            <div className="ins-sf-row"><span className="ins-sf-label">CPT Code</span><span className="ins-sf-val teal">99213</span></div>
+          </div>
+        </div>
+        {/* Chat */}
+        <div className="ins-chat">
+          <div className="ins-chat-header">
+            <div className="ins-chat-av">A</div>
+            <div>
+              <div className="ins-chat-name">Prior Auth Agent · Elevia</div>
+              <div className="ins-chat-tagline">Automated pre-authorization workflow</div>
+            </div>
+            <div className="ins-chat-live"><div className="ins-live-dot"/>Live</div>
+          </div>
+          <div className="ins-messages" ref={msgsRef}>
+            <div className="ins-sys-msg">Session started · {patient.name} · {patient.insurance}</div>
+            {msgs.map(m => <div key={m.id}>{renderMsg(m)}</div>)}
+            {typing && (
+              <div className="ins-msg agent">
+                <div className="ins-msg-av ins-agent-av">A</div>
+                <div className="ins-typing"><div className="ins-typing-dot"/><div className="ins-typing-dot"/><div className="ins-typing-dot"/></div>
+              </div>
+            )}
+          </div>
+          <div className="ins-input-bar">
+            <input className="ins-input" placeholder="Ask a question about this authorization…" />
+            <button className="ins-send-btn">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ScanRow({ label, delay }) {
+  const [state, setState] = React.useState('pending');
+  const [barW, setBarW] = React.useState(0);
+  React.useEffect(() => {
+    const t1 = setTimeout(() => { setState('active'); setBarW(60); }, delay + 200);
+    const t2 = setTimeout(() => { setState('done'); setBarW(100); }, delay + 1100);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [delay]);
+  return (
+    <div className={`ins-scan-row ${state}`}>
+      {state === 'active' ? <div className="ins-scan-spinner"/> : state === 'done' ? <span>✓</span> : <span style={{width:12,display:'inline-block'}}/>}
+      <span style={{flex:1}}>{label}</span>
+      <div className="ins-scan-bar-wrap"><div className="ins-scan-bar" style={{width:barW+'%'}}/></div>
+    </div>
+  );
+}
+
+/* Insurance Validation flow */
+function InsValidate({ patient, onBack, onHome }) {
+  const [msgs, setMsgs] = React.useState([]);
+  const [typing, setTyping] = React.useState(false);
+  const [step, setStep] = React.useState(0);
+  const msgsRef = React.useRef(null);
+
+  const VAL_STEPS = [
+    { label: 'EHR Insurance Lookup', subs: ['Connect to Ethizo EHR', 'Fetch insurance record', 'Extract policy details'] },
+    { label: 'Coverage Verification', subs: ['Verify plan active', 'Check eligibility dates', 'Confirm benefit year'] },
+    { label: 'Copay Determination', subs: ['Apply CPT fee schedule', 'Calculate patient share', 'Check deductible status'] },
+    { label: 'Validation Complete', subs: ['Results logged to EHR', 'Staff notified', 'Ready for check-in'] },
+  ];
+
+  const addMsg = (role, content) => setMsgs(m => [...m, { role, content, id: Date.now() + Math.random() }]);
+
+  React.useEffect(() => {
+    if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
+  }, [msgs, typing]);
+
+  React.useEffect(() => {
+    const seq = [
+      [500,  () => setTyping(true)],
+      [1600, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Starting insurance validation for ${patient.name}. Connecting to Ethizo EHR to pull coverage details from ${patient.insurance}.` }); }],
+      [2200, () => { setStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Ethizo EHR Lookup', items: ['Connect to Ethizo EHR', 'Fetch insurance record', 'Extract policy details'], delays: [0, 800, 1700] }); }],
+      [5200, () => { setStep(2); addMsg('agent', { type: 'coverage', patient }); }],
+      [6400, () => { setStep(3); addMsg('agent', { type: 'text', text: 'Coverage verified — plan is active. Running copay calculation for the scheduled appointment type.' }); }],
+      [7200, () => { addMsg('agent', { type: 'copay', patient }); }],
+      [8800, () => { setStep(4); addMsg('agent', { type: 'validated', patient }); }],
+    ];
+    const timers = seq.map(([delay, fn]) => setTimeout(fn, delay));
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const renderMsg = (m) => {
+    if (m.role !== 'agent') return null;
+    if (m.content.type === 'text') return (
+      <div className="ins-msg agent">
+        <div className="ins-msg-av ins-agent-av">E</div>
+        <div className="ins-bubble">{m.content.text}</div>
+      </div>
+    );
+    if (m.content.type === 'scan') return (
+      <div className="ins-msg agent">
+        <div className="ins-msg-av ins-agent-av">E</div>
+        <div className="ins-card">
+          <div className="ins-card-header">
+            <span style={{fontSize:13}}>🔗</span>
+            <div><div className="ins-card-title">{m.content.title}</div></div>
+            <div className="ins-card-badge ins-badge-source">Ethizo</div>
+          </div>
+          <div className="ins-card-body">
+            {m.content.items.map((item, i) => (
+              <ScanRow key={i} label={item} delay={m.content.delays[i]} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+    if (m.content.type === 'coverage') return (
+      <div className="ins-msg agent">
+        <div className="ins-msg-av ins-agent-av">E</div>
+        <div className="ins-card">
+          <div className="ins-card-header">
+            <span style={{fontSize:13}}>🛡</span>
+            <div><div className="ins-card-title">Insurance Coverage — Verified</div><div className="ins-card-sub">{m.content.patient.insurance} · Retrieved from Ethizo EHR</div></div>
+            <div className="ins-card-badge ins-badge-ok">Active</div>
+          </div>
+          <div className="ins-card-grid">
+            <div className="ins-cg-item"><div className="ins-cg-label">Plan Type</div><div className="ins-cg-val">PPO</div></div>
+            <div className="ins-cg-item"><div className="ins-cg-label">Group #</div><div className="ins-cg-val">UHC-83920</div></div>
+            <div className="ins-cg-item"><div className="ins-cg-label">Member ID</div><div className="ins-cg-val">W294810332</div></div>
+            <div className="ins-cg-item"><div className="ins-cg-label">Plan Year</div><div className="ins-cg-val teal">Jan–Dec 2026</div></div>
+            <div className="ins-cg-item"><div className="ins-cg-label">Effective</div><div className="ins-cg-val">Jan 1, 2026</div></div>
+            <div className="ins-cg-item"><div className="ins-cg-label">Status</div><div className="ins-cg-val teal">Active ✓</div></div>
+          </div>
+        </div>
+      </div>
+    );
+    if (m.content.type === 'copay') return (
+      <div className="ins-msg agent">
+        <div className="ins-msg-av ins-agent-av">E</div>
+        <div className="ins-card">
+          <div className="ins-card-header">
+            <span style={{fontSize:13}}>💰</span>
+            <div><div className="ins-card-title">Copay &amp; Cost Calculation</div><div className="ins-card-sub">Based on plan fee schedule · CPT 99213</div></div>
+            <div className="ins-card-badge ins-badge-payer">Calculated</div>
+          </div>
+          <div className="ins-card-body">
+            {[
+              ['Visit Type', m.content.patient.appt, false],
+              ['CPT Code', '99213 — Office Visit, Est. Patient', false],
+              ['Allowed Amount', '$185.00', false],
+              ['Deductible Met', '$1,200 / $1,500 (80%)', false],
+              ['Plan Pays', '$148.00 (80%)', false],
+              ['Patient Copay', '$37.00', true],
+            ].map(([k,v,highlight]) => (
+              <div key={k} className="ins-row">
+                <span className="ins-row-key">{k}</span>
+                <span className={`ins-row-val${highlight?' teal':''}`} style={highlight?{fontSize:15,fontWeight:700}:{}}>{v}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{padding:'10px 14px',background:'var(--teal-soft)',borderTop:'1px solid oklch(87% 0.05 250)'}}>
+            <div style={{fontSize:12,color:'var(--teal-deep)',fontWeight:600}}>Patient owes <strong>$37.00</strong> at time of service</div>
+            <div style={{fontSize:11,color:'var(--ink-3)',marginTop:2}}>Remaining deductible: $300 · Out-of-pocket max: $3,200 / $6,000</div>
+          </div>
+        </div>
+      </div>
+    );
+    if (m.content.type === 'validated') return (
+      <div className="ins-msg agent">
+        <div className="ins-msg-av ins-agent-av">E</div>
+        <div className="ins-result-banner validated">
+          <div className="ins-result-icon">✓</div>
+          <div>
+            <div className="ins-result-title">Insurance Validated</div>
+            <div className="ins-result-sub">{m.content.patient.name} has active {m.content.patient.insurance} coverage.<br/>Patient copay: <strong>$37.00</strong> at time of service. Results logged to Ethizo EHR.</div>
+            <div className="ins-ref">Validation ID: VAL-2026-0422-{m.content.patient.initials}</div>
+          </div>
+        </div>
+      </div>
+    );
+    return null;
+  };
+
+  return (
+    <div className="ins-view" style={{height:'calc(100vh - 70px)'}}>
+      <div style={{display:'flex',alignItems:'center',gap:10,padding:'10px 20px',background:'var(--surface)',borderBottom:'1px solid var(--hair)',flexShrink:0}}>
+        <div className="view-strip-nav">
+          <button className="pn-btn" onClick={onBack}>← Back</button>
+          <span className="pn-sep">/</span>
+          <button className="pn-btn pn-home" onClick={onHome}>⌂ Dashboard</button>
+        </div>
+        <span className="pn-sep" style={{marginLeft:6}}>/</span>
+        <span style={{fontSize:13,fontWeight:600,color:'var(--ink-2)'}}>Insurance Validation</span>
+        <span style={{fontSize:13,color:'var(--ink-4)'}}>·</span>
+        <span style={{fontSize:13,fontWeight:600,color:'var(--ink)'}}>{patient.name}</span>
+        <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
+          <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:'var(--teal-soft)',color:'var(--teal-deep)',border:'1px solid oklch(87% 0.05 250)',fontWeight:600}}>{patient.insurance}</span>
+        </div>
+      </div>
+      <div className="ins-shell" style={{height:'calc(100% - 49px)'}}>
+        <div className="ins-sidebar">
+          <div className="ins-sb-patient">
+            <div className="ins-sb-av">{patient.initials}</div>
+            <div><div className="ins-sb-name">{patient.name}</div><div className="ins-sb-sub">{patient.appt}</div></div>
+          </div>
+          <div className="ins-step-section">Validation Workflow</div>
+          {VAL_STEPS.map((s, i) => (
+            <div key={i} className={`ins-step${step===i+1?' active':step>i+1?' done':''}`}>
+              <div className="ins-step-dot-col">
+                <div className="ins-step-dot">{step>i+1?'✓':i+1}</div>
+                {i < VAL_STEPS.length-1 && <div className="ins-step-conn" />}
+              </div>
+              <div className="ins-step-body">
+                <div className="ins-step-label">{s.label}</div>
+                <div className="ins-step-subs">
+                  {s.subs.map((sub, j) => (
+                    <div key={j} className={`ins-sub${step>i+1?' done':''}`}>
+                      <div className="ins-sub-dot"/>{sub}
+                    </div>
+                  ))}
+                </div>
+                {step>i+1 && <div className="ins-step-badge ins-badge-auto">Auto</div>}
+              </div>
+            </div>
+          ))}
+          <div className="ins-sb-footer">
+            <div className="ins-sf-row"><span className="ins-sf-label">Patient</span><span className="ins-sf-val">{patient.name}</span></div>
+            <div className="ins-sf-row"><span className="ins-sf-label">Insurance</span><span className="ins-sf-val teal">{patient.insurance}</span></div>
+            <div className="ins-sf-row"><span className="ins-sf-label">Source</span><span className="ins-sf-val">Ethizo EHR</span></div>
+          </div>
+        </div>
+        <div className="ins-chat">
+          <div className="ins-chat-header">
+            <div className="ins-chat-av">V</div>
+            <div>
+              <div className="ins-chat-name">Insurance Validator · Elevia</div>
+              <div className="ins-chat-tagline">Real-time coverage &amp; copay determination</div>
+            </div>
+            <div className="ins-chat-live"><div className="ins-live-dot"/>Live</div>
+          </div>
+          <div className="ins-messages" ref={msgsRef}>
+            <div className="ins-sys-msg">Session started · {patient.name} · {patient.insurance}</div>
+            {msgs.map(m => <div key={m.id}>{renderMsg(m)}</div>)}
+            {typing && (
+              <div className="ins-msg agent">
+                <div className="ins-msg-av ins-agent-av">V</div>
+                <div className="ins-typing"><div className="ins-typing-dot"/><div className="ins-typing-dot"/><div className="ins-typing-dot"/></div>
+              </div>
+            )}
+          </div>
+          <div className="ins-input-bar">
+            <input className="ins-input" placeholder="Ask about coverage, copay, or benefits…" />
+            <button className="ins-send-btn">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* Clinic dashboard */
 function ClinicDashboard({ onNavigate }) {
   const [apptCount, setApptCount] = React.useState(null);
@@ -5704,6 +7405,13 @@ function ClinicDashboard({ onNavigate }) {
           <div className="ct-sub">Weekly calendar view of appointments by provider. Syncs with Ethizo EHR in real time.</div>
           <div className="ct-cta">Open calendar <span>→</span></div>
         </div>
+
+        <div className="clinic-tile" onClick={() => onNavigate('insurance')}>
+          <div className="ct-icon">🛡</div>
+          <div className="ct-title">Insurance Authorization</div>
+          <div className="ct-sub">Submit prior authorizations and validate patient insurance coverage with AI-assisted workflows powered by Ethizo EHR.</div>
+          <div className="ct-cta">Get started <span>→</span></div>
+        </div>
       </div>
     </div>
   );
@@ -5711,11 +7419,13 @@ function ClinicDashboard({ onNavigate }) {
 
 function ClinicPortal() {
   const [view, setView] = React.useState('dashboard');
+  const goHome = () => setView('dashboard');
 
-  if (view === 'new_appt')     return <CreateAppointmentView onBack={() => setView('dashboard')} onCreated={() => {}} />;
-  if (view === 'appointments') return <AppointmentsListView  onBack={() => setView('dashboard')} />;
-  if (view === 'patients')     return <PatientsListView      onBack={() => setView('dashboard')} />;
-  if (view === 'schedules')    return <SchedulesView          onBack={() => setView('dashboard')} />;
+  if (view === 'new_appt')     return <CreateAppointmentView onBack={goHome} onHome={goHome} onCreated={() => {}} />;
+  if (view === 'appointments') return <AppointmentsListView  onBack={goHome} onHome={goHome} />;
+  if (view === 'patients')     return <PatientsListView      onBack={goHome} onHome={goHome} />;
+  if (view === 'schedules')    return <SchedulesView          onBack={goHome} onHome={goHome} />;
+  if (view === 'insurance')    return <InsuranceAuthView      onBack={goHome} onHome={goHome} />;
   return <ClinicDashboard onNavigate={setView} />;
 }
 
@@ -5776,8 +7486,8 @@ function App() {
       ) : (
         <>
           {page === 'welcome' && <WelcomePage patient={effectivePatient} intakeCtx={intakeCtx} onChoose={setPage} />}
-          {page === 'docs'    && <DocListPage patient={effectivePatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onSwitchToAI={() => setPage('ai')} />}
-          {page === 'ai'      && <AIIntakePage patient={effectivePatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} />}
+          {page === 'docs'    && <DocListPage patient={effectivePatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} onSwitchToAI={() => setPage('ai')} />}
+          {page === 'ai'      && <AIIntakePage patient={effectivePatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} />}
         </>
       )}
       <Footer />
