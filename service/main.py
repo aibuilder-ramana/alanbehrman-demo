@@ -1,5 +1,5 @@
 """
-Run from elevia-1medicalservices/:
+Run from elevia-alanbehrman/:
     uvicorn service.main:app --port 8020 --reload
 """
 import os
@@ -46,6 +46,10 @@ app.include_router(forms.router,        prefix="/api",               tags=["form
 @app.get("/", include_in_schema=False)
 def serve_index():
     return FileResponse(os.path.join(_ROOT, "index.html"))
+
+@app.get("/intake-v2", include_in_schema=False)
+def serve_intake_v2():
+    return FileResponse(os.path.join(_ROOT, "intake-v2.html"))
 
 # Static asset directories
 for _name, _rel in [("assets", "assets"), ("resources", "resources"), ("data", "data")]:

@@ -1,7 +1,7 @@
 """
 Generates synthetic test patients + appointments covering multiple scenarios.
 
-Run from elevia-1medicalservices/:
+Run from elevia-alanbehrman/:
     python service/gen_test_users.py
 
 Prints intake URLs for each scenario.
@@ -17,7 +17,7 @@ from service.database import engine, SessionLocal
 from service import models, crud, schemas
 from sqlalchemy import select, text
 
-BASE_URL = "http://localhost:8020"
+BASE_URL = "http://localhost:8025"
 
 
 def migrate_schema(engine):
@@ -133,7 +133,7 @@ def run():
 
     # ── 1. New patient — Immigration Medical Exam ─────────────────────────
     p1 = make_patient(db, "Amara", "Okafor", 1988, 6, 15, "Female", "amara.okafor@example.com")
-    a1 = make_appointment(db, p1.id, "immigration_medical_exam", 7, "Dr. Anjali Desai, MD", "Kent, WA",
+    a1 = make_appointment(db, p1.id, "immigration_medical_exam", 7, "Dr. Ramakanth Vemuluri, MD", "Marietta, GA",
                           description="Immigration medical exam for green card adjustment of status (Form I-485). First-time applicant, no prior US medical records.")
     t1, d1 = count_forms(db, a1.id)
     scenarios.append({
@@ -145,7 +145,7 @@ def run():
 
     # ── 2. Returning patient — Immigration Medical Exam (3 forms done) ───
     p2 = make_patient(db, "David", "Nguyen", 1995, 3, 22, "Male", "david.nguyen@example.com")
-    a2 = make_appointment(db, p2.id, "immigration_medical_exam", 5, "Dr. Anjali Desai, MD", "Kent, WA",
+    a2 = make_appointment(db, p2.id, "immigration_medical_exam", 5, "Dr. Ramakanth Vemuluri, MD", "Marietta, GA",
                           description="Immigration medical exam for spousal green card (CR-1 visa). Vaccination records partially available.")
     mark_forms_completed(db, a2.id, ["brief_i693", "hipaa", "vaccine"])
     t2, d2 = count_forms(db, a2.id)
@@ -158,7 +158,7 @@ def run():
 
     # ── 3. New patient — Primary Care Visit ──────────────────────────────
     p3 = make_patient(db, "Sofia", "Martinez", 1979, 11, 4, "Female", "sofia.martinez@example.com")
-    a3 = make_appointment(db, p3.id, "primary_care", 14, "Dr. James Thornton, MD", "Bellevue, WA",
+    a3 = make_appointment(db, p3.id, "primary_care", 14, "Meredith Mitchell, PMHNP-BC", "Duluth, GA",
                           description="New patient establishing primary care. Reports chronic lower back pain, fatigue, and occasional headaches. Last saw a doctor 2 years ago.")
     t3, d3 = count_forms(db, a3.id)
     scenarios.append({
@@ -170,7 +170,7 @@ def run():
 
     # ── 4. Returning patient — Primary Care (most forms done) ────────────
     p4 = make_patient(db, "Marcus", "Johnson", 1962, 8, 30, "Male", "marcus.johnson@example.com")
-    a4 = make_appointment(db, p4.id, "primary_care", 3, "Dr. James Thornton, MD", "Bellevue, WA",
+    a4 = make_appointment(db, p4.id, "primary_care", 3, "Meredith Mitchell, PMHNP-BC", "Duluth, GA",
                           description="Follow-up for hypertension and Type 2 diabetes management. Patient reports improved BP readings. Medication refill needed for metformin and lisinopril.")
     mark_forms_completed(db, a4.id, ["full_intake", "vaccine", "hipaa", "phq9", "gad7"])
     t4, d4 = count_forms(db, a4.id)
@@ -183,7 +183,7 @@ def run():
 
     # ── 5. New patient — Annual Physical ─────────────────────────────────
     p5 = make_patient(db, "Emily", "Chen", 1990, 1, 17, "Female", "emily.chen@example.com")
-    a5 = make_appointment(db, p5.id, "annual_physical", 10, "Dr. Priya Kapoor, MD", "Kent, WA",
+    a5 = make_appointment(db, p5.id, "annual_physical", 10, "Patty Postanowicz, PhD, LMFT", "Marietta, GA",
                           description="Annual wellness exam. Patient in good general health. Requesting routine labs — CBC, metabolic panel, thyroid, and cholesterol screen. No current complaints.")
     t5, d5 = count_forms(db, a5.id)
     scenarios.append({
@@ -195,7 +195,7 @@ def run():
 
     # ── 6. New patient — Pre-Employment Physical ──────────────────────────
     p6 = make_patient(db, "Raj", "Patel", 2000, 9, 5, "Male", "raj.patel@example.com")
-    a6 = make_appointment(db, p6.id, "pre_employment", 2, "Dr. Priya Kapoor, MD", "Bellevue, WA",
+    a6 = make_appointment(db, p6.id, "pre_employment", 2, "Patty Postanowicz, PhD, LMFT", "Duluth, GA",
                           description="Pre-employment physical for warehouse logistics role. Employer requires drug screen, vision and hearing test, and lift-capacity clearance.")
     t6, d6 = count_forms(db, a6.id)
     scenarios.append({
@@ -207,7 +207,7 @@ def run():
 
     # ── 7. Returning patient — almost complete (1 remaining) ─────────────
     p7 = make_patient(db, "Fatima", "Al-Hassan", 1985, 4, 12, "Female", "fatima.alhassan@example.com")
-    a7 = make_appointment(db, p7.id, "immigration_medical_exam", 1, "Dr. Anjali Desai, MD", "Kent, WA",
+    a7 = make_appointment(db, p7.id, "immigration_medical_exam", 1, "Dr. Ramakanth Vemuluri, MD", "Marietta, GA",
                           description="Immigration medical exam for green card adjustment of status. Appointment tomorrow — patient has completed most forms, one outstanding.")
     all_pf = db.execute(
         select(models.PatientForm, models.FormDefinition)
@@ -228,10 +228,10 @@ def run():
     # ── 8. Returning patient RECENT (< 3 yrs) → only Patient Update Form ─
     p8 = make_patient(db, "Kenji", "Tanaka", 1987, 7, 20, "Male", "kenji.tanaka@example.com")
     # Prior visit 8 months ago — makes patient returning_recent
-    make_appointment(db, p8.id, "primary_care", -240, "Dr. James Thornton, MD", "Bellevue, WA",
+    make_appointment(db, p8.id, "primary_care", -240, "Meredith Mitchell, PMHNP-BC", "Duluth, GA",
                      description="Annual wellness visit. No acute complaints.")
     # New appointment — crud detects returning_recent, serves only update form
-    a8 = make_appointment(db, p8.id, "primary_care", 14, "Dr. James Thornton, MD", "Bellevue, WA",
+    a8 = make_appointment(db, p8.id, "primary_care", 14, "Meredith Mitchell, PMHNP-BC", "Duluth, GA",
                           description="Follow-up for blood pressure monitoring. Patient reports BP well controlled.")
     t8, d8 = count_forms(db, a8.id)
     scenarios.append({
@@ -245,7 +245,7 @@ def run():
     # ── 9. Returning patient STALE (> 3 yrs) → full intake, all forms ────
     p9 = make_patient(db, "Carmen", "Vega", 1975, 12, 1, "Female", "carmen.vega@example.com")
     # Create a prior appointment, then backdate it to 4 years ago
-    prior_a9 = make_appointment(db, p9.id, "primary_care", 0, "Dr. Priya Kapoor, MD", "Kent, WA",
+    prior_a9 = make_appointment(db, p9.id, "primary_care", 0, "Patty Postanowicz, PhD, LMFT", "Marietta, GA",
                                 description="Old visit.")
     db.execute(
         text("UPDATE appointments SET created_at = now() - INTERVAL '4 years' WHERE id = :id"),
@@ -253,7 +253,7 @@ def run():
     )
     db.commit()
     # New appointment — crud detects returning_stale, serves full intake
-    a9 = make_appointment(db, p9.id, "primary_care", 10, "Dr. Priya Kapoor, MD", "Kent, WA",
+    a9 = make_appointment(db, p9.id, "primary_care", 10, "Patty Postanowicz, PhD, LMFT", "Marietta, GA",
                           description="Annual physical. Patient returning after 4-year gap. Full records refresh needed.")
     t9, d9 = count_forms(db, a9.id)
     scenarios.append({
@@ -266,7 +266,7 @@ def run():
 
     # ── 10. New patient — depression symptoms → PHQ-9 included ───────────
     p10 = make_patient(db, "Jordan", "Williams", 1994, 5, 8, "Female", "jordan.williams@example.com")
-    a10 = make_appointment(db, p10.id, "primary_care", 7, "Dr. James Thornton, MD", "Bellevue, WA",
+    a10 = make_appointment(db, p10.id, "primary_care", 7, "Meredith Mitchell, PMHNP-BC", "Duluth, GA",
                            description="Patient reports persistent low mood and feeling depressed for the past 3 months. Difficulty sleeping, low energy, loss of interest in daily activities.")
     t10, d10 = count_forms(db, a10.id)
     scenarios.append({
@@ -278,7 +278,7 @@ def run():
 
     # ── 11. New patient — anxiety symptoms → GAD-7 included ──────────────
     p11 = make_patient(db, "Arjun", "Sharma", 1998, 2, 14, "Male", "arjun.sharma@example.com")
-    a11 = make_appointment(db, p11.id, "primary_care", 5, "Dr. Priya Kapoor, MD", "Kent, WA",
+    a11 = make_appointment(db, p11.id, "primary_care", 5, "Patty Postanowicz, PhD, LMFT", "Marietta, GA",
                            description="Patient experiencing significant anxiety and panic attacks. Reports constant worry about work and finances. Difficulty concentrating and feeling restless.")
     t11, d11 = count_forms(db, a11.id)
     scenarios.append({
@@ -290,9 +290,9 @@ def run():
 
     # ── 12. Returning recent + depression + anxiety → update + PHQ-9 + GAD-7
     p12 = make_patient(db, "Leila", "Nasser", 1985, 9, 25, "Female", "leila.nasser@example.com")
-    make_appointment(db, p12.id, "primary_care", -180, "Dr. Priya Kapoor, MD", "Kent, WA",
+    make_appointment(db, p12.id, "primary_care", -180, "Patty Postanowicz, PhD, LMFT", "Marietta, GA",
                      description="Routine follow-up. Patient doing well.")
-    a12 = make_appointment(db, p12.id, "primary_care", 3, "Dr. Priya Kapoor, MD", "Kent, WA",
+    a12 = make_appointment(db, p12.id, "primary_care", 3, "Patty Postanowicz, PhD, LMFT", "Marietta, GA",
                            description="Patient reporting increased anxiety, depression, and difficulty coping following recent bereavement. Feeling hopeless and extremely anxious about the future.")
     t12, d12 = count_forms(db, a12.id)
     scenarios.append({

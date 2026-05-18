@@ -11,7 +11,7 @@
 - Intended Use: Obtain patient authorization for clinic to communicate via electronic channels (text, email, phone), consistent with HIPAA requirements and state law
 - Version: ECOMMS-CONSENT-RAG-v1
 - Language: English
-- Provider: 1 Stop Medical Services (Kent, WA & Bellevue, WA)
+- Provider: 1 Stop Medical Services (Marietta, GA & Duluth, GA)
 - Regulatory Basis: HIPAA Privacy Rule (45 CFR §164.522), Washington State RCW 70.02 (Medical Records — Health Care Information Access and Disclosure Act)
 
 ---

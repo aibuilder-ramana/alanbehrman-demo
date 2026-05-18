@@ -129,8 +129,8 @@
 
 * Exam Location (single select)
 
-  * Kent, WA
-  * Bellevue, WA
+  * Marietta, GA
+  * Duluth, GA
 
 ---
 

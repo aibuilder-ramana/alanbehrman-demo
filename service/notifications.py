@@ -58,7 +58,7 @@ _EMAIL_HTML = """\
 <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#1e2a38;background:#fff;border-radius:12px">
   <div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #e8eff5">
     <span style="font-size:16px;font-weight:700;color:#1e2a38">1 Stop Medical Services</span>
-    <span style="font-size:13px;color:#8a99aa;margin-left:8px">· Kent &amp; Bellevue, WA</span>
+    <span style="font-size:13px;color:#8a99aa;margin-left:8px">· Marietta &amp; Duluth, GA</span>
   </div>
 
   <h2 style="font-size:22px;font-weight:700;margin:0 0 6px;letter-spacing:-0.3px">
@@ -96,7 +96,7 @@ _EMAIL_HTML = """\
   <p style="font-size:13px;color:#8a99aa;line-height:1.6;margin:0">
     Questions? Call us at <a href="tel:2533978683" style="color:#2a7fd4">(253) 397-8683</a>
     or reply to this email.<br/>
-    1 Stop Medical Services · Kent &amp; Bellevue, WA
+    1 Stop Medical Services · Marietta &amp; Duluth, GA
   </p>
 </div>
 """

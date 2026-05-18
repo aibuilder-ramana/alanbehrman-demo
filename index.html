@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>1 Stop Medical — Patient Intake · Powered by Elevia</title>
+<title>AlanBehrman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" type="image/jpeg" href="assets/onestop-logo.jpg" />
+<link rel="icon" type="image/png" href="assets/alan-Behrman-Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -12,19 +12,19 @@
 /* ── Design tokens ─────────────────────────────────────────────────────── */
 :root {
   --bg: oklch(98.5% 0.004 85);
-  --bg-tint: oklch(97% 0.008 170);
+  --bg-tint: oklch(98.5% 0.008 80);
   --surface: oklch(100% 0 0);
-  --ink: oklch(22% 0.012 240);
-  --ink-2: oklch(38% 0.012 240);
-  --ink-3: oklch(55% 0.010 240);
-  --ink-4: oklch(72% 0.008 240);
+  --ink: oklch(18% 0.015 240);
+  --ink-2: oklch(36% 0.012 240);
+  --ink-3: oklch(54% 0.010 240);
+  --ink-4: oklch(71% 0.008 240);
   --hair: oklch(90% 0.008 200);
   --hair-strong: oklch(82% 0.010 200);
-  --teal: oklch(55% 0.14 250);
-  --teal-deep: oklch(40% 0.14 255);
-  --teal-soft: oklch(95% 0.03 250);
-  --sage: oklch(68% 0.06 200);
-  --sage-soft: oklch(95% 0.02 200);
+  --teal: oklch(56% 0.10 158);
+  --teal-deep: oklch(38% 0.09 158);
+  --teal-soft: oklch(96% 0.03 158);
+  --sage: oklch(56% 0.10 158);
+  --sage-soft: oklch(96% 0.03 158);
   --amber: oklch(78% 0.12 80);
   --radius-sm: 6px;
   --radius: 10px;
@@ -148,6 +148,15 @@ button { font-family: inherit; }
   font-weight: 500;
   white-space: nowrap;
 }
+.profile-photo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--hair-strong);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
 
 /* ── Footer ─────────────────────────────────────────────────────────────── */
 .footer {
@@ -193,11 +202,19 @@ button { font-family: inherit; }
 }
 .btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .btn-primary:hover { background: oklch(15% 0.012 240); transform: translateY(-1px); }
-.btn-accent { background: var(--teal); color: white; border-color: var(--teal); }
-.btn-accent:hover { background: var(--teal-deep); transform: translateY(-1px); box-shadow: 0 4px 14px -4px oklch(55% 0.14 250 / 0.4); }
+.btn-accent { background: oklch(52% 0.12 158); color: white; border-color: oklch(52% 0.12 158); }
+.btn-accent:hover { background: var(--teal-deep); transform: translateY(-1px); box-shadow: 0 4px 14px -4px oklch(52% 0.12 158 / 0.38); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--hair-strong); }
 .btn-ghost:hover { background: var(--bg-tint); border-color: var(--ink-3); }
 .btn-lg { padding: 16px 28px; font-size: 15px; border-radius: 12px; }
+.btn:disabled,
+.btn-accent:disabled,
+.btn-ghost:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 /* ── Utilities ──────────────────────────────────────────────────────────── */
 .eyebrow {
@@ -206,6 +223,24 @@ button { font-family: inherit; }
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 500;
+}
+.patient-logo-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+.patient-logo-lockup img {
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+}
+.patient-logo-lockup span {
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 /* ── Welcome B (Split) ──────────────────────────────────────────────────── */
@@ -278,12 +313,17 @@ button { font-family: inherit; }
 
 .welcome-b .right {
   background: var(--bg-tint);
-  padding: 72px 60px;
+  padding: clamp(28px, 5vh, 72px) clamp(20px, 5vw, 60px);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.welcome-b .right > * {
+  max-width: 100%;
 }
 .welcome-b .right::before {
   content: '';
@@ -374,6 +414,1622 @@ button { font-family: inherit; }
   font-size: 12px;
   color: var(--ink-4);
   line-height: 1.55;
+}
+.hipaa-ack-panel {
+  width: min(100%, 500px);
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  position: relative;
+}
+.hipaa-ack-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--hair);
+  margin-bottom: 16px;
+}
+.hipaa-ack-header img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.hipaa-ack-title {
+  font-size: 18px;
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.hipaa-ack-sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 3px;
+}
+.hipaa-notice-scroll {
+  max-height: 310px;
+  overflow: auto;
+  padding: 2px 4px 2px 0;
+  margin-bottom: 18px;
+}
+.hipaa-local-form {
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+.hipaa-local-scroll {
+  max-height: min(50vh, 430px);
+  overflow: auto;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--hair);
+}
+.hipaa-form-heading {
+  color: #2f2f2f;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+.hipaa-notice-copy {
+  color: #3f3f46;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.hipaa-notice-copy h3 {
+  color: #303036;
+  font-size: 14px;
+  line-height: 1.35;
+  margin: 18px 0 8px;
+}
+.hipaa-notice-copy p,
+.hipaa-notice-copy li {
+  margin: 0 0 10px;
+}
+.hipaa-notice-copy ul {
+  margin: 0 0 10px 18px;
+  padding: 0;
+}
+.hipaa-fields {
+  padding: 18px 24px 22px;
+}
+.hipaa-field-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 10px 0;
+}
+.hipaa-field-row label,
+.hipaa-field-label {
+  color: #2f2f2f;
+  font-size: 14px;
+  font-weight: 600;
+  padding-top: 8px;
+}
+.hipaa-required {
+  color: #d33;
+  margin-left: 2px;
+}
+.hipaa-name-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.hipaa-subfield {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hipaa-subfield small {
+  color: #6f7280;
+  font-size: 11px;
+}
+.hipaa-input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #c8c8c8;
+  border-radius: 3px;
+  background: #fff;
+  color: #2f2f2f;
+  font: inherit;
+  font-size: 14px;
+  padding: 9px 10px;
+}
+.hipaa-input:focus {
+  border-color: #005f59;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 95, 89, 0.12);
+}
+.hipaa-date-input {
+  max-width: 180px;
+}
+.hipaa-signature-pad {
+  width: min(100%, 330px);
+  border: 1px solid #c8c8c8;
+  border-radius: 3px;
+  background: #fff;
+}
+.hipaa-signature-pad canvas {
+  width: 100%;
+  height: 116px;
+  display: block;
+  touch-action: none;
+}
+.hipaa-signature-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-top: 1px solid #e7e7e7;
+}
+.hipaa-signature-actions span {
+  color: #7a7d87;
+  font-size: 11px;
+}
+.hipaa-clear {
+  border: 0;
+  background: transparent;
+  color: #005f59;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hipaa-submit-row {
+  padding-top: 14px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+.hipaa-submit {
+  min-width: 120px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 4px;
+  background: #005f59;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hipaa-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hipaa-notice-scroll h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+.hipaa-notice-scroll p {
+  margin: 0 0 12px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.hipaa-notice-section {
+  padding: 12px 0;
+  border-top: 1px solid var(--hair);
+}
+.hipaa-notice-section h4 {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ack-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid var(--hair-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+.ack-check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--teal);
+  flex-shrink: 0;
+}
+.ack-check strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.ack-check small {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.45;
+  margin-top: 4px;
+}
+.privacy-saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  color: oklch(38% 0.08 200);
+  border: 1px solid oklch(84% 0.04 200);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.basic-info-panel,
+.ehr-scan-card,
+.needs-panel {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  position: relative;
+}
+.basic-info-panel h2,
+.ehr-scan-card h2,
+.needs-panel h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.basic-info-panel p,
+.ehr-scan-card p,
+.needs-panel p {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.basic-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.basic-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.basic-field.full {
+  grid-column: 1 / -1;
+}
+.basic-field label {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.basic-input {
+  width: 100%;
+  border: 1px solid var(--hair-strong);
+  border-radius: 8px;
+  padding: 10px 11px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.basic-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+textarea.basic-input {
+  min-height: 76px;
+  resize: vertical;
+}
+.chat-input-field {
+  min-height: 112px;
+  border-radius: 14px;
+  line-height: 1.55;
+}
+.chat-input-shell {
+  position: relative;
+}
+.chat-input-shell .chat-input-field {
+  display: block;
+}
+.chat-placeholder {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  color: var(--ink-4);
+  font-size: 13.5px;
+  line-height: 1.55;
+  pointer-events: none;
+  animation: hintDrift 2.5s ease both;
+}
+@keyframes hintDrift {
+  0% { opacity: 0; transform: translateY(8px); }
+  12%, 78% { opacity: 0.9; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
+.hint-rotator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  font-size: 12px;
+  overflow: hidden;
+}
+.hint-rotator span:first-child {
+  color: var(--teal-deep);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.hint-rotator span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.basic-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.needs-section {
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--hair);
+}
+.needs-section-title {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+.workflow-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+.workflow-progress-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--hair);
+  overflow: hidden;
+}
+.workflow-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--teal);
+  transition: width 0.2s ease;
+}
+.workflow-progress span {
+  font-size: 12px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.workflow-prompt {
+  margin-bottom: 16px;
+}
+.workflow-prompt h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.workflow-prompt p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
+.ip-detect {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 13px;
+  border: 1px solid oklch(85% 0.04 200);
+  background: var(--teal-soft);
+  border-radius: 10px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+.ip-detect strong {
+  display: block;
+  color: var(--teal-deep);
+}
+.location-options {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.location-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.location-option:hover {
+  border-color: var(--hair-strong);
+  box-shadow: var(--shadow-sm);
+}
+.location-option.selected {
+  border-color: var(--teal);
+  background: oklch(98% 0.018 250);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+.location-option input {
+  margin-top: 3px;
+  accent-color: var(--teal);
+}
+.location-name {
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.location-address {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+.location-meta {
+  font-size: 11.5px;
+  color: var(--teal-deep);
+  font-weight: 700;
+  margin-top: 6px;
+}
+.workflow-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+}
+.needs-panel.insurance-step-panel {
+  max-width: min(100%, 840px);
+  padding: 20px 22px 18px;
+}
+.insurance-step-panel > p {
+  margin-bottom: 12px;
+}
+.insurance-step-panel .workflow-progress {
+  margin: 10px 0 16px;
+}
+.insurance-step-panel .workflow-prompt {
+  margin-bottom: 12px;
+}
+.insurance-step-panel .workflow-prompt h3 {
+  font-size: 18px;
+}
+.insurance-step-panel .workflow-prompt p {
+  margin-bottom: 0;
+}
+.insurance-mode {
+  display: flex;
+  gap: 8px;
+  padding: 3px;
+  border: 1px solid var(--hair);
+  background: var(--bg-tint);
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+.insurance-mode button {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.insurance-mode button.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.upload-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.insurance-step-panel .upload-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.upload-card {
+  padding: 16px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.insurance-step-panel .upload-card {
+  min-height: 210px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.upload-card-title {
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.insurance-step-panel .upload-card-title {
+  font-size: 13.5px;
+  line-height: 1.25;
+}
+.upload-card-lines {
+  width: 96px;
+  margin: 0 auto 14px;
+}
+.insurance-step-panel .upload-card-lines {
+  width: 72px;
+  margin-bottom: 10px;
+}
+.upload-card-lines span {
+  display: block;
+  height: 2px;
+  background: var(--hair-strong);
+  margin: 8px 0;
+}
+.upload-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.upload-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  width: 100%;
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 0;
+  white-space: normal;
+  line-height: 1.2;
+  text-align: center;
+  padding: 0 12px;
+}
+.upload-action span {
+  flex: 0 0 auto;
+}
+.insurance-step-panel .upload-action {
+  min-height: 38px;
+  font-size: 12.5px;
+  padding: 0 10px;
+}
+.upload-action.primary {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+.insurance-step-panel .workflow-nav {
+  margin-top: 14px;
+}
+.insurance-step-panel .btn-lg {
+  padding: 12px 18px;
+  border-radius: 10px;
+}
+.insurance-auth-panel {
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  padding: 14px;
+}
+.insurance-auth-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.insurance-auth-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--teal-soft);
+  color: var(--teal-deep);
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+.insurance-auth-mark.running {
+  animation: livePulse 1.4s ease infinite;
+}
+.insurance-auth-title {
+  margin: 0 0 3px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.insurance-auth-sub {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+.insurance-auth-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.insurance-auth-step {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.3;
+}
+.insurance-auth-step.active {
+  color: var(--ink);
+  border-color: oklch(84% 0.06 250);
+  background: var(--teal-soft);
+}
+.insurance-auth-step.done {
+  color: var(--ink-2);
+  background: var(--sage-soft);
+  border-color: oklch(84% 0.04 200);
+}
+.insurance-auth-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: var(--hair-strong);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+}
+.insurance-auth-step.active .insurance-auth-dot {
+  background: var(--teal);
+  animation: livePulse 1.4s ease infinite;
+}
+.insurance-auth-step.done .insurance-auth-dot {
+  background: var(--sage);
+}
+.coverage-summary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.coverage-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid oklch(84% 0.04 200);
+  border-radius: 10px;
+  background: var(--sage-soft);
+}
+.coverage-banner strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+}
+.coverage-banner span {
+  color: var(--ink-3);
+  font-size: 12.5px;
+}
+.coverage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.coverage-item {
+  padding: 11px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--bg);
+  min-width: 0;
+}
+.coverage-item .k {
+  color: var(--ink-3);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.coverage-item .v {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.copay-highlight {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 14px;
+  border-radius: 10px;
+  background: var(--teal-soft);
+  border: 1px solid oklch(84% 0.06 250);
+}
+.copay-highlight .amount {
+  color: var(--teal-deep);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.coverage-note {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+.appointment-panel {
+  width: 100%;
+  max-width: 760px;
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 22px;
+  position: relative;
+}
+.appointment-panel h2 {
+  margin: 0 0 6px;
+  color: var(--ink);
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+.appointment-panel p {
+  margin: 0 0 14px;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.appointment-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--hair);
+  border-radius: 9px;
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  font-size: 12.5px;
+  margin-bottom: 14px;
+}
+.appointment-source strong {
+  color: var(--ink);
+}
+.appointment-source a {
+  font-weight: 700;
+  text-decoration: none;
+}
+.appointment-list {
+  display: grid;
+  gap: 9px;
+}
+.appointment-card {
+  display: grid;
+  grid-template-columns: minmax(145px, 0.85fr) minmax(0, 1.4fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.appointment-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+  transform: translateY(-1px);
+}
+.appointment-time {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.appointment-meta {
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 4px;
+}
+.appointment-provider {
+  min-width: 0;
+}
+.appointment-provider strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.25;
+}
+.appointment-provider span {
+  display: block;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  margin-top: 3px;
+}
+.appointment-provider a {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 5px;
+  color: var(--teal-deep);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.appointment-select {
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: white;
+  font-size: 12.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.selected-appt-summary {
+  padding: 13px 14px;
+  border: 1px solid oklch(84% 0.04 200);
+  background: var(--sage-soft);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.selected-appt-summary strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+.credit-auth-panel {
+  width: 100%;
+  max-width: 680px;
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+.credit-auth-panel h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.credit-auth-panel p {
+  margin: 0 0 14px;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.credit-auth-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--teal-deep);
+  font-size: 12.5px;
+  font-weight: 800;
+  text-decoration: none;
+  margin-bottom: 14px;
+}
+.credit-notice {
+  padding: 12px 13px;
+  border-radius: 9px;
+  border: 1px solid oklch(84% 0.04 200);
+  background: var(--sage-soft);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+.credit-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.credit-upload-grid .upload-card {
+  min-height: 190px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.credit-auth-panel .basic-form-grid {
+  margin-top: 4px;
+}
+.credit-form-section-title {
+  margin: 16px 0 10px;
+  color: var(--ink-3);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.card-type-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.card-type-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid var(--hair-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.card-type-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.card-type-option.selected {
+  border-color: var(--teal);
+  background: var(--teal-soft);
+  color: var(--teal-deep);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+.credit-ocr-status {
+  margin-top: 10px;
+  padding: 10px 11px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.credit-ocr-status strong {
+  display: block;
+  color: var(--ink);
+  font-size: 12.5px;
+  margin-bottom: 2px;
+}
+.credit-ocr-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0 14px;
+}
+.credit-ocr-item {
+  padding: 10px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.credit-ocr-item .k {
+  color: var(--ink-3);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.credit-ocr-item .v {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 700;
+  min-height: 18px;
+  overflow-wrap: anywhere;
+}
+.credit-auth-panel .ack-check {
+  margin-top: 14px;
+}
+.credit-saved {
+  padding: 13px 14px;
+  border: 1px solid oklch(84% 0.04 200);
+  background: var(--sage-soft);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.credit-saved strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+.dynamic-forms-panel {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--hair);
+}
+.dynamic-forms-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.dynamic-forms-title {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+}
+.dynamic-forms-sub {
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.dynamic-forms-count {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+.dynamic-forms-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.dynamic-form-card {
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 12px;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.dynamic-form-card:hover,
+.dynamic-form-card.active {
+  border-color: var(--teal);
+  box-shadow: var(--shadow-sm);
+}
+.dynamic-form-card.done {
+  background: var(--sage-soft);
+  border-color: oklch(84% 0.04 200);
+}
+.dynamic-form-step {
+  color: var(--ink-4);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.dynamic-form-title {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+.dynamic-form-reason {
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.4;
+  margin-top: 5px;
+}
+.dynamic-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.dynamic-form-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--hair-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.dynamic-form-action.primary {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: white;
+}
+.dynamic-form-viewer {
+  margin-top: 12px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.dynamic-form-viewer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hair);
+  background: var(--bg);
+}
+.dynamic-form-viewer-title {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+.dynamic-form-viewer iframe {
+  width: 100%;
+  height: min(68vh, 620px);
+  border: 0;
+  display: block;
+  background: white;
+}
+.dynamic-screener-body {
+  padding: 14px;
+  max-height: min(68vh, 620px);
+  overflow: auto;
+}
+.confirmation-panel {
+  width: 100%;
+  max-width: 760px;
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+.confirmation-panel h2 {
+  margin: 0 0 6px;
+  color: var(--ink);
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+.confirmation-panel p {
+  margin: 0 0 14px;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.handoff-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 10px;
+}
+.handoff-summary-item {
+  padding: 12px;
+  border: 1px solid var(--hair);
+  border-radius: 9px;
+  background: var(--bg);
+}
+.handoff-summary-item .k {
+  color: var(--ink-3);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.handoff-summary-item .v {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.handoff-owner-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border: 1px solid oklch(84% 0.04 200);
+  border-radius: 10px;
+  background: var(--sage-soft);
+  margin-top: 12px;
+}
+.handoff-owner-banner strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+.handoff-owner-banner span {
+  display: block;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.signup-panel {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--bg);
+}
+.signup-panel h3 {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.25;
+}
+.signup-panel p {
+  margin: 0 0 13px;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.signup-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.signup-profile-item {
+  padding: 10px 11px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--surface);
+  min-width: 0;
+}
+.signup-profile-item .k {
+  color: var(--ink-3);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.signup-profile-item .v {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.sso-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.google-signin-wrap {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.google-signin-slot {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.sso-config-note {
+  padding: 10px 11px;
+  border: 1px dashed var(--hair-strong);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.sso-btn {
+  min-height: 46px;
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.15s, opacity 0.15s;
+  letter-spacing: -0.01em;
+}
+.sso-btn:hover { transform: translateY(-1px); opacity: 0.92; }
+.sso-btn:active { transform: translateY(0); }
+.sso-btn.sso-google {
+  background: #fff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  box-shadow: 0 1px 2px rgba(60,64,67,.12);
+}
+.sso-btn.sso-google:hover { box-shadow: 0 2px 6px rgba(60,64,67,.18); }
+.sso-btn.sso-apple {
+  background: #111;
+  border: 1px solid #111;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+.sso-btn.sso-microsoft {
+  background: #fff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  box-shadow: 0 1px 2px rgba(60,64,67,.12);
+}
+.sso-btn.sso-microsoft:hover { box-shadow: 0 2px 6px rgba(60,64,67,.18); }
+.sso-btn svg { flex-shrink: 0; }
+.signup-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid oklch(84% 0.04 200);
+  border-radius: 9px;
+  background: var(--sage-soft);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.signup-success strong {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.signup-profile-photo {
+  width: 38px;
+  height: 38px;
+  align-self: center;
+}
+.upload-status {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--sage);
+  font-weight: 600;
+  text-align: center;
+}
+.sr-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.ehr-source-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.ehr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  border: 1px solid var(--hair);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+.ehr-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hair-strong);
+}
+.ehr-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-top: 1px solid var(--hair);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.ehr-row.active {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ehr-row.active .ehr-dot {
+  background: var(--teal);
+  animation: livePulse 1.4s ease infinite;
+}
+.ehr-row.done {
+  color: var(--ink-2);
+}
+.ehr-row.done .ehr-dot {
+  background: var(--sage);
+}
+.match-result {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid oklch(84% 0.04 200);
+  background: var(--sage-soft);
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.match-result.new {
+  border-color: oklch(86% 0.06 80);
+  background: oklch(97% 0.025 80);
+}
+.match-result strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+.match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--teal-soft);
+  border: 1px solid oklch(86% 0.05 250);
+  color: var(--teal-deep);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 860px) {
+  .welcome-b {
+    display: block;
+    overflow-y: auto;
+  }
+  .welcome-b .left,
+  .welcome-b .right {
+    padding: 28px 22px;
+  }
+  .welcome-b .left {
+    justify-content: flex-start;
+    border-right: none;
+    border-bottom: 1px solid var(--hair);
+  }
+  .welcome-b h1 {
+    font-size: 38px;
+    max-width: none;
+  }
+  .summary-table {
+    max-width: none;
+    margin-bottom: 8px;
+  }
+  .summary-table .row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+  .welcome-b .right::before {
+    display: none;
+  }
+  .option-cards,
+  .hipaa-ack-panel,
+  .basic-info-panel,
+  .ehr-scan-card,
+  .needs-panel,
+  .confirmation-panel {
+    max-width: none;
+    width: 100%;
+  }
+  .basic-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .upload-card {
+    padding: 14px;
+  }
+  .upload-action {
+    font-size: 12.5px;
+  }
+  .insurance-auth-steps,
+  .coverage-grid,
+  .handoff-summary-grid,
+  .signup-profile-grid,
+  .dynamic-forms-grid {
+    grid-template-columns: 1fr;
+  }
+  .copay-highlight {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .appointment-card {
+    grid-template-columns: 1fr;
+  }
+  .appointment-select {
+    width: fit-content;
+  }
+  .credit-upload-grid {
+    grid-template-columns: 1fr;
+  }
+  .card-type-options,
+  .credit-ocr-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hipaa-field-row,
+  .hipaa-name-grid {
+    grid-template-columns: 1fr;
+  }
+  .hipaa-field-row label,
+  .hipaa-field-label {
+    padding-top: 0;
+  }
+  .hipaa-notice-scroll {
+    max-height: none;
+  }
 }
 
 /* ── Document list ───────────────────────────────────────────────────────── */
@@ -1500,7 +3156,7 @@ button { font-family: inherit; }
 .clinic-tile.primary .ct-cta { color: white; }
 .clinic-tile:not(.primary) .ct-cta { color: var(--teal); }
 
-/* ── Create appointment panel ─────────────────────────────────────────────── */
+/* ── Client intake panel ──────────────────────────────────────────────────── */
 .ca-panel {
   max-width: 640px;
 }
@@ -1796,7 +3452,7 @@ button { font-family: inherit; }
 .sched-header-left { display: flex; align-items: center; gap: 14px; }
 .sched-title-row { display: flex; align-items: center; gap: 10px; }
 .sched-title-text { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
-.ethizo-badge {
+.tebra-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1809,12 +3465,12 @@ button { font-family: inherit; }
   font-weight: 500;
   white-space: nowrap;
 }
-.ethizo-badge.syncing {
+.tebra-badge.syncing {
   background: oklch(96% 0.025 250);
   border-color: oklch(84% 0.06 250);
   color: var(--teal-deep);
 }
-.ethizo-badge.synced {
+.tebra-badge.synced {
   background: oklch(96% 0.02 160);
   border-color: oklch(84% 0.05 160);
   color: oklch(38% 0.1 160);
@@ -2332,7 +3988,7 @@ button { font-family: inherit; }
   border-bottom: 2px solid var(--hair); display: flex; align-items: center; gap: 8px;
 }
 .chart-sec-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: none; letter-spacing: 0; }
-.chart-sec-badge.ethizo { background: oklch(93% 0.04 60); color: oklch(48% 0.12 60); border: 1px solid oklch(86% 0.08 60); }
+.chart-sec-badge.tebra { background: oklch(93% 0.04 60); color: oklch(48% 0.12 60); border: 1px solid oklch(86% 0.08 60); }
 .chart-sec-badge.ai { background: var(--teal-soft); color: var(--teal-deep); border: 1px solid oklch(87% 0.05 250); }
 
 /* Data tables */
@@ -2511,6 +4167,8 @@ button { font-family: inherit; }
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone@7.27.0/babel.min.js" crossorigin></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script type="text/babel">
 /* ── Icons ─────────────────────────────────────────────────────────────── */
@@ -2533,7 +4191,55 @@ const I = {
 };
 
 /* ── API client ──────────────────────────────────────────────────────────── */
-const API = 'http://localhost:8020/api';
+const API = 'http://localhost:8025/api';
+const GOOGLE_IDENTITY_CLIENT_ID = window.ALANBEHRMAN_GOOGLE_CLIENT_ID || '';
+const MOCK_PATIENT_AVATARS = {
+  female: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+      <defs>
+        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+          <stop stop-color="#d9f2ee"/>
+          <stop offset="1" stop-color="#f7e7c4"/>
+        </linearGradient>
+      </defs>
+      <rect width="128" height="128" fill="url(#bg)"/>
+      <circle cx="64" cy="49" r="27" fill="#2f241f"/>
+      <path d="M28 119c6-27 25-42 36-42s30 15 36 42" fill="#287c91"/>
+      <circle cx="64" cy="54" r="22" fill="#f0c6a8"/>
+      <path d="M39 53c3-22 15-32 28-32 18 0 29 15 29 37-9-10-20-13-34-20-7 8-14 13-23 15z" fill="#3a2a24"/>
+      <circle cx="56" cy="57" r="2.4" fill="#1f2933"/>
+      <circle cx="72" cy="57" r="2.4" fill="#1f2933"/>
+      <path d="M56 69c5 5 12 5 17 0" fill="none" stroke="#9b4f48" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="42" cy="60" r="4" fill="#f0c6a8"/>
+      <circle cx="86" cy="60" r="4" fill="#f0c6a8"/>
+    </svg>
+  `)}`,
+  male: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+      <defs>
+        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+          <stop stop-color="#d8ebff"/>
+          <stop offset="1" stop-color="#d9f2ee"/>
+        </linearGradient>
+      </defs>
+      <rect width="128" height="128" fill="url(#bg)"/>
+      <path d="M28 119c7-27 25-42 36-42s29 15 36 42" fill="#2c5f8f"/>
+      <circle cx="64" cy="53" r="23" fill="#d8aa86"/>
+      <path d="M40 49c0-19 11-30 25-30 16 0 27 10 27 29-13-3-25-7-38-15-4 7-9 12-14 16z" fill="#2a211d"/>
+      <circle cx="56" cy="57" r="2.5" fill="#1f2933"/>
+      <circle cx="72" cy="57" r="2.5" fill="#1f2933"/>
+      <path d="M56 69c5 4 12 4 17 0" fill="none" stroke="#7a4d3d" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="42" cy="59" r="4" fill="#d8aa86"/>
+      <circle cx="86" cy="59" r="4" fill="#d8aa86"/>
+      <path d="M45 43c5-16 16-24 31-18 10 4 15 12 16 24-16-2-31-7-47-6z" fill="#35251f"/>
+    </svg>
+  `)}`,
+};
+function getMockPatientAvatar(gender) {
+  return String(gender || '').toLowerCase().startsWith('m')
+    ? MOCK_PATIENT_AVATARS.male
+    : MOCK_PATIENT_AVATARS.female;
+}
 
 // Maps SCRIPT fill form IDs → form_definitions.id in the DB
 const FORM_ID_MAP = {
@@ -2567,21 +4273,346 @@ async function apiPut(path, body) {
     .catch(console.warn);
 }
 
+const CREDIT_CARD_TYPES = ['Amex', 'Discover', 'Mastercard', 'Visa'];
+
+function parseAddressParts(rawAddress) {
+  const value = String(rawAddress || '').replace(/\s+/g, ' ').trim();
+  if (!value) return { street: '', city: '', state: '', zip: '' };
+  const zipMatch = value.match(/\b(\d{5}(?:-\d{4})?)\b/);
+  const stateMatch = value.match(/\b([A-Z]{2})\s+\d{5}(?:-\d{4})?\b/i);
+  const parts = value.split(',').map(part => part.trim()).filter(Boolean);
+  if (parts.length >= 3) {
+    return {
+      street: parts.slice(0, -2).join(', '),
+      city: parts[parts.length - 2] || '',
+      state: stateMatch ? stateMatch[1].toUpperCase() : '',
+      zip: zipMatch ? zipMatch[1] : '',
+    };
+  }
+  return { street: value, city: '', state: stateMatch ? stateMatch[1].toUpperCase() : '', zip: zipMatch ? zipMatch[1] : '' };
+}
+
+function normalizeOcrDigits(value) {
+  return String(value || '')
+    .replace(/[OoQ]/g, '0')
+    .replace(/[Il|!]/g, '1')
+    .replace(/[Ss]/g, '5')
+    .replace(/[Bb]/g, '8');
+}
+
+function passesLuhn(value) {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (digits.length < 12) return false;
+  let sum = 0;
+  let doubleDigit = false;
+  for (let i = digits.length - 1; i >= 0; i -= 1) {
+    let n = Number(digits[i]);
+    if (doubleDigit) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    doubleDigit = !doubleDigit;
+  }
+  return sum % 10 === 0;
+}
+
+function formatCardNumber(value) {
+  const digits = String(value || '').replace(/\D/g, '').slice(0, 19);
+  if (!digits) return '';
+  return digits.replace(/(.{4})/g, '$1 ').trim();
+}
+
+function maskCardNumber(value) {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return '';
+  return `Ending ${digits.slice(-4)}`;
+}
+
+function inferCardType(cardNumber, text = '') {
+  const digits = String(cardNumber || '').replace(/\D/g, '');
+  const upper = String(text || '').toUpperCase();
+  if (/AMEX|AMERICAN\s+EXPRESS/.test(upper) || /^3[47]/.test(digits)) return 'Amex';
+  if (/DISCOVER/.test(upper) || /^(6011|65|64[4-9])/.test(digits)) return 'Discover';
+  const firstTwo = Number(digits.slice(0, 2));
+  const firstFour = Number(digits.slice(0, 4));
+  if (/MASTERCARD|MASTER\s*CARD/.test(upper) || (firstTwo >= 51 && firstTwo <= 55) || (firstFour >= 2221 && firstFour <= 2720)) return 'Mastercard';
+  if (/\bVISA\b/.test(upper) || /^4/.test(digits)) return 'Visa';
+  return '';
+}
+
+function extractCardNumberFromOcr(text) {
+  const normalized = normalizeOcrDigits(text);
+  const candidates = [...normalized.matchAll(/(?:\d[\s-]*){12,19}/g)]
+    .map(match => match[0].replace(/\D/g, ''))
+    .filter(digits => digits.length >= 13 && digits.length <= 19)
+    .sort((a, b) => {
+      const luhnScore = Number(passesLuhn(b)) - Number(passesLuhn(a));
+      return luhnScore || b.length - a.length;
+    });
+  return candidates[0] || '';
+}
+
+function extractExpirationFromOcr(text) {
+  const normalized = normalizeOcrDigits(text);
+  const match = normalized.match(/\b(0[1-9]|1[0-2])\s*[\/.\-]\s*(\d{2}|\d{4})\b/);
+  if (!match) return '';
+  return `${match[1]}/${match[2].slice(-2)}`;
+}
+
+function extractNameFromOcr(text) {
+  const blocked = /\b(BANK|CARD|CREDIT|DEBIT|VALID|THRU|UNTIL|VISA|MASTERCARD|MASTER|AMEX|AMERICAN|EXPRESS|DISCOVER|MEMBER|CUSTOMER|SIGNATURE|AUTHORIZED|ELECTRONIC|USE|ONLY|VOID)\b/;
+  const lines = String(text || '').split(/\r?\n/)
+    .map(line => line.replace(/[^A-Za-z\s'.-]/g, ' ').replace(/\s+/g, ' ').trim())
+    .filter(line => line.length >= 5 && line.length <= 34 && /[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(line));
+  const match = lines.find(line => {
+    const upper = line.toUpperCase();
+    return upper === line && !blocked.test(upper);
+  }) || lines.find(line => !blocked.test(line.toUpperCase()));
+  return match ? match.replace(/\b\w/g, char => char.toUpperCase()) : '';
+}
+
+function extractCvcFromOcr(text, side) {
+  const normalized = normalizeOcrDigits(text);
+  const labeled = normalized.match(/\b(?:CVC|CVV|CID|SECURITY\s*CODE)\D{0,18}(\d{3,4})\b/i);
+  if (labeled) return labeled[1];
+  if (side !== 'credit_card_back') return '';
+  const withoutLongNumbers = normalized
+    .replace(/(?:\d[\s-]*){12,19}/g, ' ')
+    .replace(/\b(0[1-9]|1[0-2])\s*[\/.\-]\s*(\d{2}|\d{4})\b/g, ' ');
+  const groups = [...withoutLongNumbers.matchAll(/\b\d{3,4}\b/g)].map(match => match[0]);
+  return groups[groups.length - 1] || '';
+}
+
+function extractCreditCardFields(text, side) {
+  const cardNumber = extractCardNumberFromOcr(text);
+  return {
+    card_number: formatCardNumber(cardNumber),
+    expiration: extractExpirationFromOcr(text),
+    cvc: extractCvcFromOcr(text, side),
+    your_name: side === 'credit_card_front' ? extractNameFromOcr(text) : '',
+    card_type: inferCardType(cardNumber, text),
+  };
+}
+
 /* ── Patient data (fallback — overridden by API when ?t= token present) ─── */
 const PATIENT = {
   name: 'Paranjit Kaur',
   first: 'Paranjit',
   appt: 'Immigration Medical Exam',
   date: 'Tue, Apr 22 · 10:30 AM',
-  provider: 'Dr. Anjali Desai, MD',
+  provider: 'Dr. Ramakanth Vemuluri, MD',
 };
 
+const MOCK_IP_LOCATION = 'Marietta, GA';
+const INTAKE_LOCATIONS = [
+  {
+    id: 'marietta-johnson-ferry',
+    name: 'Marietta',
+    address: ['2862 Johnson Ferry Rd.', 'Suite 150 & Suite 200', 'Marietta, GA 30062'],
+    distance: 'Closest to your area',
+  },
+  {
+    id: 'alpharetta-cambridge-square',
+    name: 'Alpharetta',
+    address: ['1041 Cambridge Square', 'Suite A', 'Alpharetta, GA 30009'],
+    distance: 'Nearby option',
+  },
+  {
+    id: 'duluth-river-green',
+    name: 'Duluth',
+    address: ['4855 River Green Parkway', 'Suite 330', 'Duluth, GA 30096'],
+    distance: 'Nearby option',
+  },
+  {
+    id: 'dunwoody-peachford',
+    name: 'Dunwoody',
+    address: ['2150 Peachford Rd.', 'Suite I', 'Dunwoody, GA 30338'],
+    distance: 'Atlanta metro option',
+  },
+  {
+    id: 'new-orleans-jena',
+    name: 'New Orleans',
+    address: ['2517 Jena St.', 'New Orleans, LA 70115'],
+    distance: 'Louisiana option',
+  },
+];
+
+const LOCATION_PROVIDERS = {
+  'marietta-johnson-ferry': [
+    { name: 'Emma Green, LAMFT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/emma-green-lamft/' },
+    { name: 'Jamie Goldberg, LPC, E-RYT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/goldberg/' },
+    { name: 'Meredith Mitchell, PMHNP-BC', specialty: 'Psychiatric nurse practitioner', url: 'https://www.alanbehrman.com/meredith-mitchell-pmhnp-bc/' },
+    { name: 'Patty Postanowicz, Ph.D, LMFT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/postanowicz/' },
+    { name: 'Rachel Barlev, LCSW', specialty: 'Therapist', url: 'https://www.alanbehrman.com/rachel-barlev-lcsw/' },
+    { name: 'Silvia Lynch, LCSW', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/lynch/' },
+    { name: 'Tu Vo, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/vo/' },
+    { name: 'Whitney Rudd, LMFT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/whitney-rudd-lmft/' },
+  ],
+  'alpharetta-cambridge-square': [
+    { name: 'Antonio Cordero, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/antonio/' },
+    { name: 'Ariella Peist, LCSW', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/ariella-peist-lcsw/' },
+    { name: 'Cristina Lazaro, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/crisine-lazaro-lpc/' },
+    { name: 'Emma Green, LAMFT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/emma-green-lamft/' },
+    { name: 'Jamie Goldberg, LPC, E-RYT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/goldberg/' },
+    { name: 'Kelly Villarreal, LMFT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/villarreal/' },
+    { name: 'Mona Chandra, Psy.D', specialty: 'Psychologist', url: 'https://www.alanbehrman.com/about/chandra/' },
+  ],
+  'duluth-river-green': [
+    { name: 'Antonio Cordero, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/antonio/' },
+    { name: 'Cristina Lazaro, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/crisine-lazaro-lpc/' },
+    { name: 'Emma Green, LAMFT', specialty: 'Therapist', url: 'https://www.alanbehrman.com/emma-green-lamft/' },
+    { name: 'Jessica Bosson, Psy.D', specialty: 'Psychologist', url: 'https://www.alanbehrman.com/about/bosson/' },
+    { name: 'Kailyn Blackmon, PsyD', specialty: 'Psychologist', url: 'https://www.alanbehrman.com/drkailyn/' },
+    { name: 'Sheldon Kay, LAPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/kay/' },
+    { name: 'Dr. Ramakanth Vemuluri, MD', specialty: 'Psychiatrist', url: 'https://www.alanbehrman.com/dr-ramakanth-vemuluri-md/' },
+  ],
+  'dunwoody-peachford': [
+    { name: 'Dr. Ramakanth Vemuluri, MD', specialty: 'Psychiatrist', url: 'https://www.alanbehrman.com/dr-ramakanth-vemuluri-md/' },
+  ],
+  'new-orleans-jena': [
+    { name: 'Ashley LeGros, MEd, PLPC, NCC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/ashely-legros/' },
+    { name: 'David Dolese, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/david-dolese-lpc/' },
+    { name: 'Mary Schexnaydre, PA-C, CAQ Psychiatry', specialty: 'Psychiatric physician assistant', url: 'https://www.alanbehrman.com/mary-schexnaydre-pa-c-caq-psychiatry/' },
+    { name: 'Rae Sidlauskas, MS, LPC', specialty: 'Therapist', url: 'https://www.alanbehrman.com/about/rae/' },
+  ],
+};
+
+const LOCATION_TEAM_URLS = {
+  'marietta-johnson-ferry': 'https://www.alanbehrman.com/team/marietta',
+  'alpharetta-cambridge-square': 'https://www.alanbehrman.com/team/alpharetta',
+  'duluth-river-green': 'https://www.alanbehrman.com/team/duluth',
+  'dunwoody-peachford': 'https://www.alanbehrman.com/team/dunwoody',
+  'new-orleans-jena': 'https://www.alanbehrman.com/team/new-orleans',
+};
+
+const ALAN_FORMS_SOURCE = 'https://www.alanbehrman.com/forms/';
+const ALAN_FORMS = {
+  hipaa: { id:'hipaa-exact', step:'Step Two', title:'HIPAA', type:'local_hipaa' },
+  clientInfo: { id:'client-information', step:'Step Two', title:'Client Information', url:'https://form.jotform.com/221707434629155', type:'jotform' },
+  clientMinor: { id:'client-information-minor', step:'Step Two', title:'Client Information for Minors', url:'https://form.jotform.com/221706053773050', type:'jotform' },
+  cancellation: { id:'cancellation-policy', step:'Step Three', title:'Cancellation Policy', url:'https://form.jotform.com/221714054182044', type:'jotform' },
+  insuranceAuth: { id:'insurance-authorization', step:'Step Four', title:'Insurance Authorization', url:'https://form.jotform.com/221713875383057', type:'jotform' },
+  relationalIntake: { id:'relational-intake', step:'Step Four', title:'Relational Therapy Initial Intake Form', url:'https://form.jotform.com/221715084103041', type:'jotform' },
+  releaseInfo: { id:'release-information', step:'Step Four', title:'Consent & Authorization to Release Information', url:'https://form.jotform.com/221714881659061', type:'jotform' },
+  surpriseBilling: { id:'surprise-billing', step:'Step Four', title:'Surprise Billing Policy', url:'https://form.jotform.com/221706363497057', type:'jotform' },
+  coachingConsent: { id:'coaching-consent', step:'Step Four', title:'Coaching Informed Consent', url:'https://form.jotform.com/221714008041037', type:'jotform' },
+};
+
+const PROVIDER_CONSENT_FORMS = [
+  { match:/alan|behrman/i, title:'Informed Consent for Alan', url:'https://form.jotform.com/221714358632051' },
+  { match:/antonio/i, title:'Informed Consent for Antonio', url:'https://form.jotform.com/253634431730149' },
+  { match:/ariella/i, title:'Informed Consent for Ariella', url:'https://form.jotform.com/243585488783173' },
+  { match:/ashlie\s+martinez/i, title:'Informed Consent for Ashlie Martinez', url:'https://form.jotform.com/231696417230152' },
+  { match:/ashley\s+legros/i, title:'Informed Consent for Ashley LeGros', url:'https://form.jotform.com/243395167527162' },
+  { match:/ashley\s+lee/i, title:'Informed Consent Ashley Lee', url:'https://form.jotform.com/260634458185160' },
+  { match:/cristina/i, title:'Informed Consent for Cristina', url:'https://form.jotform.com/232268847664166' },
+  { match:/david/i, title:'Informed Consent for David', url:'https://form.jotform.com/241682627706159' },
+  { match:/ramakanth|dr\.?\s*ram|vemuluri/i, title:'Informed Consent for Dr. Ram', url:'https://form.jotform.com/231905216758157' },
+  { match:/emma/i, title:'Informed Consent for Emma', url:'https://form.jotform.com/243315513754151' },
+  { match:/jamie|goldberg/i, title:'Informed Consent for Jamie', url:'https://form.jotform.com/221714413446147' },
+  { match:/jessica|bosson/i, title:'Informed Consent for Jessica', url:'https://form.jotform.com/221715115548150' },
+  { match:/mona|chandra/i, title:'Informed Consent for Mona', url:'https://form.jotform.com/221715421341141' },
+  { match:/kailyn|blackmon/i, title:'Informed Consent for Kailyn', url:'https://form.jotform.com/253095510725152' },
+  { match:/kelly|villarreal/i, title:'Informed Consent for Kelly', url:'https://form.jotform.com/221715468284158' },
+  { match:/mary|schexnaydre/i, title:'Informed Consent for Mary', url:'https://form.jotform.com/250866202080147' },
+  { match:/meredith|mitchell/i, title:'Informed Consent for Meredith', url:'https://form.jotform.com/250624884918165' },
+  { match:/patty|postanowicz/i, title:'Informed Consent for Patty', url:'https://form.jotform.com/221714625324147' },
+  { match:/rachel\s+barlev/i, title:'Informed Consent for Rachel', url:'https://form.jotform.com/230594784987174' },
+  { match:/rae|sidlauskas/i, title:'Informed Consent for Rae', url:'https://form.jotform.com/251944457244159' },
+  { match:/sheldon|kay/i, title:'Informed Consent for Sheldon', url:'https://form.jotform.com/221733993729165' },
+  { match:/tu\s+vo|\bvo\b/i, title:'Informed Consent for Tu', url:'https://form.jotform.com/221715183819156' },
+  { match:/silvia|lynch/i, title:'Informed Consent for Silvia', url:'https://form.jotform.com/221714616018147' },
+  { match:/whitney|rudd/i, title:'Informed Consent for Whitney', url:'https://form.jotform.com/240196995599176' },
+];
+
+const CONCERN_SCREENERS = [
+  {
+    id: 'gad7-dynamic',
+    title: 'GAD-7 Anxiety Screening',
+    type: 'screener',
+    screener: 'gad7',
+    step: 'Dynamic Screener',
+    reason: 'Added because the presenting concern mentions anxiety, panic, worry, stress, or trauma.',
+    matches: /\b(anxi\w*|panic\w*|worr\w*|nervous\w*|stress\w*|ptsd|trauma\w*|fear\w*|phobia\w*|restless\w*|tension)\b/i,
+  },
+  {
+    id: 'phq9-dynamic',
+    title: 'PHQ-9 Depression Screening',
+    type: 'screener',
+    screener: 'phq9',
+    step: 'Dynamic Screener',
+    reason: 'Added because the presenting concern mentions depression, low mood, grief, hopelessness, or self-harm.',
+    matches: /\b(depress\w*|sad|grief|hopeless\w*|worthless\w*|low mood|loss of interest|anhedonia|suicid\w*|self[-\s]?harm|down|mood)\b/i,
+  },
+];
+
+function providerConsentForm(providerName) {
+  const hit = PROVIDER_CONSENT_FORMS.find(form => form.match.test(providerName || ''));
+  if (!hit) return null;
+  return {
+    id: `provider-consent-${hit.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+    step: 'Step Three',
+    title: hit.title,
+    url: hit.url,
+    type: 'jotform',
+    reason: `Provider-specific consent for ${providerName}.`,
+  };
+}
+
+function patientAge(dob) {
+  if (!dob) return null;
+  const date = new Date(`${dob}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - date.getFullYear();
+  const monthDelta = today.getMonth() - date.getMonth();
+  if (monthDelta < 0 || (monthDelta === 0 && today.getDate() < date.getDate())) age -= 1;
+  return age;
+}
+
+function shouldInclude(text, pattern) {
+  return pattern.test(String(text || ''));
+}
+
+function buildDynamicFormPacket({ selectedAppointment, needsData, basicInfo, patient }) {
+  const concernText = [
+    needsData.presenting_concern,
+    needsData.general_fit,
+    selectedAppointment?.provider?.specialty,
+  ].filter(Boolean).join(' ');
+  const age = patientAge(basicInfo.dob || patient.dob);
+  const packet = [
+    { ...ALAN_FORMS.hipaa, reason:'Exact HIPAA form from AlanBehrman Step Two.' },
+    { ...(age !== null && age < 18 ? ALAN_FORMS.clientMinor : ALAN_FORMS.clientInfo), reason: age !== null && age < 18 ? 'Minor client information form based on date of birth.' : 'Client information form from AlanBehrman Step Two.' },
+    { ...ALAN_FORMS.cancellation, reason:'Required Step Three cancellation policy.' },
+    { ...ALAN_FORMS.surpriseBilling, reason:'Relevant billing disclosure from Step Four.' },
+  ];
+  const providerForm = providerConsentForm(selectedAppointment?.provider?.name);
+  if (providerForm) packet.push(providerForm);
+
+  if (needsData.insurance_mode) packet.push({ ...ALAN_FORMS.insuranceAuth, reason:'Added because insurance information was collected during intake.' });
+  if (shouldInclude(concernText, /\b(couple|partner|marriage|marital|relationship|family|relational)\b/i)) packet.push({ ...ALAN_FORMS.relationalIntake, reason:'Added because the concern appears relational or family-oriented.' });
+  if (shouldInclude(concernText, /\b(coach|coaching|career|leadership|executive|life\s+goal)\b/i)) packet.push({ ...ALAN_FORMS.coachingConsent, reason:'Added because the concern appears coaching-related.' });
+  if (shouldInclude(concernText, /\b(release|records|coordinate|school|attorney|court|doctor|physician|psychiatrist)\b/i)) packet.push({ ...ALAN_FORMS.releaseInfo, reason:'Added because the concern mentions records, coordination, or a third party.' });
+  CONCERN_SCREENERS.forEach(form => {
+    if (form.matches.test(concernText)) packet.push(form);
+  });
+
+  const seen = new Set();
+  return packet.filter(form => {
+    if (seen.has(form.id)) return false;
+    seen.add(form.id);
+    return true;
+  });
+}
+
 /* ── Shared Topbar ───────────────────────────────────────────────────────── */
-function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView }) {
+function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView, showPatientIdentity = true }) {
   return (
     <header className="topbar">
       <div className="brandlock">
-        <img src="assets/onestop-logo.jpg" alt="1 Stop Medical Services" className="logo-main" />
+        <img src="assets/alan-Behrman-Logo.png" alt="AlanBehrman" className="logo-main" />
         <div className="div" />
         <span className="powered-chip">
           <span className="pb-label">Powered by</span>
@@ -2613,8 +4644,19 @@ function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView }) {
           </span>
         )}
         <span className="patient-chip">
-          <I.user />
-          {viewMode === 'clinic' ? '1 Stop Medical' : patient.name}
+          {viewMode === 'clinic' ? (
+            <>
+              <img className="profile-photo" src="assets/marisa-sharpe-profile.jpeg" alt="Marisa Sharpe" />
+              Marisa Sharpe
+            </>
+          ) : (
+            <>
+              {showPatientIdentity && patient.profile_photo
+                ? <img className="profile-photo" src={patient.profile_photo} alt={patient.name || 'Patient profile'} />
+                : <I.user />}
+              {showPatientIdentity ? patient.name : 'Secure Intake'}
+            </>
+          )}
         </span>
       </div>
     </header>
@@ -2626,13 +4668,11 @@ function Footer() {
   return (
     <footer className="footer">
       <div>
-        <span>© Onestop Medical Services, LLC</span>
+        <span>© AlanBehrman</span>
         <span className="sep">·</span>
         <a href="#">Privacy</a>
         <span className="sep">·</span>
-        <a href="tel:2533978683">(253) 397-8683</a>
-        <span className="sep">·</span>
-        <span>Kent &amp; Bellevue, WA</span>
+        <span>Secure patient intake</span>
       </div>
       <div className="powered-by">
         <span>Intake experience by</span>
@@ -2644,8 +4684,178 @@ function Footer() {
   );
 }
 
+function SignaturePad({ onChange }) {
+  const canvasRef = React.useRef(null);
+  const drawingRef = React.useRef(false);
+  const hasInkRef = React.useRef(false);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.floor(rect.width * scale));
+    canvas.height = Math.max(1, Math.floor(rect.height * scale));
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#1f2933';
+  }, []);
+
+  const pointFromEvent = event => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const point = event.touches?.[0] || event;
+    return { x: point.clientX - rect.left, y: point.clientY - rect.top };
+  };
+
+  const start = event => {
+    event.preventDefault();
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const point = pointFromEvent(event);
+    drawingRef.current = true;
+    ctx.beginPath();
+    ctx.moveTo(point.x, point.y);
+    if (!hasInkRef.current) {
+      hasInkRef.current = true;
+      onChange?.(true);
+    }
+  };
+
+  const draw = event => {
+    if (!drawingRef.current) return;
+    event.preventDefault();
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const point = pointFromEvent(event);
+    ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+  };
+
+  const stop = () => {
+    drawingRef.current = false;
+  };
+
+  const clear = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasInkRef.current = false;
+    onChange?.(false);
+  };
+
+  return (
+    <div className="hipaa-signature-pad">
+      <canvas
+        ref={canvasRef}
+        onMouseDown={start}
+        onMouseMove={draw}
+        onMouseUp={stop}
+        onMouseLeave={stop}
+        onTouchStart={start}
+        onTouchMove={draw}
+        onTouchEnd={stop}
+        aria-label="Draw e-signature"
+      />
+      <div className="hipaa-signature-actions">
+        <span>Draw signature</span>
+        <button type="button" className="hipaa-clear" onClick={clear}>Clear</button>
+      </div>
+    </div>
+  );
+}
+
+function LocalHipaaForm({ initialName = '', initialEmail = '', onSubmit }) {
+  const nameParts = String(initialName || '').trim().split(/\s+/);
+  const today = new Date().toLocaleDateString('en-US', { month:'2-digit', day:'2-digit', year:'numeric' }).replace(/\//g, '-');
+  const [firstName, setFirstName] = React.useState(nameParts[0] || '');
+  const [lastName, setLastName] = React.useState(nameParts.slice(1).join(' ') || '');
+  const [email, setEmail] = React.useState(initialEmail || '');
+  const [signed, setSigned] = React.useState(false);
+  const canSubmit = firstName.trim() && lastName.trim() && /\S+@\S+\.\S+/.test(email) && signed;
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!canSubmit) return;
+    onSubmit?.({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      date: today,
+    });
+  }
+
+  return (
+    <form className="hipaa-local-form" onSubmit={handleSubmit}>
+      <div className="hipaa-local-scroll">
+        <h1 className="hipaa-form-heading">HIPAA</h1>
+        <div className="hipaa-notice-copy">
+          <p>Alan Behrman & Associates, PC is dedicated to maintaining the privacy of protected health information. This notice explains how medical and mental health information may be used and disclosed, and describes patient rights regarding that information.</p>
+          <h3>I. Uses and Disclosures for Treatment, Payment, and Health Care Operations</h3>
+          <p>Protected health information may be used or shared to provide care, coordinate treatment, bill for services, obtain payment, and support health care operations such as quality review, scheduling, training, compliance, licensing, and business administration.</p>
+          <h3>II. Uses and Disclosures Permitted or Required by Law</h3>
+          <ul>
+            <li>Information may be disclosed when required by federal, state, or local law.</li>
+            <li>Information may be shared for public health, health oversight, law enforcement, court orders, worker safety, and national security when applicable.</li>
+            <li>Information may be disclosed to prevent a serious threat to health or safety.</li>
+          </ul>
+          <h3>III. Patient Rights</h3>
+          <ul>
+            <li>You may request access to your records or ask for paper or electronic copies.</li>
+            <li>You may request corrections, restrictions, confidential communication, and an accounting of certain disclosures.</li>
+            <li>You may choose someone to act on your behalf when legally authorized.</li>
+          </ul>
+          <h3>IV. Authorizations, Questions, and Complaints</h3>
+          <p>Other uses or disclosures generally require written authorization, which may be revoked in writing. Concerns about privacy rights may be discussed with the practice or submitted as a complaint without retaliation.</p>
+          <h3>V. Practice Responsibilities</h3>
+          <p>The practice is required to maintain the privacy and security of protected health information, follow the privacy duties described in this notice, and notify affected patients if a breach compromises privacy or security.</p>
+        </div>
+      </div>
+      <div className="hipaa-fields">
+        <div className="hipaa-field-row">
+          <div className="hipaa-field-label">Name<span className="hipaa-required">*</span></div>
+          <div className="hipaa-name-grid">
+            <div className="hipaa-subfield">
+              <input className="hipaa-input" value={firstName} onChange={e => setFirstName(e.target.value)} autoComplete="given-name" />
+              <small>First Name</small>
+            </div>
+            <div className="hipaa-subfield">
+              <input className="hipaa-input" value={lastName} onChange={e => setLastName(e.target.value)} autoComplete="family-name" />
+              <small>Last Name</small>
+            </div>
+          </div>
+        </div>
+        <div className="hipaa-field-row">
+          <label htmlFor="hipaa-email">Email<span className="hipaa-required">*</span></label>
+          <div className="hipaa-subfield">
+            <input id="hipaa-email" className="hipaa-input" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
+            <small>example@example.com</small>
+          </div>
+        </div>
+        <div className="hipaa-field-row">
+          <label htmlFor="hipaa-date">Date<span className="hipaa-required">*</span></label>
+          <div className="hipaa-subfield">
+            <input id="hipaa-date" className="hipaa-input hipaa-date-input" value={today} readOnly />
+            <small>Date</small>
+          </div>
+        </div>
+        <div className="hipaa-field-row">
+          <div className="hipaa-field-label">E-Signature<span className="hipaa-required">*</span></div>
+          <SignaturePad onChange={setSigned} />
+        </div>
+        <div className="hipaa-submit-row">
+          <button className="hipaa-submit" type="submit" disabled={!canSubmit}>Submit</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
 /* ── Welcome Page — Split (Variation B) ─────────────────────────────────── */
-function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
+function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null, privacyAcknowledged = false, onAcknowledgePrivacy, onResolvedPatient }) {
   const forms       = intakeCtx ? intakeCtx.forms : [];
   const total       = forms.length;
   const completed   = forms.filter(f => f.status === 'completed').length;
@@ -2662,10 +4872,782 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
   const [savedFields, setSavedFields] = React.useState(null);
   const [saving, setSaving]         = React.useState(false);
   const [saveError, setSaveError]   = React.useState('');
+  const [basicInfo, setBasicInfo]   = React.useState({
+    name: '', dob: '', gender: '', phone: '', email: '', address: '', emergency_contact: '',
+  });
+  const [matchStage, setMatchStage] = React.useState('basic'); // basic | searching | result
+  const [matchStep, setMatchStep]   = React.useState(0);
+  const [matchResult, setMatchResult] = React.useState(null);
+  const [needsComplete, setNeedsComplete] = React.useState(false);
+  const [needsStep, setNeedsStep] = React.useState(0);
+  const [needsData, setNeedsData] = React.useState({
+    presenting_concern: '',
+    preferred_location: INTAKE_LOCATIONS[0].id,
+    preferred_times: '',
+    insurance_mode: 'upload',
+    insurance_carrier: '',
+    insurance_member_id: '',
+    insurance_group_id: '',
+    policyholder_name: '',
+    general_fit: '',
+  });
+  const [uploadedDocs, setUploadedDocs] = React.useState({});
+  const [insuranceAuthStage, setInsuranceAuthStage] = React.useState('idle'); // idle | running | complete
+  const [insuranceAuthStep, setInsuranceAuthStep] = React.useState(0);
+  const [selectedAppointment, setSelectedAppointment] = React.useState(null);
+  const [creditCardComplete, setCreditCardComplete] = React.useState(false);
+  const [confirmationStage, setConfirmationStage] = React.useState('idle'); // idle | running | complete
+  const [confirmationStep, setConfirmationStep] = React.useState(0);
+  const [signupMethod, setSignupMethod] = React.useState('');
+  const [signupStatus, setSignupStatus] = React.useState('');
+  const [signupNotice, setSignupNotice] = React.useState('');
+  const [googleIdentityState, setGoogleIdentityState] = React.useState('loading');
+  const [googleIdentityDetail, setGoogleIdentityDetail] = React.useState('');
+  const [activePacketForm, setActivePacketForm] = React.useState(null);
+  const [packetCompleted, setPacketCompleted] = React.useState({});
+  const [creditData, setCreditData] = React.useState({
+    mode: 'manual',
+    your_name: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
+    phone: '',
+    email: '',
+    card_type: '',
+    card_number: '',
+    expiration: '',
+    cvc: '',
+    authorization: false,
+  });
+  const [creditOcrStatus, setCreditOcrStatus] = React.useState({});
+  const matchTimers = React.useRef([]);
+  const insuranceTimers = React.useRef([]);
+  const confirmationTimers = React.useRef([]);
+  const googleButtonRef = React.useRef(null);
+  const googleInitializedRef = React.useRef(false);
 
   const displayDob   = savedFields?.dob   ?? (patient.dob   || '');
   const displayEmail = savedFields?.email ?? (patient.email || '');
   const displayPhone = savedFields?.phone ?? (patient.phone || '');
+  const manualEstimate = forms.reduce((sum, f) => sum + (Number(f.estimated_minutes) || 2), 0) || (isRecent ? 5 : 15);
+  const guidedEstimateBase = isRecent ? 3 : Math.max(8, Math.ceil(manualEstimate * 0.55));
+  const guidedEstimate = Math.max(1, Math.min(manualEstimate, guidedEstimateBase));
+  const estimatedLabel = guidedEstimate < manualEstimate
+    ? `${guidedEstimate}-${manualEstimate} minutes`
+    : `about ${manualEstimate} minute${manualEstimate !== 1 ? 's' : ''}`;
+  const resolvedName = matchResult?.name || basicInfo.name.trim();
+  const basicComplete = ['name','dob','gender','phone','email','address','emergency_contact']
+    .every(k => (basicInfo[k] || '').trim());
+  const scanSteps = [
+    'Reviewing identity fields',
+    'Checking existing patient records',
+    'Comparing contact details',
+    'Preparing the right intake path',
+  ];
+  const needsSteps = ['Needs', 'Location', 'Schedule', 'Insurance', 'Fit'];
+  const selectedLocation = INTAKE_LOCATIONS.find(loc => loc.id === needsData.preferred_location) || INTAKE_LOCATIONS[0];
+  const locationProviders = LOCATION_PROVIDERS[selectedLocation.id] || LOCATION_PROVIDERS[INTAKE_LOCATIONS[0].id];
+  const locationTeamUrl = LOCATION_TEAM_URLS[selectedLocation.id] || 'https://www.alanbehrman.com/about/';
+  const insuranceAuthSteps = [
+    'Reading insurance details',
+    'Checking active coverage',
+    'Looking up authorization rules',
+    'Calculating estimated copay',
+  ];
+  const confirmationSteps = [
+    'Credit card authorization received',
+    'Confirmation email sent',
+    'Paperwork packet sent',
+    'Provider copied',
+    'Appointment confirmed',
+    'Provider notified',
+  ];
+  const coveragePayer = needsData.insurance_mode === 'manual' && needsData.insurance_carrier.trim()
+    ? needsData.insurance_carrier.trim()
+    : 'UnitedHealthcare Choice Plus PPO';
+  const memberEnding = needsData.insurance_member_id.trim()
+    ? needsData.insurance_member_id.trim().slice(-4).padStart(4, '0')
+    : '4821';
+  const coverageResult = {
+    payer: coveragePayer,
+    member: `Member ending ${memberEnding}`,
+    status: 'Active',
+    network: `${selectedLocation.name} office in network`,
+    copay: '$35',
+    deductible: '$240 remaining',
+    coinsurance: '10% after deductible',
+    authorization: 'No prior authorization required for initial evaluation',
+    reference: 'ELV-COV-2026-0516-AB',
+  };
+  const timeHints = [
+    'weekdays after 3pm, Fridays and Monday work best',
+    'any weekday after 3pm',
+    'weekends preferred',
+    'first available appointment',
+  ];
+  const [timeHintIndex, setTimeHintIndex] = React.useState(0);
+  const preferredLower = (needsData.preferred_times || '').toLowerCase();
+  const wantsWeekend = /weekend|saturday|sunday/.test(preferredLower);
+  const wantsAfter3 = /after\s*3|3pm|pm|afternoon|evening/.test(preferredLower);
+  const wantsMondayOrFriday = /monday|friday/.test(preferredLower);
+  const wantsFirstAvailable = /first|soon|available|asap/.test(preferredLower);
+  const appointmentTimeSets = wantsWeekend
+    ? ['Sat, May 23 · 10:00 AM', 'Sat, May 23 · 11:30 AM', 'Sat, May 30 · 9:30 AM', 'Sat, May 30 · 12:00 PM', 'Sat, Jun 6 · 10:30 AM']
+    : wantsAfter3 || wantsMondayOrFriday
+      ? ['Mon, May 18 · 3:30 PM', 'Tue, May 19 · 4:00 PM', 'Wed, May 20 · 3:45 PM', 'Thu, May 21 · 5:15 PM', 'Fri, May 22 · 4:30 PM']
+      : wantsFirstAvailable
+        ? ['Mon, May 18 · 9:00 AM', 'Mon, May 18 · 10:30 AM', 'Tue, May 19 · 11:00 AM', 'Wed, May 20 · 2:00 PM', 'Thu, May 21 · 9:30 AM']
+        : ['Mon, May 18 · 11:00 AM', 'Tue, May 19 · 2:30 PM', 'Wed, May 20 · 4:00 PM', 'Thu, May 21 · 10:00 AM', 'Fri, May 22 · 3:00 PM'];
+  const appointmentMatchLabel = wantsWeekend
+    ? 'Weekend preference'
+    : wantsAfter3
+      ? 'After 3 PM preference'
+      : wantsMondayOrFriday
+        ? 'Monday/Friday preference'
+        : wantsFirstAvailable
+          ? 'First available'
+          : 'Best fit';
+  const availableAppointments = appointmentTimeSets.map((time, index) => {
+    const provider = locationProviders[index % locationProviders.length];
+    return {
+      id: `${selectedLocation.id}-${index + 1}`,
+      time,
+      provider,
+      location: selectedLocation.name,
+      address: selectedLocation.address.join(', '),
+      matchLabel: appointmentMatchLabel,
+    };
+  });
+  const confirmationEmail = basicInfo.email.trim() || displayEmail || 'patient email on file';
+  const confirmationReference = selectedAppointment
+    ? `AB-${selectedAppointment.id.toUpperCase()}-CONF`
+    : 'AB-INTAKE-CONF';
+  const providerCopyTarget = selectedAppointment?.provider?.name || 'Selected provider';
+  const assignmentStatus = confirmationStage === 'complete' ? 'Appointment confirmed' : 'Intake finalizing';
+  const dynamicFormPacket = React.useMemo(
+    () => buildDynamicFormPacket({ selectedAppointment, needsData, basicInfo, patient }),
+    [selectedAppointment, needsData, basicInfo, patient]
+  );
+  const packetCompleteCount = dynamicFormPacket.filter(form => packetCompleted[form.id]).length;
+  const signupProfile = [
+    ['Name', resolvedName || patient.name || 'Provided during intake'],
+    ['Email', confirmationEmail],
+    ['Phone', basicInfo.phone.trim() || displayPhone || 'Provided during intake'],
+    ['Date of birth', basicInfo.dob || displayDob || 'Provided during intake'],
+    ['Appointment', selectedAppointment?.time || 'Appointment confirmed'],
+    ['Provider', providerCopyTarget],
+  ];
+  const hasGoogleClientId = !!GOOGLE_IDENTITY_CLIENT_ID;
+
+  React.useEffect(() => {
+    if (!selectedAppointment) return;
+    const parsedAddress = parseAddressParts(basicInfo.address || patient.address || '');
+    setCreditData(data => ({
+      ...data,
+      your_name: data.your_name || resolvedName || patient.name || '',
+      address: data.address || parsedAddress.street || basicInfo.address || '',
+      city: data.city || parsedAddress.city || '',
+      state: data.state || parsedAddress.state || '',
+      zip: data.zip || parsedAddress.zip || '',
+      phone: data.phone || basicInfo.phone.trim() || displayPhone || '',
+      email: data.email || basicInfo.email.trim() || displayEmail || '',
+    }));
+  }, [selectedAppointment]);
+
+  React.useEffect(() => {
+    setActivePacketForm(null);
+    setPacketCompleted({});
+  }, [selectedAppointment?.id]);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeHintIndex(index => (index + 1) % timeHints.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, []);
+
+  React.useEffect(() => () => {
+    matchTimers.current.forEach(clearTimeout);
+    insuranceTimers.current.forEach(clearTimeout);
+    confirmationTimers.current.forEach(clearTimeout);
+  }, []);
+
+  React.useEffect(() => {
+    if (confirmationStage !== 'complete' || !googleButtonRef.current) return;
+    googleButtonRef.current.innerHTML = '';
+
+    if (!hasGoogleClientId) {
+      setGoogleIdentityState('needs-client-id');
+      setGoogleIdentityDetail('Google OAuth client ID is not configured yet.');
+      return;
+    }
+
+    let tries = 0;
+    const renderGoogleButton = () => {
+      const googleId = window.google?.accounts?.id;
+      if (!googleId || !googleButtonRef.current) {
+        tries += 1;
+        if (tries > 40) {
+          setGoogleIdentityState('unavailable');
+          setGoogleIdentityDetail('Google Identity Services could not load.');
+          return;
+        }
+        window.setTimeout(renderGoogleButton, 150);
+        return;
+      }
+
+      if (!googleInitializedRef.current) {
+        googleId.initialize({
+          client_id: GOOGLE_IDENTITY_CLIENT_ID,
+          context: 'signup',
+          ux_mode: 'popup',
+          use_fedcm_for_button: true,
+          callback: response => {
+            completeProfileSignup('Google', 'Google sign-up completed. AlanBehrman will prefill the profile from the intake information shown above.');
+            setGoogleIdentityState('complete');
+            setGoogleIdentityDetail(response?.credential ? 'Google ID token received.' : 'Google sign-up completed.');
+          },
+        });
+        googleInitializedRef.current = true;
+      }
+
+      const buttonWidth = Math.min(320, Math.max(220, Math.floor(googleButtonRef.current.getBoundingClientRect().width || 320)));
+      googleId.renderButton(googleButtonRef.current, {
+        type: 'standard',
+        theme: 'outline',
+        size: 'large',
+        text: 'signup_with',
+        shape: 'rectangular',
+        logo_alignment: 'left',
+        width: buttonWidth,
+      });
+      setGoogleIdentityState('ready');
+      setGoogleIdentityDetail('Use your Google Account to create your AlanBehrman profile.');
+    };
+
+    renderGoogleButton();
+  }, [confirmationStage, hasGoogleClientId]);
+
+  const setBasic = (key, value) => setBasicInfo(info => ({ ...info, [key]: value }));
+  const setNeeds = (key, value) => {
+    setNeedsData(info => ({ ...info, [key]: value }));
+    if (key === 'preferred_location' || key.startsWith('insurance') || key === 'policyholder_name') {
+      insuranceTimers.current.forEach(clearTimeout);
+      insuranceTimers.current = [];
+      setInsuranceAuthStage('idle');
+      setInsuranceAuthStep(0);
+    }
+    if (key === 'preferred_location' || key === 'preferred_times') {
+      setSelectedAppointment(null);
+      setCreditCardComplete(false);
+      resetConfirmationHandoff();
+    }
+  };
+  const setCredit = (key, value) => setCreditData(info => ({ ...info, [key]: value }));
+
+  function resetConfirmationHandoff() {
+    confirmationTimers.current.forEach(clearTimeout);
+    confirmationTimers.current = [];
+    setConfirmationStage('idle');
+    setConfirmationStep(0);
+    setSignupMethod('');
+    setSignupStatus('');
+    setSignupNotice('');
+    setGoogleIdentityState('loading');
+    setGoogleIdentityDetail('');
+  }
+
+  const normalize = value => (value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normalizePhone = value => (value || '').replace(/\D/g, '');
+
+  function findEhrMatch() {
+    const candidate = {
+      name: basicInfo.name,
+      dob: basicInfo.dob,
+      email: basicInfo.email,
+      phone: basicInfo.phone,
+    };
+    const records = [
+      {
+        name: patient.name,
+        dob: patient.dob || '',
+        email: patient.email || '',
+        phone: patient.phone || '',
+        source: 'Tebra',
+        confidence: 'High confidence match',
+      },
+      {
+        name: 'Paranjit Kaur',
+        dob: '',
+        email: 'paranjit@example.com',
+        phone: '2533978683',
+        source: 'TherapyNotes',
+        confidence: 'Existing chart located',
+      },
+      {
+        name: 'Avery Johnson',
+        dob: '1988-09-12',
+        email: 'avery.johnson@example.com',
+        phone: '4045550188',
+        source: 'Tebra',
+        confidence: 'Existing chart located',
+      },
+    ].filter(r => r.name);
+
+    return records.find(record => {
+      const nameMatch = normalize(record.name) && normalize(record.name) === normalize(candidate.name);
+      const dobMatch = record.dob && candidate.dob && record.dob === candidate.dob;
+      const emailMatch = normalize(record.email) && normalize(record.email) === normalize(candidate.email);
+      const phoneMatch = normalizePhone(record.phone) && normalizePhone(record.phone) === normalizePhone(candidate.phone);
+      return nameMatch || emailMatch || phoneMatch || (dobMatch && normalize(candidate.name).slice(0, 4) === normalize(record.name).slice(0, 4));
+    });
+  }
+
+  function handleBasicSubmit(e) {
+    e.preventDefault();
+    if (!basicComplete || matchStage === 'searching') return;
+    matchTimers.current.forEach(clearTimeout);
+    setMatchStage('searching');
+    setMatchStep(0);
+    setMatchResult(null);
+    setNeedsComplete(false);
+    setNeedsStep(0);
+    setInsuranceAuthStage('idle');
+    setInsuranceAuthStep(0);
+    setSelectedAppointment(null);
+    setCreditCardComplete(false);
+    resetConfirmationHandoff();
+
+    scanSteps.forEach((_, index) => {
+      matchTimers.current.push(setTimeout(() => setMatchStep(index + 1), 500 + index * 700));
+    });
+
+    matchTimers.current.push(setTimeout(() => {
+      const found = findEhrMatch();
+      const result = found
+        ? {
+            status: 'existing',
+            name: found.name,
+            source: found.source,
+            confidence: found.confidence,
+          }
+        : {
+            status: 'new',
+            name: basicInfo.name.trim(),
+            source: 'Tebra + TherapyNotes',
+            confidence: 'No matching chart found',
+          };
+      setMatchResult(result);
+      setMatchStage('result');
+      if (onResolvedPatient) {
+        const first = (result.name || basicInfo.name).trim().split(/\s+/)[0] || 'there';
+        onResolvedPatient({
+          name: result.name || basicInfo.name.trim(),
+          first,
+          dob: basicInfo.dob,
+          email: basicInfo.email,
+          phone: basicInfo.phone,
+          patient_type: result.status === 'existing' ? 'returning_recent' : 'new',
+          match_status: result.status,
+          address: basicInfo.address,
+          emergency_contact: basicInfo.emergency_contact,
+        });
+      }
+    }, 3600));
+  }
+
+  function handleUpload(docKey, fileList) {
+    const file = fileList && fileList[0];
+    if (!file) return;
+    setUploadedDocs(docs => ({ ...docs, [docKey]: file.name || 'Photo ready' }));
+    insuranceTimers.current.forEach(clearTimeout);
+    insuranceTimers.current = [];
+    setInsuranceAuthStage('idle');
+    setInsuranceAuthStep(0);
+  }
+
+  async function handleCreditUpload(docKey, fileList) {
+    const file = fileList && fileList[0];
+    if (!file) return;
+    setUploadedDocs(docs => ({ ...docs, [docKey]: file.name || 'Photo ready' }));
+    setCredit('mode', 'upload');
+    if (!file.type.startsWith('image/')) {
+      setCreditOcrStatus(status => ({
+        ...status,
+        [docKey]: { state: 'skipped', message: 'OCR works with image uploads. Review the fields below.' },
+      }));
+      return;
+    }
+    if (!window.Tesseract?.recognize) {
+      setCreditOcrStatus(status => ({
+        ...status,
+        [docKey]: { state: 'skipped', message: 'OCR is unavailable. Review the fields below.' },
+      }));
+      return;
+    }
+    setCreditOcrStatus(status => ({
+      ...status,
+      [docKey]: { state: 'running', message: 'Reading card image...' },
+    }));
+    try {
+      const result = await window.Tesseract.recognize(file, 'eng', {
+        logger: progress => {
+          if (progress.status === 'recognizing text') {
+            const pct = Math.max(1, Math.round((progress.progress || 0) * 100));
+            setCreditOcrStatus(status => ({
+              ...status,
+              [docKey]: { state: 'running', message: `Reading card image... ${pct}%` },
+            }));
+          }
+        },
+      });
+      const text = result?.data?.text || '';
+      const extracted = extractCreditCardFields(text, docKey);
+      setCreditData(data => ({
+        ...data,
+        your_name: data.your_name || extracted.your_name || '',
+        card_type: extracted.card_type || data.card_type,
+        card_number: extracted.card_number || data.card_number,
+        expiration: extracted.expiration || data.expiration,
+        cvc: extracted.cvc || data.cvc,
+      }));
+      const found = [
+        extracted.card_type,
+        extracted.card_number && maskCardNumber(extracted.card_number),
+        extracted.expiration && `exp ${extracted.expiration}`,
+        extracted.cvc && 'CVC',
+      ].filter(Boolean).join(' · ');
+      setCreditOcrStatus(status => ({
+        ...status,
+        [docKey]: {
+          state: 'done',
+          message: found ? `Extracted ${found}.` : 'No fields were confidently extracted. Review the fields below.',
+        },
+      }));
+    } catch (err) {
+      console.warn('Credit card OCR failed:', err);
+      setCreditOcrStatus(status => ({
+        ...status,
+        [docKey]: { state: 'error', message: 'OCR could not read this image. Review the fields below.' },
+      }));
+    }
+  }
+
+  function startInsuranceAuthorization() {
+    insuranceTimers.current.forEach(clearTimeout);
+    insuranceTimers.current = [];
+    setInsuranceAuthStage('running');
+    setInsuranceAuthStep(0);
+    insuranceAuthSteps.forEach((_, index) => {
+      insuranceTimers.current.push(setTimeout(() => setInsuranceAuthStep(index + 1), 450 + index * 650));
+    });
+    insuranceTimers.current.push(setTimeout(() => {
+      setInsuranceAuthStep(insuranceAuthSteps.length);
+      setInsuranceAuthStage('complete');
+    }, 3300));
+  }
+
+  function startConfirmationHandoff() {
+    confirmationTimers.current.forEach(clearTimeout);
+    confirmationTimers.current = [];
+    setConfirmationStage('running');
+    setConfirmationStep(0);
+    confirmationSteps.forEach((_, index) => {
+      confirmationTimers.current.push(setTimeout(() => setConfirmationStep(index + 1), 450 + index * 600));
+    });
+    confirmationTimers.current.push(setTimeout(() => {
+      setConfirmationStep(confirmationSteps.length);
+      setConfirmationStage('complete');
+    }, 4300));
+  }
+
+  function completeProfileSignup(provider, notice) {
+    const profilePhoto = getMockPatientAvatar(basicInfo.gender);
+    setSignupMethod(provider);
+    setSignupStatus('complete');
+    setSignupNotice(notice || 'AlanBehrman will prefill the profile from the intake information shown above.');
+    if (onResolvedPatient) {
+      const name = resolvedName || basicInfo.name.trim() || patient.name;
+      onResolvedPatient({
+        ...patient,
+        name,
+        first: name.trim().split(/\s+/)[0] || patient.first || 'there',
+        dob: basicInfo.dob || displayDob,
+        email: confirmationEmail,
+        phone: basicInfo.phone.trim() || displayPhone,
+        gender: basicInfo.gender || patient.gender || '',
+        address: basicInfo.address,
+        emergency_contact: basicInfo.emergency_contact,
+        patient_type: matchResult?.status === 'existing' ? 'returning_recent' : 'new',
+        match_status: matchResult?.status,
+        profile_photo: profilePhoto,
+        auth_provider: provider,
+        profile_created: true,
+      });
+    }
+  }
+
+  function handleConfiguredSso(provider) {
+    completeProfileSignup(provider, `${provider} single sign-on connected. AlanBehrman will prefill the profile from the intake information shown above.`);
+  }
+
+  function handleNeedsSubmit(e) {
+    e.preventDefault();
+    if (needsStep === 3 && insuranceAuthStage === 'idle') {
+      startInsuranceAuthorization();
+      return;
+    }
+    if (needsStep === 3 && insuranceAuthStage === 'running') {
+      return;
+    }
+    if (needsStep < needsSteps.length - 1) {
+      setNeedsStep(step => step + 1);
+      return;
+    }
+    setNeedsComplete(true);
+  }
+
+  function backNeedsStep() {
+    if (needsStep === 3 && insuranceAuthStage !== 'idle') {
+      insuranceTimers.current.forEach(clearTimeout);
+      insuranceTimers.current = [];
+      setInsuranceAuthStage('idle');
+      setInsuranceAuthStep(0);
+      return;
+    }
+    setNeedsStep(step => Math.max(0, step - 1));
+  }
+
+  const UploadCard = ({ docKey, title }) => (
+    <div className="upload-card">
+      <div className="upload-card-title">{title}</div>
+      <div className="upload-card-lines"><span /><span /></div>
+      <div className="upload-actions">
+        <label className="upload-action primary" htmlFor={`camera-${docKey}`}>
+          Take photo <span>▣</span>
+        </label>
+        <input
+          id={`camera-${docKey}`}
+          className="sr-file-input"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={e => handleUpload(docKey, e.target.files)}
+        />
+        <label className="upload-action" htmlFor={`upload-${docKey}`}>
+          Upload from phone <span>⇧</span>
+        </label>
+        <input
+          id={`upload-${docKey}`}
+        className="sr-file-input"
+        type="file"
+        accept="image/*,.pdf"
+        onChange={e => handleUpload(docKey, e.target.files)}
+      />
+    </div>
+    {uploadedDocs[docKey] && <div className="upload-status">✓ {uploadedDocs[docKey]}</div>}
+  </div>
+  );
+
+  const CreditUploadCard = ({ docKey, title }) => (
+    <div className="upload-card">
+      <div className="upload-card-title">{title}</div>
+      <div className="upload-card-lines"><span /><span /></div>
+      <div className="upload-actions">
+        <label className="upload-action primary" htmlFor={`credit-camera-${docKey}`}>
+          Take photo <span>▣</span>
+        </label>
+        <input
+          id={`credit-camera-${docKey}`}
+          className="sr-file-input"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={e => handleCreditUpload(docKey, e.target.files)}
+        />
+        <label className="upload-action" htmlFor={`credit-upload-${docKey}`}>
+          Upload from phone <span>⇧</span>
+        </label>
+        <input
+          id={`credit-upload-${docKey}`}
+          className="sr-file-input"
+          type="file"
+          accept="image/*"
+          onChange={e => handleCreditUpload(docKey, e.target.files)}
+        />
+      </div>
+      {uploadedDocs[docKey] && <div className="upload-status">✓ {uploadedDocs[docKey]}</div>}
+      {creditOcrStatus[docKey] && (
+        <div className="credit-ocr-status">
+          <strong>{creditOcrStatus[docKey].state === 'done' ? 'OCR complete' : creditOcrStatus[docKey].state === 'running' ? 'OCR in progress' : 'OCR note'}</strong>
+          {creditOcrStatus[docKey].message}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderCreditAuthorizationFields = () => (
+    <>
+      <div className="credit-form-section-title">Billing information</div>
+      <div className="basic-form-grid">
+        <div className="basic-field full">
+          <label htmlFor="cc-your-name">Your name</label>
+          <input id="cc-your-name" className="basic-input" value={creditData.your_name} onChange={e => setCredit('your_name', e.target.value)} placeholder="Full name" autoComplete="cc-name" />
+        </div>
+        <div className="basic-field full">
+          <label htmlFor="cc-address">Address</label>
+          <input id="cc-address" className="basic-input" value={creditData.address} onChange={e => setCredit('address', e.target.value)} placeholder="Street address" autoComplete="billing street-address" />
+        </div>
+        <div className="basic-field">
+          <label htmlFor="cc-city">City</label>
+          <input id="cc-city" className="basic-input" value={creditData.city} onChange={e => setCredit('city', e.target.value)} placeholder="City" autoComplete="billing address-level2" />
+        </div>
+        <div className="basic-field">
+          <label htmlFor="cc-state">State</label>
+          <input id="cc-state" className="basic-input" value={creditData.state} onChange={e => setCredit('state', e.target.value.toUpperCase().slice(0, 2))} placeholder="GA" autoComplete="billing address-level1" />
+        </div>
+        <div className="basic-field">
+          <label htmlFor="cc-zip">Zip</label>
+          <input id="cc-zip" className="basic-input" value={creditData.zip} onChange={e => setCredit('zip', e.target.value)} placeholder="ZIP code" inputMode="numeric" autoComplete="billing postal-code" />
+        </div>
+        <div className="basic-field">
+          <label htmlFor="cc-phone">Phone</label>
+          <input id="cc-phone" className="basic-input" value={creditData.phone} onChange={e => setCredit('phone', e.target.value)} placeholder="(555) 555-5555" inputMode="tel" autoComplete="tel" />
+        </div>
+        <div className="basic-field full">
+          <label htmlFor="cc-email">Email</label>
+          <input id="cc-email" className="basic-input" type="email" value={creditData.email} onChange={e => setCredit('email', e.target.value)} placeholder="you@example.com" autoComplete="email" />
+        </div>
+      </div>
+
+      <div className="credit-form-section-title">Card type</div>
+      <div className="card-type-options">
+        {CREDIT_CARD_TYPES.map(type => (
+          <label key={type} className={`card-type-option${creditData.card_type === type ? ' selected' : ''}`}>
+            <input
+              type="radio"
+              name="cc-card-type"
+              checked={creditData.card_type === type}
+              onChange={() => setCredit('card_type', type)}
+            />
+            {type}
+          </label>
+        ))}
+      </div>
+
+      <div className="credit-form-section-title">Card details</div>
+      <div className="basic-form-grid">
+        <div className="basic-field full">
+          <label htmlFor="cc-number">Card Number</label>
+          <input id="cc-number" className="basic-input" value={creditData.card_number} onChange={e => setCredit('card_number', formatCardNumber(e.target.value))} placeholder="0000 0000 0000 0000" inputMode="numeric" autoComplete="cc-number" />
+        </div>
+        <div className="basic-field">
+          <label htmlFor="cc-exp">Expiration Date</label>
+          <input id="cc-exp" className="basic-input" value={creditData.expiration} onChange={e => setCredit('expiration', e.target.value)} placeholder="MM / YY" autoComplete="cc-exp" />
+        </div>
+        <div className="basic-field">
+          <label htmlFor="cc-cvc">CVC</label>
+          <input id="cc-cvc" className="basic-input" value={creditData.cvc} onChange={e => setCredit('cvc', e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="CVC" inputMode="numeric" autoComplete="cc-csc" />
+        </div>
+      </div>
+    </>
+  );
+
+  const creditFormComplete = ['your_name','address','city','state','zip','phone','email','card_type','card_number','expiration','cvc']
+    .every(k => (creditData[k] || '').trim());
+  const creditUploadComplete = !!(uploadedDocs.credit_card_front && uploadedDocs.credit_card_back);
+  const creditCanSubmit = creditData.authorization && creditFormComplete && (creditData.mode === 'manual' || creditUploadComplete);
+
+  const markPacketFormDone = formId => setPacketCompleted(done => ({ ...done, [formId]: true }));
+
+  function renderPacketFormViewer() {
+    if (!activePacketForm) return null;
+    const isDone = !!packetCompleted[activePacketForm.id];
+    return (
+      <div className="dynamic-form-viewer">
+        <div className="dynamic-form-viewer-head">
+          <div>
+            <div className="dynamic-form-step">{activePacketForm.step}</div>
+            <div className="dynamic-form-viewer-title">{activePacketForm.title}</div>
+          </div>
+          <button type="button" className="dynamic-form-action primary" onClick={() => markPacketFormDone(activePacketForm.id)}>
+            {isDone ? 'Done' : 'Mark done'}
+          </button>
+        </div>
+        {activePacketForm.type === 'local_hipaa' ? (
+          <div className="dynamic-screener-body">
+            <LocalHipaaForm
+              initialName={resolvedName || basicInfo.name || patient.name || ''}
+              initialEmail={basicInfo.email || displayEmail || ''}
+              onSubmit={() => markPacketFormDone(activePacketForm.id)}
+            />
+          </div>
+        ) : activePacketForm.type === 'screener' ? (
+          <div className="dynamic-screener-body">
+            <ScoreQuestionnaire
+              questions={activePacketForm.screener === 'phq9' ? PHQ9_QUESTIONS : GAD7_QUESTIONS}
+              getSeverity={activePacketForm.screener === 'phq9' ? phq9Severity : gad7Severity}
+              label={activePacketForm.screener === 'phq9' ? 'PHQ-9' : 'GAD-7'}
+            />
+          </div>
+        ) : (
+          <iframe src={activePacketForm.url} title={activePacketForm.title} />
+        )}
+      </div>
+    );
+  }
+
+  function renderDynamicFormsPacket() {
+    if (!selectedAppointment || dynamicFormPacket.length === 0) return null;
+    return (
+      <div className="dynamic-forms-panel">
+        <div className="dynamic-forms-head">
+          <div>
+            <div className="dynamic-forms-title">Dynamic paperwork packet</div>
+            <div className="dynamic-forms-sub">
+              Forms are selected from AlanBehrman&apos;s current forms page based on patient age, selected provider, insurance, and presenting concern.
+            </div>
+          </div>
+          <div className="dynamic-forms-count">{packetCompleteCount}/{dynamicFormPacket.length} done</div>
+        </div>
+        <div className="dynamic-forms-grid">
+          {dynamicFormPacket.map(form => {
+            const done = !!packetCompleted[form.id];
+            const active = activePacketForm?.id === form.id;
+            return (
+              <div
+                key={form.id}
+                role="button"
+                tabIndex="0"
+                className={`dynamic-form-card${active ? ' active' : ''}${done ? ' done' : ''}`}
+                onClick={() => setActivePacketForm(form)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActivePacketForm(form);
+                  }
+                }}
+              >
+                <div className="dynamic-form-step">{form.step}</div>
+                <div className="dynamic-form-title">{form.title}</div>
+                <div className="dynamic-form-reason">{form.reason}</div>
+                <div className="dynamic-form-actions">
+                  <span className="dynamic-form-action primary">{form.type === 'screener' ? 'Start' : 'Review'}</span>
+                  {form.url && (
+                    <a className="dynamic-form-action" href={form.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>
+                      Open source
+                    </a>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {renderPacketFormViewer()}
+      </div>
+    );
+  }
 
   function startEdit() {
     setEditFields({ dob: displayDob, email: displayEmail, phone: displayPhone });
@@ -2691,6 +5673,16 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
     }
   }
 
+  async function handleHipaaSubmit(hipaaData) {
+    const fullName = [hipaaData.firstName, hipaaData.lastName].filter(Boolean).join(' ');
+    setBasicInfo(info => ({
+      ...info,
+      name: info.name || fullName,
+      email: info.email || hipaaData.email,
+    }));
+    if (onAcknowledgePrivacy) await onAcknowledgePrivacy();
+  }
+
   const formMsg = (() => {
     if (isRecent && total > 0) {
       return remaining > 0
@@ -2698,7 +5690,7 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
         : <span>Your information is up to date — all forms are complete.</span>;
     }
     if (completed === 0 && total > 0) {
-      return <span>You are required to complete <strong>{total}</strong> form{total !== 1 ? 's' : ''} before your appointment.</span>;
+      return <span>You are required to complete <strong>{total}</strong> form{total !== 1 ? 's' : ''} before scheduling can be confirmed.</span>;
     }
     if (completed > 0 && remaining > 0) {
       return <span>Thank you for completing <strong>{completed}</strong> form{completed !== 1 ? 's' : ''}. Let&apos;s complete the remaining <strong>{remaining}</strong>.</span>;
@@ -2707,45 +5699,155 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
   })();
 
   const lede = (() => {
-    if (isRecent) return <>We have your records on file. Please <strong>review and update your information</strong> before your upcoming {patient.appt.toLowerCase()}. This should only take a few minutes.</>;
-    if (isStale)  return <>It&apos;s been a while since your last visit — let&apos;s refresh your full records before your upcoming <strong>{patient.appt.toLowerCase()}</strong>. Both paths securely save your progress.</>;
-    return <>Complete your paperwork for your upcoming <strong>{patient.appt.toLowerCase()}</strong>. Both paths securely save your progress.</>;
+    if (isRecent) return <>We have your records on file. Please <strong>review and update your information</strong> so the intake team can prepare the right next step.</>;
+    if (isStale)  return <>It&apos;s been a while since your last visit — let&apos;s refresh your records before scheduling. Your progress is securely saved.</>;
+    return <>Complete your intake so we can match your needs with available appointment options.</>;
   })();
 
   return (
     <div className="welcome-b">
       <div className="left">
+        <div className="patient-logo-lockup">
+          <img src="assets/alan-Behrman-Logo.png" alt="AlanBehrman" />
+          <span>Secure client intake</span>
+        </div>
         <div className="step-indicator">
           <div className="s active" />
           <div className="s" />
           <div className="s" />
+          <div className="s" />
         </div>
-        <div className="eyebrow">Step 1 · Welcome</div>
-        <h1>
-          {isReturning
-            ? <><span style={{fontStyle:'normal'}}>Welcome back,</span> <em>{patient.first}.</em></>
-            : <>Welcome, <em>{patient.first}.</em></>
-          }
-        </h1>
-        {isStale && (
+        <div className="eyebrow">
+          {!privacyAcknowledged
+            ? 'Step 1 · Privacy notice'
+            : selectedAppointment && creditCardComplete
+              ? 'Step 4 · Confirmation + paperwork'
+            : selectedAppointment && !creditCardComplete
+              ? 'Step 3 · Hold your appointment'
+            : matchResult?.status === 'new' && !needsComplete
+              ? 'Step 3 · New patient intake'
+            : matchResult?.status === 'new' && needsComplete && !selectedAppointment
+              ? 'Appointment matches'
+            : matchResult
+              ? 'Step 4 · Intake options'
+                : 'Step 2 · Basic information'}
+        </div>
+        {!privacyAcknowledged ? (
+          <>
+            <h1>Welcome to <em>AlanBehrman.</em></h1>
+            <p className="lede">
+              Before you begin, please review and acknowledge the privacy notice. Appointment details will appear only after a time is selected.
+            </p>
+          </>
+        ) : matchStage === 'searching' ? (
+          <>
+            <h1>Checking your <em>information.</em></h1>
+            <p className="lede">
+              Elevia is reviewing your details in the background so we can start the right intake path.
+            </p>
+          </>
+        ) : matchResult?.status === 'existing' ? (
+          <>
+            <h1>Welcome back, <em>{resolvedName.split(/\s+/)[0]}.</em></h1>
+            <p className="lede">
+              We found your existing patient profile. Please continue so we can refresh your intake before scheduling is confirmed.
+            </p>
+          </>
+        ) : matchResult?.status === 'new' && !needsComplete ? (
+          <>
+            <h1>New Patient <em>Intake.</em></h1>
+            <p className="lede">
+              Share your needs, preferences, and insurance details so the intake team can prepare the right next step.
+            </p>
+          </>
+        ) : selectedAppointment && !creditCardComplete ? (
+          <>
+            <h1>Credit card <em>authorization.</em></h1>
+            <p className="lede">
+              Add a card authorization for billing after your appointment is confirmed. No charge is made in this demo.
+            </p>
+          </>
+        ) : selectedAppointment && creditCardComplete && confirmationStage !== 'complete' ? (
+          <>
+            <h1>Finalizing <em>intake.</em></h1>
+            <p className="lede">
+              Intake is sending the confirmation email and paperwork, then copying the selected provider.
+            </p>
+          </>
+        ) : selectedAppointment && creditCardComplete && confirmationStage === 'complete' ? (
+          <>
+            <h1>Appointment <em>confirmed.</em></h1>
+            <p className="lede">
+              Confirmation email and paperwork are sent. Your provider has everything needed for the visit.
+            </p>
+          </>
+        ) : matchResult?.status === 'new' && needsComplete && !selectedAppointment ? (
+          <>
+            <h1>Select an <em>appointment.</em></h1>
+            <p className="lede">
+              Elevia found available times that match the location and scheduling preferences you shared.
+            </p>
+          </>
+        ) : matchResult?.status === 'new' ? (
+          <>
+            <h1>New patient intake <em>started.</em></h1>
+            <p className="lede">
+              Thanks. Your needs assessment and billing authorization are saved for staff review.
+            </p>
+          </>
+        ) : (
+          <>
+            <h1>Tell us about <em>yourself.</em></h1>
+            <p className="lede">
+              Enter your basic information so Elevia can prepare your intake experience.
+            </p>
+          </>
+        )}
+        {matchResult && isStale && (
           <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'var(--amber)',color:'oklch(25% 0.05 80)',fontSize:11.5,fontWeight:600,letterSpacing:'0.04em',textTransform:'uppercase',padding:'4px 10px',borderRadius:20,marginBottom:16}}>
             ↻ Records refresh needed
           </div>
         )}
         <div className="summary-table">
-          <div className="row"><span className="k">Patient</span><span className="v">{patient.name}</span></div>
-          <div className="row"><span className="k">Appointment</span><span className="v">{patient.appt}</span></div>
-          <div className="row"><span className="k">Scheduled</span><span className="v">{patient.date || <em style={{color:'var(--ink-4)',fontStyle:'normal'}}>TBD</em>}</span></div>
-          {patient.location && <div className="row"><span className="k">Location</span><span className="v">{patient.location}</span></div>}
-          {patient.provider && <div className="row"><span className="k">Provider</span><span className="v">{patient.provider}</span></div>}
-          {patient.description && (
-            <div className="row">
-              <span className="k">Reason</span>
-              <span className="v" style={{fontWeight:400,color:'var(--ink-2)',fontSize:13.5}}>{patient.description}</span>
-            </div>
+          <div className="row"><span className="k">Estimated time</span><span className="v">{estimatedLabel}</span></div>
+          {privacyAcknowledged && !matchResult && (
+            <>
+              <div className="row"><span className="k">Next</span><span className="v">Basic information</span></div>
+            </>
+          )}
+          {matchResult && (
+            <>
+              <div className="row"><span className="k">Patient</span><span className="v">{resolvedName || patient.name}</span></div>
+              <div className="row"><span className="k">Patient status</span><span className="v">{matchResult.status === 'existing' ? 'Existing patient' : 'New patient'}</span></div>
+              {selectedAppointment && (
+                <>
+                  <div className="row"><span className="k">Selected time</span><span className="v">{selectedAppointment.time}</span></div>
+                  <div className="row"><span className="k">Location</span><span className="v">{selectedAppointment.location}</span></div>
+                  <div className="row"><span className="k">Selected provider</span><span className="v">{selectedAppointment.provider.name}</span></div>
+                </>
+              )}
+              {creditCardComplete && (
+                <>
+                  <div className="row"><span className="k">Card authorization</span><span className="v">Received</span></div>
+                  <div className="row"><span className="k">Intake status</span><span className="v">{assignmentStatus}</span></div>
+                  {confirmationStage === 'complete' && (
+                    <>
+                      <div className="row"><span className="k">Paperwork</span><span className="v">Sent to patient</span></div>
+                      <div className="row"><span className="k">Care team ready</span><span className="v">Complete</span></div>
+                    </>
+                  )}
+                </>
+              )}
+              {patient.description && (
+                <div className="row">
+                  <span className="k">Reason</span>
+                  <span className="v" style={{fontWeight:400,color:'var(--ink-2)',fontSize:13.5}}>{patient.description}</span>
+                </div>
+              )}
+            </>
           )}
           {/* Editable contact fields — only shown when intakeCtx is available */}
-          {patient.patient_id && (
+          {matchResult && patient.patient_id && (
             <>
               <div className="row" style={{alignItems:'center'}}>
                 <span className="k">Date of Birth</span>
@@ -2794,7 +5896,591 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
       </div>
 
       <div className="right">
-        <div className="option-cards">
+        {!privacyAcknowledged ? (
+          <div className="hipaa-ack-panel">
+            <div className="hipaa-ack-header">
+              <img src="assets/alan-Behrman-Logo.png" alt="AlanBehrman" />
+              <div>
+                <div className="hipaa-ack-title">HIPAA Notice of Privacy Practices</div>
+                <div className="hipaa-ack-sub">Acknowledgement required before continuing</div>
+              </div>
+            </div>
+            <LocalHipaaForm
+              initialName={basicInfo.name || patient.name || ''}
+              initialEmail={basicInfo.email || displayEmail || ''}
+              onSubmit={handleHipaaSubmit}
+            />
+          </div>
+        ) : matchStage === 'basic' ? (
+          <form className="basic-info-panel" onSubmit={handleBasicSubmit}>
+            <div className="privacy-saved">✓ Privacy acknowledgement saved</div>
+            <h2>Patient basic information</h2>
+            <p>These details are used only to find your chart and route the correct intake workflow.</p>
+            <div className="basic-form-grid">
+              <div className="basic-field full">
+                <label htmlFor="basic-name">Name</label>
+                <input id="basic-name" className="basic-input" value={basicInfo.name} onChange={e => setBasic('name', e.target.value)} placeholder="Full legal name" autoComplete="name" />
+              </div>
+              <div className="basic-field">
+                <label htmlFor="basic-dob">Date of birth</label>
+                <input id="basic-dob" className="basic-input" type="date" value={basicInfo.dob} onChange={e => setBasic('dob', e.target.value)} />
+              </div>
+              <div className="basic-field">
+                <label htmlFor="basic-gender">Gender</label>
+                <select id="basic-gender" className="basic-input" value={basicInfo.gender} onChange={e => setBasic('gender', e.target.value)}>
+                  <option value="">Select</option>
+                  <option>Female</option>
+                  <option>Male</option>
+                  <option>Non-binary</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </div>
+              <div className="basic-field">
+                <label htmlFor="basic-phone">Phone</label>
+                <input id="basic-phone" className="basic-input" value={basicInfo.phone} onChange={e => setBasic('phone', e.target.value)} placeholder="(555) 555-5555" autoComplete="tel" />
+              </div>
+              <div className="basic-field">
+                <label htmlFor="basic-email">Email</label>
+                <input id="basic-email" className="basic-input" type="email" value={basicInfo.email} onChange={e => setBasic('email', e.target.value)} placeholder="you@example.com" autoComplete="email" />
+              </div>
+              <div className="basic-field full">
+                <label htmlFor="basic-address">Address</label>
+                <textarea id="basic-address" className="basic-input" value={basicInfo.address} onChange={e => setBasic('address', e.target.value)} placeholder="Street, city, state, ZIP" autoComplete="street-address" />
+              </div>
+              <div className="basic-field full">
+                <label htmlFor="basic-emergency">Emergency contact</label>
+                <input id="basic-emergency" className="basic-input" value={basicInfo.emergency_contact} onChange={e => setBasic('emergency_contact', e.target.value)} placeholder="Name, relationship, phone" />
+              </div>
+            </div>
+            <div className="basic-actions">
+              <button className="btn btn-accent btn-lg" type="submit" disabled={!basicComplete}>
+                Continue
+              </button>
+            </div>
+          </form>
+        ) : matchStage === 'searching' ? (
+          <div className="ehr-scan-card">
+            <h2>Reviewing your information</h2>
+            <p>Elevia is preparing your intake path.</p>
+            {scanSteps.map((stepLabel, index) => (
+              <div key={stepLabel} className={`ehr-row${matchStep === index + 1 ? ' active' : matchStep > index + 1 ? ' done' : ''}`}>
+                <span className="ehr-dot" />
+                <span>{stepLabel}</span>
+              </div>
+            ))}
+          </div>
+        ) : matchResult?.status === 'new' && !needsComplete ? (
+          <form className={`needs-panel${needsStep === 3 ? ' insurance-step-panel' : ''}`} onSubmit={handleNeedsSubmit}>
+            <div className="match-badge">New patient intake</div>
+            <h2>New Patient Intake</h2>
+            <p>Elevia will ask a few quick questions and save your answers for the intake team.</p>
+
+            <div className="workflow-progress">
+              <div className="workflow-progress-bar">
+                <div className="workflow-progress-fill" style={{width:`${((needsStep + 1) / needsSteps.length) * 100}%`}} />
+              </div>
+              <span>{needsStep + 1} of {needsSteps.length}</span>
+            </div>
+
+            {needsStep === 0 && (
+              <>
+                <div className="workflow-prompt">
+                  <h3>What brings you in?</h3>
+                  <p>Share your presenting concern, care goals, or what kind of support you need.</p>
+                </div>
+                <div className="basic-field full">
+                  <label htmlFor="needs-presenting">Presenting concern / needs</label>
+                  <textarea
+                    id="needs-presenting"
+                    className="basic-input"
+                    value={needsData.presenting_concern}
+                    onChange={e => setNeeds('presenting_concern', e.target.value)}
+                    placeholder="What brings you in? Share symptoms, goals, or support needed."
+                  />
+                </div>
+              </>
+            )}
+
+            {needsStep === 1 && (
+              <>
+                <div className="workflow-prompt">
+                  <h3>Which location works best?</h3>
+                  <p>Choose the office that works best for your visit.</p>
+                </div>
+                <div className="location-options">
+                  {INTAKE_LOCATIONS.map(loc => (
+                    <label key={loc.id} className={`location-option${needsData.preferred_location === loc.id ? ' selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="preferred-location"
+                        checked={needsData.preferred_location === loc.id}
+                        onChange={() => setNeeds('preferred_location', loc.id)}
+                      />
+                      <span>
+                        <span className="location-name">{loc.name}</span>
+                        <span className="location-address">{loc.address.map(line => <React.Fragment key={line}>{line}<br /></React.Fragment>)}</span>
+                        <span className="location-meta">{loc.distance}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {needsStep === 2 && (
+              <>
+                <div className="workflow-prompt">
+                  <h3>When would you prefer to come in?</h3>
+                  <p>Tell us dates, times, or general availability.</p>
+                </div>
+                <div className="basic-field full">
+                  <label htmlFor="needs-times">Preferred dates/times</label>
+                  <div className="chat-input-shell">
+                    <textarea
+                      id="needs-times"
+                      className="basic-input chat-input-field"
+                      value={needsData.preferred_times}
+                      onChange={e => setNeeds('preferred_times', e.target.value)}
+                    />
+                    {!needsData.preferred_times && (
+                      <div className="chat-placeholder" key={timeHintIndex} aria-hidden="true">{timeHints[timeHintIndex]}</div>
+                    )}
+                  </div>
+                  <div className="hint-rotator" aria-hidden="true">
+                    <span>Try:</span>
+                    <span key={timeHintIndex}>{timeHints[timeHintIndex]}</span>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {needsStep === 3 && (
+              <>
+                {insuranceAuthStage === 'idle' ? (
+                  <>
+                    <div className="workflow-prompt">
+                      <h3>How would you like to share insurance information?</h3>
+                      <p>You can upload photos from your phone camera or type the insurance details manually.</p>
+                    </div>
+                    <div className="insurance-mode">
+                      <button type="button" className={needsData.insurance_mode === 'upload' ? 'active' : ''} onClick={() => setNeeds('insurance_mode', 'upload')}>Upload cards</button>
+                      <button type="button" className={needsData.insurance_mode === 'manual' ? 'active' : ''} onClick={() => setNeeds('insurance_mode', 'manual')}>Enter manually</button>
+                    </div>
+
+                    {needsData.insurance_mode === 'upload' ? (
+                      <div className="upload-stack">
+                        <UploadCard docKey="insurance_front" title="Insurance card front" />
+                        <UploadCard docKey="insurance_back" title="Insurance card back" />
+                        <UploadCard docKey="driver_id" title="Driver's license / ID" />
+                      </div>
+                    ) : (
+                      <div className="basic-form-grid">
+                        <div className="basic-field">
+                          <label htmlFor="ins-carrier">Insurance carrier</label>
+                          <input id="ins-carrier" className="basic-input" value={needsData.insurance_carrier} onChange={e => setNeeds('insurance_carrier', e.target.value)} placeholder="Aetna, BCBS, United..." />
+                        </div>
+                        <div className="basic-field">
+                          <label htmlFor="ins-member">Member ID</label>
+                          <input id="ins-member" className="basic-input" value={needsData.insurance_member_id} onChange={e => setNeeds('insurance_member_id', e.target.value)} placeholder="Member ID" />
+                        </div>
+                        <div className="basic-field">
+                          <label htmlFor="ins-group">Group ID</label>
+                          <input id="ins-group" className="basic-input" value={needsData.insurance_group_id} onChange={e => setNeeds('insurance_group_id', e.target.value)} placeholder="Group number" />
+                        </div>
+                        <div className="basic-field">
+                          <label htmlFor="ins-policyholder">Policyholder</label>
+                          <input id="ins-policyholder" className="basic-input" value={needsData.policyholder_name} onChange={e => setNeeds('policyholder_name', e.target.value)} placeholder="Policyholder name" />
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : insuranceAuthStage === 'running' ? (
+                  <div className="insurance-auth-panel">
+                    <div className="insurance-auth-head">
+                      <div className="insurance-auth-mark running">E</div>
+                      <div>
+                        <h3 className="insurance-auth-title">Verifying coverage and authorization</h3>
+                        <p className="insurance-auth-sub">Elevia is reading the insurance details, checking payer eligibility, and calculating the patient estimate.</p>
+                      </div>
+                    </div>
+                    <div className="insurance-auth-steps">
+                      {insuranceAuthSteps.map((stepLabel, index) => (
+                        <div key={stepLabel} className={`insurance-auth-step${insuranceAuthStep === index + 1 ? ' active' : insuranceAuthStep > index + 1 ? ' done' : ''}`}>
+                          <span className="insurance-auth-dot">{insuranceAuthStep > index + 1 ? '✓' : index + 1}</span>
+                          <span>{stepLabel}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="coverage-summary">
+                    <div className="coverage-banner">
+                      <div className="insurance-auth-mark">✓</div>
+                      <div>
+                        <strong>Coverage verified</strong>
+                        <span>{coverageResult.payer} · {coverageResult.member} · Reference {coverageResult.reference}</span>
+                      </div>
+                    </div>
+                    <div className="coverage-grid">
+                      <div className="coverage-item">
+                        <div className="k">Coverage</div>
+                        <div className="v">{coverageResult.status}</div>
+                      </div>
+                      <div className="coverage-item">
+                        <div className="k">Network</div>
+                        <div className="v">{coverageResult.network}</div>
+                      </div>
+                      <div className="coverage-item">
+                        <div className="k">Authorization</div>
+                        <div className="v">{coverageResult.authorization}</div>
+                      </div>
+                      <div className="coverage-item">
+                        <div className="k">Deductible</div>
+                        <div className="v">{coverageResult.deductible}</div>
+                      </div>
+                      <div className="coverage-item">
+                        <div className="k">Coinsurance</div>
+                        <div className="v">{coverageResult.coinsurance}</div>
+                      </div>
+                      <div className="coverage-item">
+                        <div className="k">Plan</div>
+                        <div className="v">{coverageResult.payer}</div>
+                      </div>
+                    </div>
+                    <div className="copay-highlight">
+                      <div>
+                        <div className="insurance-auth-title">Estimated patient copay</div>
+                        <p className="insurance-auth-sub">Final patient responsibility may vary after payer adjudication.</p>
+                      </div>
+                      <div className="amount">{coverageResult.copay}</div>
+                    </div>
+                    <div className="coverage-note">
+                      This coverage estimate has been shared with the AlanBehrman team and will be reviewed before your appointment.
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {needsStep === 4 && (
+              <>
+                <div className="workflow-prompt">
+                  <h3>Anything that would help us find the right fit?</h3>
+                  <p>Feel free to share anything — provider preferences, language needs, accessibility requirements, or anything on your mind.</p>
+                </div>
+                <div className="basic-field full">
+                  <label htmlFor="needs-fit">Tell us anything helpful</label>
+                  <textarea
+                    id="needs-fit"
+                    className="basic-input"
+                    value={needsData.general_fit}
+                    onChange={e => setNeeds('general_fit', e.target.value)}
+                    placeholder="Language preferences, accessibility needs, anything you'd like us to know…"
+                  />
+                </div>
+              </>
+            )}
+
+            <div className="workflow-nav">
+              <button className="btn btn-ghost" type="button" onClick={backNeedsStep} disabled={needsStep === 0 || insuranceAuthStage === 'running'}>
+                Back
+              </button>
+              <button className="btn btn-accent btn-lg" type="submit" disabled={insuranceAuthStage === 'running'}>
+                {needsStep === 3 && insuranceAuthStage === 'idle'
+                  ? 'Check my coverage'
+                  : needsStep === 3 && insuranceAuthStage === 'running'
+                    ? 'Checking...'
+                    : needsStep === needsSteps.length - 1 ? 'Find my provider' : 'Continue'}
+              </button>
+            </div>
+          </form>
+        ) : matchResult?.status === 'new' && needsComplete && !selectedAppointment ? (
+          <div className="appointment-panel">
+            <div className="match-badge">Great news — times available</div>
+            <h2>Pick a time that works for you</h2>
+            <p>
+              Here are available times near you that match your preferences. Pick one and we'll hold it while we review your intake.
+            </p>
+            <div className="appointment-source">
+              <strong>{selectedLocation.name}</strong>
+              <span>{selectedLocation.address.join(', ')}</span>
+              <span>Preferred: {needsData.preferred_times || 'first available appointment'}</span>
+              <a href={locationTeamUrl} target="_blank" rel="noreferrer">Team page</a>
+            </div>
+            <div className="appointment-list">
+              {availableAppointments.map(appt => (
+                <div
+                  key={appt.id}
+                  className="appointment-card"
+                  role="button"
+                  tabIndex="0"
+                  onClick={() => { setSelectedAppointment(appt); setCreditCardComplete(false); resetConfirmationHandoff(); }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedAppointment(appt);
+                      setCreditCardComplete(false);
+                      resetConfirmationHandoff();
+                    }
+                  }}
+                >
+                  <div>
+                    <div className="appointment-time">{appt.time}</div>
+                    <div className="appointment-meta">{appt.matchLabel} · {appt.location}</div>
+                  </div>
+                  <div className="appointment-provider">
+                    <strong>{appt.provider.name}</strong>
+                    <span>Medical provider · {appt.provider.specialty}</span>
+                    <a href={appt.provider.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>
+                      Meet your provider
+                    </a>
+                  </div>
+                  <span className="appointment-select">Choose</span>
+                </div>
+              ))}
+            </div>
+            <div className="workflow-nav">
+              <button className="btn btn-ghost" type="button" onClick={() => { setNeedsComplete(false); setNeedsStep(4); }}>
+                Back
+              </button>
+            </div>
+          </div>
+        ) : matchResult?.status === 'new' && selectedAppointment && !creditCardComplete ? (
+          <form
+            className="credit-auth-panel"
+            id="credit-card-authorization-form"
+            onSubmit={e => {
+              e.preventDefault();
+              if (creditCanSubmit) {
+                setCreditCardComplete(true);
+                startConfirmationHandoff();
+              }
+            }}
+          >
+            <div className="match-badge">Step One</div>
+            <h2>Credit Card Authorization</h2>
+            <p>
+              Add the billing authorization required to hold your appointment. No charge happens today — a staff member reviews everything first.
+            </p>
+            <a className="credit-auth-link" href="https://www.alanbehrman.com/forms/" target="_blank" rel="noreferrer">
+              Source form · alanbehrman.com/forms
+            </a>
+            <div className="credit-notice">
+              Selected appointment: {selectedAppointment.time} with {selectedAppointment.provider.name}. Card details are collected for billing authorization after scheduling is confirmed.
+            </div>
+            <div className="insurance-mode">
+              <button type="button" className={creditData.mode === 'manual' ? 'active' : ''} onClick={() => setCredit('mode', 'manual')}>Enter manually</button>
+              <button type="button" className={creditData.mode === 'upload' ? 'active' : ''} onClick={() => setCredit('mode', 'upload')}>Upload photos</button>
+            </div>
+
+            {creditData.mode === 'manual' ? (
+              renderCreditAuthorizationFields()
+            ) : (
+              <>
+                <div className="credit-upload-grid">
+                  <CreditUploadCard docKey="credit_card_front" title="Credit card front" />
+                  <CreditUploadCard docKey="credit_card_back" title="Credit card back" />
+                </div>
+                <div className="credit-ocr-summary">
+                  <div className="credit-ocr-item">
+                    <div className="k">Card type</div>
+                    <div className="v">{creditData.card_type || 'Review'}</div>
+                  </div>
+                  <div className="credit-ocr-item">
+                    <div className="k">Card number</div>
+                    <div className="v">{maskCardNumber(creditData.card_number) || 'Review'}</div>
+                  </div>
+                  <div className="credit-ocr-item">
+                    <div className="k">Expiration</div>
+                    <div className="v">{creditData.expiration || 'Review'}</div>
+                  </div>
+                </div>
+                {renderCreditAuthorizationFields()}
+              </>
+            )}
+
+            <label className="ack-check">
+              <input type="checkbox" checked={creditData.authorization} onChange={e => setCredit('authorization', e.target.checked)} />
+              <span>
+                <strong>I authorize AlanBehrman to keep this card on file for appointment-related charges after staff confirmation.</strong>
+                <small>Card photos are used in this browser to prefill the authorization fields for staff review.</small>
+              </span>
+            </label>
+            <div className="workflow-nav">
+              <button className="btn btn-ghost" type="button" onClick={() => { setSelectedAppointment(null); setCreditCardComplete(false); resetConfirmationHandoff(); }}>
+                Back
+              </button>
+              <button className="btn btn-accent btn-lg" type="submit" disabled={!creditCanSubmit}>
+                Hold my appointment
+              </button>
+            </div>
+          </form>
+        ) : matchResult?.status === 'new' && selectedAppointment && creditCardComplete ? (
+          <div className="confirmation-panel">
+            <div className="match-badge">Step 4 · All done!</div>
+            <h2>{confirmationStage === 'complete' ? 'You\'re booked!' : 'Confirming your appointment'}</h2>
+            <p>
+              You're almost done! We're sending your confirmation and getting your provider ready.
+            </p>
+            {confirmationStage !== 'complete' ? (
+              <div className="insurance-auth-panel">
+                <div className="insurance-auth-head">
+                  <div className="insurance-auth-mark running">E</div>
+                  <div>
+                    <h3 className="insurance-auth-title">Almost there — wrapping things up</h3>
+                    <p className="insurance-auth-sub">Sending your confirmation, paperwork, and notifying your provider.</p>
+                  </div>
+                </div>
+                <div className="insurance-auth-steps">
+                  {confirmationSteps.map((stepLabel, index) => {
+                    const done = confirmationStage === 'complete' || confirmationStep > index + 1;
+                    const active = !done && (confirmationStep === index + 1 || (confirmationStep === 0 && index === 0));
+                    return (
+                      <div key={stepLabel} className={`insurance-auth-step${active ? ' active' : done ? ' done' : ''}`}>
+                        <span className="insurance-auth-dot">{done ? '✓' : index + 1}</span>
+                        <span>{stepLabel}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="coverage-summary">
+                <div className="coverage-banner">
+                  <div className="insurance-auth-mark">✓</div>
+                  <div>
+                    <strong>You're all set!</strong>
+                    <span>To {confirmationEmail} · Reference {confirmationReference}</span>
+                  </div>
+                </div>
+                <div className="handoff-summary-grid">
+                  <div className="handoff-summary-item">
+                    <div className="k">Appointment</div>
+                    <div className="v">{selectedAppointment.time}</div>
+                  </div>
+                  <div className="handoff-summary-item">
+                    <div className="k">Paperwork</div>
+                    <div className="v">{dynamicFormPacket.length} dynamic form{dynamicFormPacket.length !== 1 ? 's' : ''} assigned</div>
+                  </div>
+                  <div className="handoff-summary-item">
+                    <div className="k">Provider copied</div>
+                    <div className="v">{providerCopyTarget}</div>
+                  </div>
+                  <div className="handoff-summary-item">
+                    <div className="k">Status</div>
+                    <div className="v">{assignmentStatus}</div>
+                  </div>
+                  <div className="handoff-summary-item">
+                    <div className="k">Care team ready</div>
+                    <div className="v">Complete</div>
+                  </div>
+                  <div className="handoff-summary-item">
+                    <div className="k">Location</div>
+                    <div className="v">{selectedAppointment.location}</div>
+                  </div>
+                </div>
+                <div className="handoff-owner-banner">
+                  <div className="insurance-auth-mark">✓</div>
+                  <div>
+                    <strong>You're all set — appointment confirmed!</strong>
+                    <span>{providerCopyTarget} has been notified and will handle the provider-side next steps.</span>
+                  </div>
+                </div>
+                {renderDynamicFormsPacket()}
+                <div className="signup-panel">
+                  <h3>Save your spot &amp; stay connected</h3>
+                  <p>
+                    Create a free account to get appointment reminders, access your care summary, and keep everything in one place.
+                  </p>
+                  <div className="signup-profile-grid">
+                    {signupProfile.map(([key, value]) => (
+                      <div className="signup-profile-item" key={key}>
+                        <div className="k">{key}</div>
+                        <div className="v">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="google-signin-wrap">
+                    <div ref={googleButtonRef} className="google-signin-slot" aria-label="Sign up with Google" />
+                    {googleIdentityState === 'needs-client-id' && (
+                      <div className="sso-config-note">
+                        Google sign-in will be available shortly.
+                      </div>
+                    )}
+                    {googleIdentityState === 'unavailable' && (
+                      <div className="sso-config-note">{googleIdentityDetail}</div>
+                    )}
+                    {(googleIdentityState === 'needs-client-id' || googleIdentityState === 'unavailable') && (
+                      <button type="button" className="sso-btn sso-google" onClick={() => handleConfiguredSso('Google')}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Continue with Google
+                      </button>
+                    )}
+                  </div>
+                  <div className="sso-options">
+                    <button type="button" className="sso-btn sso-apple" onClick={() => handleConfiguredSso('Apple')}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                      </svg>
+                      Continue with Apple
+                    </button>
+                    <button type="button" className="sso-btn sso-microsoft" onClick={() => handleConfiguredSso('Microsoft')}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="1" width="10.5" height="10.5" fill="#F25022"/>
+                        <rect x="12.5" y="1" width="10.5" height="10.5" fill="#7FBA00"/>
+                        <rect x="1" y="12.5" width="10.5" height="10.5" fill="#00A4EF"/>
+                        <rect x="12.5" y="12.5" width="10.5" height="10.5" fill="#FFB900"/>
+                      </svg>
+                      Continue with Microsoft
+                    </button>
+                  </div>
+                  {signupMethod && (
+                    <div className="signup-success">
+                      {signupStatus === 'complete'
+                        ? <img className="profile-photo signup-profile-photo" src={getMockPatientAvatar(basicInfo.gender)} alt={`${resolvedName || 'Patient'} profile`} />
+                        : <div className="insurance-auth-mark">✓</div>}
+                      <div>
+                        <strong>{signupStatus === 'needs-config' ? `${signupMethod} sign-in isn't connected yet — the team will follow up.` : `You're signing in with ${signupMethod}.`}</strong>
+                        <span>{signupStatus === 'needs-config' ? signupNotice : signupNotice || 'Your intake details will be saved to your account automatically.'}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="option-cards">
+          <div className="privacy-saved">✓ Privacy acknowledgement saved</div>
+          {matchResult?.status === 'existing' ? (
+            <div className="match-result">
+              <strong>Welcome back, {resolvedName}.</strong>
+              Your intake will continue as a returning patient update.
+            </div>
+          ) : (
+            <div className="match-result new">
+              <strong>New patient intake started.</strong>
+              Your needs assessment has been added to this intake.
+            </div>
+          )}
+          {selectedAppointment && (
+            <div className="selected-appt-summary">
+              <strong>Appointment selected</strong>
+              {selectedAppointment.time} with {selectedAppointment.provider.name} at {selectedAppointment.location}. Staff will confirm this time after reviewing your intake.
+            </div>
+          )}
+          {creditCardComplete && (
+            <div className="credit-saved">
+              <strong>Credit card authorization saved</strong>
+              Billing authorization has been added to this intake and will be reviewed by staff before confirmation.
+            </div>
+          )}
+          <div className="match-badge">{matchResult?.status === 'existing' ? 'Existing patient' : 'New patient'}</div>
           {formMsg && (
             <div style={{
               margin: '0 0 12px',
@@ -2853,10 +6539,11 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null }) {
           </button>
 
           <p className="privacy-note">
-            Your information is encrypted and shared only with 1 Stop Medical Services.
+            Your information is encrypted and shared only with AlanBehrman.
             You can switch methods at any time.
           </p>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -3330,7 +7017,7 @@ function BriefI693Form() {
         {get('ethnicity')==='Other' && <F label="If Other — specify ethnicity" k="ethnicity_other" />}
       </div>
       <div className="fv-section"><div className="fv-section-title">Exam Location</div>
-        <Chips k="clinic_location" opts={['Kent, WA','Bellevue, WA']} />
+        <Chips k="clinic_location" opts={['Marietta, GA','Duluth, GA']} />
       </div>
       <Nav />
     </>,
@@ -4525,8 +8212,8 @@ function FormViewerBody({ form }) {
   if (id === 'vaccine') return <VaccinationRecordForm />;
   if (id === 'hipaa') return (
     <ConsentForm title="HIPAA Privacy Notice"
-      body="<h4>Notice of Privacy Practices</h4><p>1 Stop Medical Services is required by law to maintain the privacy of your protected health information (PHI) and to provide you with this notice of our legal duties and privacy practices.</p><p>We use your health information to provide treatment, obtain payment, and conduct healthcare operations. We will not share your information without your authorization except as required by law (e.g., public health reporting, legal proceedings).</p><p>You have the right to access your health records, request corrections, and receive an accounting of disclosures. You may also request restrictions on certain uses of your information.</p><p>For questions about our privacy practices, contact our Privacy Officer at (253) 397-8683.</p>"
-      fields={[{label:'I acknowledge receipt of the 1 Stop Medical Services Notice of Privacy Practices', sub:'A copy has been offered to me and is available upon request.'}]}
+      body="<h4>Notice of Privacy Practices</h4><p>AlanBehrman is required by law to maintain the privacy of your protected health information (PHI) and to provide this notice of our legal duties and privacy practices.</p><p>We may use your health information for treatment, payment, healthcare operations, appointment coordination, and other purposes permitted or required by law. We will not share your information without authorization except as permitted or required by law.</p><p>You have the right to access your health records, request corrections, request certain restrictions, request confidential communications, and receive an accounting of some disclosures.</p><p>For questions about privacy practices, contact AlanBehrman staff before submitting your intake.</p>"
+      fields={[{label:'I acknowledge receipt of the AlanBehrman Notice of Privacy Practices', sub:'I had the opportunity to review the notice before continuing.'}]}
     />
   );
   if (id === 'uscis_release') return (
@@ -5141,8 +8828,8 @@ const APPT_TYPES = [
   { value: 'follow_up',                label: 'Follow-Up' },
   { value: 'urgent_care',              label: 'Urgent Care' },
 ];
-const PROVIDERS = ['Dr. Anjali Desai, MD', 'Dr. James Thornton, MD', 'Dr. Priya Kapoor, MD'];
-const LOCATIONS = ['Kent, WA', 'Bellevue, WA'];
+const PROVIDERS = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
+const LOCATIONS = ['Marietta, GA', 'Duluth, GA'];
 
 function apptTypeLabel(val) {
   return (APPT_TYPES.find(t => t.value === val) || { label: val.replace(/_/g,' ') }).label;
@@ -5178,12 +8865,12 @@ function downloadExcel(rows, filename) {
   XLSX.writeFile(wb, filename);
 }
 
-/* Create Appointment panel */
+/* Client Intake panel */
 function CreateAppointmentView({ onBack, onHome, onCreated }) {
   const [step, setStep]               = React.useState(0); // 0=patient 1=appt 2=success
   const [mode, setMode]               = React.useState('new'); // new | existing
   const [pData, setPData]             = React.useState({ gender:'Female' });
-  const [aData, setAData]             = React.useState({ appointment_type:'primary_care', clinic_location:'Kent, WA', provider_name: PROVIDERS[0] });
+  const [aData, setAData]             = React.useState({ appointment_type:'primary_care', clinic_location:'Marietta, GA', provider_name: PROVIDERS[0] });
   const [searchQ, setSearchQ]         = React.useState('');
   const [searchRes, setSearchRes]     = React.useState([]);
   const [searching, setSearching]     = React.useState(false);
@@ -5246,7 +8933,7 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
       setStep(2);
       if (onCreated) onCreated();
     } catch(e) {
-      setError('Failed to create appointment. Please check the fields and try again.');
+      setError('Failed to create client intake. Please check the fields and try again.');
     } finally {
       setSaving(false);
     }
@@ -5271,8 +8958,8 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
           onClose={() => { setShowNotify(false); setNotified(true); }}
         />
       )}
-      <PageNav onBack={onBack} onHome={onHome} crumb="Create Appointment" />
-      <div className="clinic-section-title">Appointment created</div>
+      <PageNav onBack={onBack} onHome={onHome} crumb="Client Intake" />
+      <div className="clinic-section-title">Client intake created</div>
       <div className="clinic-section-sub">Send the intake link to the patient to complete their forms.</div>
       <div className="ca-success">
         <div className="ca-success-icon">✓</div>
@@ -5287,8 +8974,8 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
           </button>
         </div>
         <div style={{display:'flex',gap:10,justifyContent:'center',marginTop:20,flexWrap:'wrap'}}>
-          <button className="btn btn-ghost" onClick={() => { setStep(0); setMode('new'); setPData({gender:'Female'}); setAData({appointment_type:'primary_care',clinic_location:'Kent, WA',provider_name:PROVIDERS[0]}); setSelectedPt(null); setResult(null); setNotified(false); }}>
-            + Create another
+          <button className="btn btn-ghost" onClick={() => { setStep(0); setMode('new'); setPData({gender:'Female'}); setAData({appointment_type:'primary_care',clinic_location:'Marietta, GA',provider_name:PROVIDERS[0]}); setSelectedPt(null); setResult(null); setNotified(false); }}>
+            + Create another intake
           </button>
           <button className="btn btn-accent" onClick={() => setShowNotify(true)}
             style={{display:'flex',alignItems:'center',gap:7,background: notified ? 'var(--sage)' : undefined}}>
@@ -5304,7 +8991,7 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
 
   return (
     <div className="clinic-inner ca-panel">
-      <PageNav onBack={onBack} onHome={onHome} crumb="Create Appointment" />
+      <PageNav onBack={onBack} onHome={onHome} crumb="Client Intake" />
       <div className="clinic-section-title">{step === 0 ? 'Patient details' : 'Appointment details'}</div>
       <div className="clinic-section-sub">{step === 0 ? 'Find an existing patient or register a new one.' : 'Set the appointment type, time, and reason for visit.'}</div>
 
@@ -5445,7 +9132,7 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
           <button className="btn btn-ghost" onClick={() => setStep(0)}>← Back</button>
           <div style={{flex:1}} />
           <button className="btn btn-accent" onClick={submit} disabled={saving}>
-            {saving ? 'Creating…' : 'Create appointment →'}
+            {saving ? 'Creating…' : 'Create client intake →'}
           </button>
         </div>
       </>}
@@ -5773,16 +9460,16 @@ function genChartData(patient) {
   const problems = allProblems.filter((_, i) => (seed + i * 7) % 5 !== 0).slice(0, 4 + rnd(3));
 
   const allMeds = [
-    { name:'Levothyroxine', dose:'75 mcg', freq:'Daily', route:'Oral', prescriber:'Dr. Desai', since:'2019-03' },
-    { name:'Lisinopril', dose:'10 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Thornton', since:'2021-07' },
-    { name:'Metformin', dose:'500 mg', freq:'BID', route:'Oral', prescriber:'Dr. Kapoor', since:'2020-02' },
-    { name:'Atorvastatin', dose:'20 mg', freq:'Nightly', route:'Oral', prescriber:'Dr. Desai', since:'2022-04' },
-    { name:'Sertraline', dose:'50 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Thornton', since:'2018-10' },
+    { name:'Levothyroxine', dose:'75 mcg', freq:'Daily', route:'Oral', prescriber:'Dr. Vemuluri', since:'2019-03' },
+    { name:'Lisinopril', dose:'10 mg', freq:'Daily', route:'Oral', prescriber:'Mitchell', since:'2021-07' },
+    { name:'Metformin', dose:'500 mg', freq:'BID', route:'Oral', prescriber:'Postanowicz', since:'2020-02' },
+    { name:'Atorvastatin', dose:'20 mg', freq:'Nightly', route:'Oral', prescriber:'Dr. Vemuluri', since:'2022-04' },
+    { name:'Sertraline', dose:'50 mg', freq:'Daily', route:'Oral', prescriber:'Mitchell', since:'2018-10' },
     { name:'Vitamin D3', dose:'2000 IU', freq:'Daily', route:'Oral', prescriber:'Self', since:'2023-01' },
-    { name:'Cetirizine', dose:'10 mg', freq:'PRN', route:'Oral', prescriber:'Dr. Kapoor', since:'2015-05' },
-    { name:'Omeprazole', dose:'20 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Desai', since:'2017-12' },
-    { name:'Albuterol inhaler', dose:'90 mcg', freq:'PRN', route:'Inhaled', prescriber:'Dr. Kapoor', since:'2010-04' },
-    { name:'Metoprolol succinate', dose:'25 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Thornton', since:'2022-01' },
+    { name:'Cetirizine', dose:'10 mg', freq:'PRN', route:'Oral', prescriber:'Postanowicz', since:'2015-05' },
+    { name:'Omeprazole', dose:'20 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Vemuluri', since:'2017-12' },
+    { name:'Albuterol inhaler', dose:'90 mcg', freq:'PRN', route:'Inhaled', prescriber:'Postanowicz', since:'2010-04' },
+    { name:'Metoprolol succinate', dose:'25 mg', freq:'Daily', route:'Oral', prescriber:'Mitchell', since:'2022-01' },
   ];
   const meds = allMeds.filter((_, i) => (seed + i * 3) % 4 !== 0).slice(0, 3 + rnd(3));
 
@@ -5823,7 +9510,7 @@ function genChartData(patient) {
   ];
 
   const VISIT_TYPES = ['Primary Care Follow-up', 'Immigration Medical Exam', 'Annual Physical', 'Urgent Care Visit', 'Pre-Placement Physical', 'Telehealth — Medication Review', 'Lab Follow-up', 'Preventive Care'];
-  const PROVIDERS = ['Dr. Anjali Desai, MD', 'Dr. James Thornton, MD', 'Dr. Priya Kapoor, MD'];
+  const PROVIDERS = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
   const SUMMARIES = [
     'Patient reports stable symptoms. BP within acceptable range. Medication refills provided.',
     'Immigration medical exam completed. All required vaccinations documented. Chest X-ray reviewed.',
@@ -5891,7 +9578,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
   const [noteSaved, setNoteSaved] = React.useState(false);
 
   const LOAD_STEPS = [
-    'Connecting to Ethizo EHR…',
+    'Connecting to Tebra & Therapy Notes…',
     'Pulling patient record & problem list…',
     'Loading medications, labs & vitals…',
     'Generating AI chart summary…',
@@ -5919,7 +9606,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
   const age = dob ? Math.floor((Date.now() - dob) / (365.25 * 24 * 3600 * 1000)) : null;
   const dobStr = dob ? dob.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
   const mrn = 'MRN-' + (patient.id || 'UNKNOWN').toString().slice(-6).toUpperCase().replace(/-/g,'').slice(0,8);
-  const providers = ['Dr. Anjali Desai, MD', 'Dr. James Thornton, MD', 'Dr. Priya Kapoor, MD'];
+  const providers = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
   const assignedProvider = providers[(patient.full_name.charCodeAt(0) + patient.full_name.length) % 3];
 
   const renderSection = () => {
@@ -5931,7 +9618,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
         <div style={{background:'linear-gradient(135deg, var(--teal-soft), var(--sage-soft))',border:'1px solid var(--hair)',borderRadius:'var(--radius)',padding:'14px 16px',marginBottom:16,display:'flex',alignItems:'flex-start',gap:12}}>
           <div style={{fontSize:22,flexShrink:0}}>🤖</div>
           <div>
-            <div style={{fontSize:12,fontWeight:700,color:'var(--teal-deep)',marginBottom:4,textTransform:'uppercase',letterSpacing:'0.05em'}}>AI Chart Summary — Generated by Elevia · Sourced from Ethizo EHR</div>
+            <div style={{fontSize:12,fontWeight:700,color:'var(--teal-deep)',marginBottom:4,textTransform:'uppercase',letterSpacing:'0.05em'}}>AI Chart Summary — Generated by Elevia · Sourced from Tebra & Therapy Notes</div>
             <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.65}}>
               <strong>{patient.full_name}</strong>{age ? `, ${age}yo` : ''}{patient.gender ? ` ${patient.gender}` : ''}, presents with {problems.slice(0,2).map(p=>p.name).join(' and ')}. Currently on {meds.length} active medications. {allergies[0]?.substance !== 'NKDA' ? `Known allergy to ${allergies[0]?.substance}.` : 'No known drug allergies.'} Last seen {visits[0]?.dateStr} for {visits[0]?.type}. Vitals at last visit: BP {vitals.bp} mmHg, BMI {vitals.bmi}. {parseInt(vitals.bmi) > 29 ? 'BMI elevated.' : ''} Labs from March 2026 reviewed — {labs.filter(l=>l.flag==='H').length > 0 ? `${labs.filter(l=>l.flag==='H').map(l=>l.name).join(', ')} flagged above reference range.` : 'all within reference range.'}
             </div>
@@ -5960,7 +9647,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
             ))}
           </div>
         </div>
-        <div className="chart-sec-title">Recent Vitals <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Recent Vitals <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <div className="chart-vitals-grid">
           {[
             { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag },
@@ -5983,7 +9670,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'problems') return (
       <div>
-        <div className="chart-sec-title">Problem List <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Problem List <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <table className="chart-table">
           <thead><tr><th>Problem</th><th>ICD-10</th><th>Onset</th><th>Status</th><th>Severity</th></tr></thead>
           <tbody>
@@ -6003,7 +9690,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'meds') return (
       <div>
-        <div className="chart-sec-title">Medication List <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Medication List <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <table className="chart-table">
           <thead><tr><th>Medication</th><th>Dose</th><th>Frequency</th><th>Route</th><th>Prescriber</th><th>Since</th></tr></thead>
           <tbody>
@@ -6024,7 +9711,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'allergies') return (
       <div>
-        <div className="chart-sec-title">Allergy &amp; Adverse Reactions <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Allergy &amp; Adverse Reactions <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <div style={{marginBottom:16}}>
           {allergies.map(a => (
             <span key={a.substance} className={`chart-allergy-tag ${a.severity.toLowerCase()}`}>
@@ -6050,7 +9737,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'vitals') return (
       <div>
-        <div className="chart-sec-title">Vitals — Last Recorded <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Vitals — Last Recorded <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <div className="chart-vitals-grid" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
           {[
             { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag, note: parseInt(vitals.bp)>130?'Stage 1 hypertension range':'' },
@@ -6076,7 +9763,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'labs') return (
       <div>
-        <div className="chart-sec-title">Laboratory Results <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Laboratory Results <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <div style={{background:'var(--surface)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',overflow:'hidden',marginBottom:16}}>
           <div style={{display:'flex',padding:'7px 12px',background:'var(--bg-tint)',borderBottom:'1px solid var(--hair)',fontSize:10.5,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:'var(--ink-4)',gap:0}}>
             <span style={{flex:2}}>Test Name</span><span style={{flex:1}}>Result</span><span style={{flex:1.5}}>Reference Range</span><span style={{flex:0.5}}>Flag</span><span style={{flex:1}}>Date</span>
@@ -6101,7 +9788,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'visits') return (
       <div>
-        <div className="chart-sec-title">Visit History <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Visit History <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <div className="chart-timeline">
           {visits.map((v,i) => (
             <div key={i} className="chart-visit">
@@ -6126,7 +9813,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'immunization') return (
       <div>
-        <div className="chart-sec-title">Immunization Record <span className="chart-sec-badge ethizo">Ethizo EHR</span></div>
+        <div className="chart-sec-title">Immunization Record <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
         <table className="chart-table">
           <thead><tr><th>Vaccine</th><th>Date / Status</th><th>Series</th><th>Source</th></tr></thead>
           <tbody>
@@ -6175,7 +9862,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
               setNoteText(''); setNoteSaved(true);
               setTimeout(() => setNoteSaved(false), 2500);
             }}>Save Note</button>
-            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to Ethizo EHR</span>}
+            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to Tebra & Therapy Notes</span>}
             <span style={{fontSize:11,color:'var(--ink-4)',marginLeft:'auto'}}>Signed as: {assignedProvider}</span>
           </div>
         </div>
@@ -6199,11 +9886,11 @@ function ClinicalChartOverlay({ patient, onClose }) {
         )}
 
         {/* Mock historical notes */}
-        <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Prior Notes — From Ethizo EHR</div>
+        <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Prior Notes — From Tebra & Therapy Notes</div>
         {[
           { type:'Progress Note', author: assignedProvider, date:'Apr 8, 2026 · 10:30 AM', text:`${patient.full_name} seen today for follow-up. Patient reports feeling well. BP ${chartData.vitals.bp} mmHg — slight improvement since last visit. Medications reviewed and continued without changes. Counseled on low-sodium diet. Return to clinic in 3 months or sooner PRN.` },
-          { type:'SOAP Note', author:'Dr. James Thornton, MD', date:'Feb 12, 2026 · 2:15 PM', text:`S: Patient c/o mild fatigue and occasional headaches. No chest pain or shortness of breath.\nO: BP 136/88, HR 74, Wt stable. Labs reviewed — LDL slightly elevated.\nA: Hypertension, controlled. Hyperlipidemia.\nP: Continue current antihypertensive. Increase atorvastatin to 40 mg. Dietary counseling provided. F/U in 6 weeks.` },
-          { type:'Telephone Note', author:'Dr. Anjali Desai, MD', date:'Jan 5, 2026 · 11:45 AM', text:`Patient called to report mild GI upset since starting metformin. Advised to take with food. Patient agrees to continue and monitor. No medication changes at this time.` },
+          { type:'SOAP Note', author:'Meredith Mitchell, PMHNP-BC', date:'Feb 12, 2026 · 2:15 PM', text:`S: Patient c/o mild fatigue and occasional headaches. No chest pain or shortness of breath.\nO: BP 136/88, HR 74, Wt stable. Labs reviewed — LDL slightly elevated.\nA: Hypertension, controlled. Hyperlipidemia.\nP: Continue current antihypertensive. Increase atorvastatin to 40 mg. Dietary counseling provided. F/U in 6 weeks.` },
+          { type:'Telephone Note', author:'Dr. Ramakanth Vemuluri, MD', date:'Jan 5, 2026 · 11:45 AM', text:`Patient called to report mild GI upset since starting metformin. Advised to take with food. Patient agrees to continue and monitor. No medication changes at this time.` },
         ].map((n, i) => (
           <div key={i} className="chart-saved-note">
             <div className="chart-saved-note-header">
@@ -6239,7 +9926,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
           <div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Provider</div><div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{assignedProvider}</div></div>
           <div className="chart-divider"/>
           <div className="chart-encounter-badge">{apptTypeLabel(patient.next_appointment_type || 'primary_care')}</div>
-          <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI · Ethizo EHR</div>
+          <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI · Tebra & Therapy Notes</div>
           <button className="chart-close" onClick={onClose}>✕</button>
         </div>
 
@@ -6268,7 +9955,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
             <div className="chart-loading" style={{width:'100%'}}>
               <div className="chart-loading-orb">🏥</div>
               <div className="chart-loading-title">Loading clinical chart…</div>
-              <div className="chart-loading-sub">Pulling data from Ethizo EHR · AI processing</div>
+              <div className="chart-loading-sub">Pulling data from Tebra & Therapy Notes · AI processing</div>
               <div className="chart-loading-steps">
                 {LOAD_STEPS.map((s, i) => (
                   <div key={i} className={`chart-load-row${loadStep>i?' done':loadStep===i?' active':''}`}>
@@ -6478,9 +10165,9 @@ function PatientsListView({ onBack, onHome }) {
 
 /* ── Schedules View ─────────────────────────────────────────────────────── */
 const SCHED_PROVIDERS = [
-  { id: 'desai',    name: 'Dr. Anjali Desai',    cred: 'MD', specialty: 'Immigration & Primary Care',  avatar: 'AD', color: 'oklch(55% 0.14 250)', bg: 'var(--teal-soft)',     text: 'var(--teal-deep)'    },
-  { id: 'thornton', name: 'Dr. James Thornton',  cred: 'MD', specialty: 'Family Medicine',              avatar: 'JT', color: 'oklch(58% 0.14 50)',  bg: 'oklch(96% 0.04 50)',   text: 'oklch(28% 0.12 50)'  },
-  { id: 'kapoor',   name: 'Dr. Priya Kapoor',    cred: 'MD', specialty: 'Occupational & Preventive',   avatar: 'PK', color: 'oklch(58% 0.13 290)', bg: 'oklch(96% 0.03 290)',  text: 'oklch(28% 0.12 290)' },
+  { id: 'vemuluri', name: 'Dr. Ramakanth Vemuluri', cred: 'MD', specialty: 'Psychiatry & Primary Care', avatar: 'RV', color: 'oklch(55% 0.14 250)', bg: 'var(--teal-soft)',     text: 'var(--teal-deep)'    },
+  { id: 'mitchell',    name: 'Meredith Mitchell',       cred: 'PMHNP-BC',  specialty: 'Psychiatric Mental Health', avatar: 'MM', color: 'oklch(58% 0.14 50)',  bg: 'oklch(96% 0.04 50)',   text: 'oklch(28% 0.12 50)'  },
+  { id: 'postanowicz', name: 'Patty Postanowicz',       cred: 'PhD, LMFT', specialty: 'Family Therapy',            avatar: 'PP', color: 'oklch(58% 0.13 290)', bg: 'oklch(96% 0.03 290)',  text: 'oklch(28% 0.12 290)' },
 ];
 const SCHED_APPT_COLORS = {
   immigration_medical_exam: { bg:'oklch(97% 0.04 55)', border:'oklch(60% 0.15 55)', text:'oklch(28% 0.12 55)', label:'Immigration Exam' },
@@ -6599,10 +10286,10 @@ function SchedulesView({ onBack, onHome }) {
           <div className="sched-title-row">
             <span className="sched-title-text">Schedules</span>
             {syncState === 'syncing' && (
-              <span className="ethizo-badge syncing"><span className="spin">↻</span> Syncing with Ethizo EHR…</span>
+              <span className="tebra-badge syncing"><span className="spin">↻</span> Syncing with Tebra & Therapy Notes…</span>
             )}
             {syncState === 'synced' && (
-              <span className="ethizo-badge synced">✓ Ethizo synced · {lastSync ? lastSync.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : ''}</span>
+              <span className="tebra-badge synced">✓ Tebra & Therapy Notes synced · {lastSync ? lastSync.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : ''}</span>
             )}
           </div>
           {!loading && (
@@ -6851,10 +10538,10 @@ function InsuranceAuthView({ onBack, onHome }) {
                 <div className="ins-flow-icon">🛡</div>
                 <div>
                   <div className="ins-flow-title">Validate Insurance</div>
-                  <div className="ins-flow-desc">Pull insurance details from Ethizo EHR, verify active coverage, determine copay and deductible amounts for the visit.</div>
+                  <div className="ins-flow-desc">Pull insurance details from Tebra & Therapy Notes, verify active coverage, determine copay and deductible amounts for the visit.</div>
                 </div>
                 <div className="ins-flow-meta">
-                  <span>🔗 Ethizo EHR sync</span>
+                  <span>🔗 Tebra & Therapy Notes sync</span>
                   <span>⏱ ~1 min</span>
                   <span>💰 Copay determination</span>
                 </div>
@@ -6885,7 +10572,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
     { label: 'Payer Rules Lookup', subs: ['Query coverage policy', 'Validate criteria met', 'Confirm submission channel'], badge: 'auto' },
     { label: 'Auth Packet Submission', subs: ['Assemble clinical packet', 'Submit via payer portal API', 'Reference number issued'], badge: 'auto' },
     { label: 'Status Polling', subs: ['Day 1–3: polling daily', 'Day 4: no decision yet', 'Auto-escalate — P2P request'], badge: 'auto' },
-    { label: 'Decision Received', subs: ['Auth decision logged', 'Syncing to Ethizo EHR', 'Scheduling triggered'], badge: 'auto' },
+    { label: 'Decision Received', subs: ['Auth decision logged', 'Syncing to Tebra & Therapy Notes', 'Scheduling triggered'], badge: 'auto' },
   ];
 
   const addMsg = (role, content) => setMsgs(m => [...m, { role, content, id: Date.now() + Math.random() }]);
@@ -6899,8 +10586,8 @@ function InsPreAuth({ patient, onBack, onHome }) {
       [600, () => { setTyping(true); }],
       [1800, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Hello — I'm the Pre-Authorization agent. I'll handle the prior auth for ${patient.name}'s upcoming ${patient.appt} with ${patient.insurance}. Starting now.` }); }],
       [2400, () => { setStep(1); setSubStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Auth Request', items: ['EHR order detected', 'CPT code auth check', 'Payer rule match confirmed'], delays: [0, 900, 1800] }); }],
-      [5200, () => { setSubStep(3); setStep(2); setSubStep(1); addMsg('agent', { type: 'text', text: 'Auth trigger confirmed. Pulling clinical data from Ethizo EHR now.' }); }],
-      [5800, () => { addMsg('agent', { type: 'scan', title: 'Step 2 · Clinical Extraction (Ethizo)', items: ['Pull labs & diagnosis codes', 'Pull prior visit history', 'Verify ordering provider NPI'], delays: [0, 1000, 2100] }); }],
+      [5200, () => { setSubStep(3); setStep(2); setSubStep(1); addMsg('agent', { type: 'text', text: 'Auth trigger confirmed. Pulling clinical data from Tebra & Therapy Notes now.' }); }],
+      [5800, () => { addMsg('agent', { type: 'scan', title: 'Step 2 · Clinical Extraction (Tebra & Therapy Notes)', items: ['Pull labs & diagnosis codes', 'Pull prior visit history', 'Verify ordering provider NPI'], delays: [0, 1000, 2100] }); }],
       [9000, () => { setStep(3); setSubStep(1); addMsg('agent', { type: 'clinical', patient }); }],
       [10200, () => { setStep(4); setSubStep(1); addMsg('agent', { type: 'payer', patient }); }],
       [11800, () => { setStep(5); setSubStep(1); addMsg('agent', { type: 'text', text: 'Payer criteria verified. Assembling auth packet and submitting to ' + patient.insurance + '.' }); }],
@@ -6945,8 +10632,8 @@ function InsPreAuth({ patient, onBack, onHome }) {
           <div className="ins-card">
             <div className="ins-card-header">
               <span style={{fontSize:13}}>🏥</span>
-              <div><div className="ins-card-title">Clinical Data — Extracted from Ethizo EHR</div><div className="ins-card-sub">{m.content.patient.name} · {m.content.patient.dob}</div></div>
-              <div className="ins-card-badge ins-badge-source">Ethizo</div>
+              <div><div className="ins-card-title">Clinical Data — Extracted from Tebra & Therapy Notes</div><div className="ins-card-sub">{m.content.patient.name} · {m.content.patient.dob}</div></div>
+              <div className="ins-card-badge ins-badge-source">Tebra & Therapy Notes</div>
             </div>
             <div className="ins-card-grid">
               <div className="ins-cg-item"><div className="ins-cg-label">Appointment</div><div className="ins-cg-val">{m.content.patient.appt}</div></div>
@@ -7005,7 +10692,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
               <div className="ins-card-badge ins-badge-ok">Submitted</div>
             </div>
             <div className="ins-card-body">
-              {[['Patient','Paranjit Kaur'],['CPT','99213'],['DX Code','Z02.89'],['Provider','Dr. Anjali Desai, MD'],['Ref #','UHC-PA-2026-0421'],['Submitted','Apr 22, 2026 · 10:14 AM']].map(([k,v]) => (
+              {[['Patient','Paranjit Kaur'],['CPT','99213'],['DX Code','Z02.89'],['Provider','Dr. Ramakanth Vemuluri, MD'],['Ref #','UHC-PA-2026-0421'],['Submitted','Apr 22, 2026 · 10:14 AM']].map(([k,v]) => (
                 <div key={k} className="ins-row"><span className="ins-row-key">{k}</span><span className="ins-row-val">{v}</span></div>
               ))}
             </div>
@@ -7048,7 +10735,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
             <div className="ins-result-icon">✅</div>
             <div>
               <div className="ins-result-title">Authorization Approved</div>
-              <div className="ins-result-sub">{m.content.patient.insurance} has approved prior auth for CPT 99213.<br/>Authorization synced to Ethizo EHR. Procedure scheduling triggered.</div>
+              <div className="ins-result-sub">{m.content.patient.insurance} has approved prior auth for CPT 99213.<br/>Authorization synced to Tebra & Therapy Notes. Procedure scheduling triggered.</div>
               <div className="ins-ref">Auth #: UHC-AUTH-2026-99213-PK</div>
             </div>
           </div>
@@ -7162,7 +10849,7 @@ function InsValidate({ patient, onBack, onHome }) {
   const msgsRef = React.useRef(null);
 
   const VAL_STEPS = [
-    { label: 'EHR Insurance Lookup', subs: ['Connect to Ethizo EHR', 'Fetch insurance record', 'Extract policy details'] },
+    { label: 'EHR Insurance Lookup', subs: ['Connect to Tebra & Therapy Notes', 'Fetch insurance record', 'Extract policy details'] },
     { label: 'Coverage Verification', subs: ['Verify plan active', 'Check eligibility dates', 'Confirm benefit year'] },
     { label: 'Copay Determination', subs: ['Apply CPT fee schedule', 'Calculate patient share', 'Check deductible status'] },
     { label: 'Validation Complete', subs: ['Results logged to EHR', 'Staff notified', 'Ready for check-in'] },
@@ -7177,8 +10864,8 @@ function InsValidate({ patient, onBack, onHome }) {
   React.useEffect(() => {
     const seq = [
       [500,  () => setTyping(true)],
-      [1600, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Starting insurance validation for ${patient.name}. Connecting to Ethizo EHR to pull coverage details from ${patient.insurance}.` }); }],
-      [2200, () => { setStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Ethizo EHR Lookup', items: ['Connect to Ethizo EHR', 'Fetch insurance record', 'Extract policy details'], delays: [0, 800, 1700] }); }],
+      [1600, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Starting insurance validation for ${patient.name}. Connecting to Tebra & Therapy Notes to pull coverage details from ${patient.insurance}.` }); }],
+      [2200, () => { setStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Tebra & Therapy Notes Lookup', items: ['Connect to Tebra & Therapy Notes', 'Fetch insurance record', 'Extract policy details'], delays: [0, 800, 1700] }); }],
       [5200, () => { setStep(2); addMsg('agent', { type: 'coverage', patient }); }],
       [6400, () => { setStep(3); addMsg('agent', { type: 'text', text: 'Coverage verified — plan is active. Running copay calculation for the scheduled appointment type.' }); }],
       [7200, () => { addMsg('agent', { type: 'copay', patient }); }],
@@ -7203,7 +10890,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <div className="ins-card-header">
             <span style={{fontSize:13}}>🔗</span>
             <div><div className="ins-card-title">{m.content.title}</div></div>
-            <div className="ins-card-badge ins-badge-source">Ethizo</div>
+            <div className="ins-card-badge ins-badge-source">Tebra &amp; Therapy Notes</div>
           </div>
           <div className="ins-card-body">
             {m.content.items.map((item, i) => (
@@ -7219,7 +10906,7 @@ function InsValidate({ patient, onBack, onHome }) {
         <div className="ins-card">
           <div className="ins-card-header">
             <span style={{fontSize:13}}>🛡</span>
-            <div><div className="ins-card-title">Insurance Coverage — Verified</div><div className="ins-card-sub">{m.content.patient.insurance} · Retrieved from Ethizo EHR</div></div>
+            <div><div className="ins-card-title">Insurance Coverage — Verified</div><div className="ins-card-sub">{m.content.patient.insurance} · Retrieved from Tebra &amp; Therapy Notes</div></div>
             <div className="ins-card-badge ins-badge-ok">Active</div>
           </div>
           <div className="ins-card-grid">
@@ -7271,7 +10958,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <div className="ins-result-icon">✓</div>
           <div>
             <div className="ins-result-title">Insurance Validated</div>
-            <div className="ins-result-sub">{m.content.patient.name} has active {m.content.patient.insurance} coverage.<br/>Patient copay: <strong>$37.00</strong> at time of service. Results logged to Ethizo EHR.</div>
+            <div className="ins-result-sub">{m.content.patient.name} has active {m.content.patient.insurance} coverage.<br/>Patient copay: <strong>$37.00</strong> at time of service. Results logged to Tebra & Therapy Notes.</div>
             <div className="ins-ref">Validation ID: VAL-2026-0422-{m.content.patient.initials}</div>
           </div>
         </div>
@@ -7325,7 +11012,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <div className="ins-sb-footer">
             <div className="ins-sf-row"><span className="ins-sf-label">Patient</span><span className="ins-sf-val">{patient.name}</span></div>
             <div className="ins-sf-row"><span className="ins-sf-label">Insurance</span><span className="ins-sf-val teal">{patient.insurance}</span></div>
-            <div className="ins-sf-row"><span className="ins-sf-label">Source</span><span className="ins-sf-val">Ethizo EHR</span></div>
+            <div className="ins-sf-row"><span className="ins-sf-label">Source</span><span className="ins-sf-val">Tebra & Therapy Notes</span></div>
           </div>
         </div>
         <div className="ins-chat">
@@ -7371,14 +11058,14 @@ function ClinicDashboard({ onNavigate }) {
     <div className="clinic-inner">
       <div style={{marginBottom:6}}>
         <div style={{fontSize:12,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Clinic Portal</div>
-        <div className="clinic-section-title">Good morning, Clinic Staff.</div>
+        <div className="clinic-section-title">Good morning, Marisa.</div>
         <div className="clinic-section-sub">Manage appointments, patients, and intake workflows from here.</div>
       </div>
 
       <div className="clinic-tiles">
         <div className="clinic-tile primary" onClick={() => onNavigate('new_appt')}>
           <div className="ct-icon">＋</div>
-          <div className="ct-title">Create Appointment</div>
+          <div className="ct-title">Client Intake</div>
           <div className="ct-sub">Register a new patient or book a visit for an existing one. Generates the patient intake link automatically.</div>
           <div className="ct-cta">Get started <span>→</span></div>
         </div>
@@ -7402,14 +11089,14 @@ function ClinicDashboard({ onNavigate }) {
         <div className="clinic-tile" onClick={() => onNavigate('schedules')}>
           <div className="ct-icon">🗓</div>
           <div className="ct-title">Schedules</div>
-          <div className="ct-sub">Weekly calendar view of appointments by provider. Syncs with Ethizo EHR in real time.</div>
+          <div className="ct-sub">Weekly calendar view of appointments by provider. Syncs with Tebra & Therapy Notes in real time.</div>
           <div className="ct-cta">Open calendar <span>→</span></div>
         </div>
 
         <div className="clinic-tile" onClick={() => onNavigate('insurance')}>
           <div className="ct-icon">🛡</div>
           <div className="ct-title">Insurance Authorization</div>
-          <div className="ct-sub">Submit prior authorizations and validate patient insurance coverage with AI-assisted workflows powered by Ethizo EHR.</div>
+          <div className="ct-sub">Submit prior authorizations and validate patient insurance coverage with AI-assisted workflows powered by Tebra & Therapy Notes.</div>
           <div className="ct-cta">Get started <span>→</span></div>
         </div>
       </div>
@@ -7435,6 +11122,8 @@ function App() {
   const [viewMode, setViewMode]     = React.useState('patient'); // 'patient' | 'clinic'
   const [intakeCtx, setIntakeCtx]   = React.useState(null);
   const [ctxLoading, setCtxLoading] = React.useState(false);
+  const [privacyAcknowledged, setPrivacyAcknowledged] = React.useState(false);
+  const [resolvedPatientInfo, setResolvedPatientInfo] = React.useState(null);
 
   // On mount: check for ?t=<token>; if present, load patient context and stay in patient view
   React.useEffect(() => {
@@ -7443,7 +11132,7 @@ function App() {
     if (!token) return;
     setCtxLoading(true);
     apiGet(`/intake/${token}`)
-      .then(ctx => { setIntakeCtx(ctx); setViewMode('patient'); })
+      .then(ctx => { setIntakeCtx(ctx); setViewMode('patient'); setPrivacyAcknowledged(false); setResolvedPatientInfo(null); })
       .catch(err => console.warn('Intake context load failed (service may be offline):', err))
       .finally(() => setCtxLoading(false));
   }, []);
@@ -7464,6 +11153,27 @@ function App() {
     phone:        intakeCtx.patient.phone || '',
     location:     intakeCtx.appointment.clinic_location || '',
   } : PATIENT;
+  const displayPatient = resolvedPatientInfo
+    ? {
+        ...effectivePatient,
+        ...resolvedPatientInfo,
+        first: resolvedPatientInfo.first || resolvedPatientInfo.name.split(/\s+/)[0],
+      }
+    : effectivePatient;
+
+  const handlePrivacyAcknowledge = React.useCallback(async () => {
+    const hipaaForm = intakeCtx?.forms?.find(f => (f.form_id || f.id) === 'hipaa');
+    if (hipaaForm?.id && hipaaForm.status !== 'completed') {
+      await apiPatch(`/forms/${hipaaForm.id}`, { status: 'completed' });
+    }
+    setPrivacyAcknowledged(true);
+    if (hipaaForm) {
+      setIntakeCtx(ctx => ctx ? ({
+        ...ctx,
+        forms: ctx.forms.map(f => (f.form_id || f.id) === 'hipaa' ? { ...f, status: 'completed' } : f),
+      }) : ctx);
+    }
+  }, [intakeCtx]);
 
   if (ctxLoading) {
     return (
@@ -7478,16 +11188,30 @@ function App() {
 
   return (
     <div className="app" style={{height:'100vh'}}>
-      <Topbar patient={effectivePatient} viewMode={viewMode} onToggleView={v => { setViewMode(v); if(v==='patient') setPage('welcome'); }} />
+      <Topbar
+        patient={displayPatient}
+        viewMode={viewMode}
+        showPatientIdentity={viewMode !== 'patient' || !!resolvedPatientInfo}
+        onToggleView={v => { setViewMode(v); if(v==='patient') setPage('welcome'); }}
+      />
       {viewMode === 'clinic' ? (
         <div className="clinic-portal">
           <ClinicPortal />
         </div>
       ) : (
         <>
-          {page === 'welcome' && <WelcomePage patient={effectivePatient} intakeCtx={intakeCtx} onChoose={setPage} />}
-          {page === 'docs'    && <DocListPage patient={effectivePatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} onSwitchToAI={() => setPage('ai')} />}
-          {page === 'ai'      && <AIIntakePage patient={effectivePatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} />}
+          {page === 'welcome' && (
+            <WelcomePage
+              patient={displayPatient}
+              intakeCtx={intakeCtx}
+              privacyAcknowledged={privacyAcknowledged}
+              onAcknowledgePrivacy={handlePrivacyAcknowledge}
+              onResolvedPatient={setResolvedPatientInfo}
+              onChoose={setPage}
+            />
+          )}
+          {page === 'docs'    && <DocListPage patient={displayPatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} onSwitchToAI={() => setPage('ai')} />}
+          {page === 'ai'      && <AIIntakePage patient={displayPatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} />}
         </>
       )}
       <Footer />

@@ -11,7 +11,7 @@
 - Intended Use: Informed consent collection for seasonal influenza vaccination at 1 Stop Medical Services
 - Version: FLUVAX-CONSENT-RAG-v1
 - Language: English
-- Provider: 1 Stop Medical Services (Kent, WA & Bellevue, WA)
+- Provider: 1 Stop Medical Services (Marietta, GA & Duluth, GA)
 - Regulatory Basis: NCVIA (National Childhood Vaccine Injury Act); CDC Vaccine Information Statement (VIS)
 
 ---
@@ -28,7 +28,7 @@ Fields:
 - Patient Full Name
 - Date of Birth
 - Date of Vaccine Administration
-- Clinic Location: Kent, WA | Bellevue, WA
+- Clinic Location: Marietta, GA | Duluth, GA
 - Administering Provider Name
 
 ---

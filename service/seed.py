@@ -1,7 +1,7 @@
 """
 Seeds form_definitions and creates a demo patient + appointment.
 
-Run from elevia-1medicalservices/:
+Run from elevia-alanbehrman/:
     python service/seed.py
 """
 import os
@@ -181,8 +181,8 @@ def seed():
         patient_id=patient.id,
         appointment_type="immigration_medical_exam",
         appointment_date=datetime(2026, 4, 22, 10, 30, tzinfo=timezone.utc),
-        provider_name="Dr. Anjali Desai, MD",
-        clinic_location="Kent, WA",
+        provider_name="Dr. Ramakanth Vemuluri, MD",
+        clinic_location="Marietta, GA",
     ))
     print(f"✓ Appointment created: {appt.appointment_type}")
     print(f"  Appointment ID:  {appt.id}")
@@ -203,7 +203,7 @@ def seed():
 
     print(f"\n{'─'*60}")
     print(f"🔗 Open the intake form:")
-    print(f"   http://localhost:8020/?t={appt.intake_link_token}")
+    print(f"   http://localhost:8025/?t={appt.intake_link_token}")
     print(f"{'─'*60}")
 
     db.close()
