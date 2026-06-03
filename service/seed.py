@@ -1,12 +1,14 @@
 """
-Seeds form_definitions and creates a demo patient + appointment.
+Seeds AlanBehrman form definitions and creates one demo intake.
 
-Run from elevia-alanbehrman/:
+Run from elevia-AlanBehrman/:
     python service/seed.py
 """
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
+
+from sqlalchemy import delete
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.dirname(_HERE)
@@ -16,179 +18,205 @@ from service.database import engine, SessionLocal
 from service import models, crud, schemas
 
 
+LEGACY_FORM_IDS = [
+    "brief_i693",
+    "full_intake",
+    "update",
+    "uscis_release",
+    "flu_vaccine_consent",
+    "electronic_comms_consent",
+    "vaccine",
+    "id_verify",
+    "interpreter",
+]
+
+
 FORM_DEFINITIONS = [
-    # ── Real clinic forms from resources/sampleforms/pdfs/ ─────────────────
     models.FormDefinition(
-        id="brief_i693",
-        title="Brief I-693 Form",
-        description="Condensed USCIS immigration medical examination form (I-693). Required for adjustment of status.",
-        appointment_types=["immigration_medical_exam"],
+        id="client_info",
+        title="Client Information",
+        description="Client demographics, contact details, emergency contact, and care preferences.",
+        appointment_types=None,
         category="required",
         is_required=True,
         estimated_minutes=4,
         sort_order=1,
-        file_template="resources/sampleforms/pdfs/BRIEFI693_English_04182026.docx.pdf",
     ),
     models.FormDefinition(
-        id="full_intake",
-        title="Medical Full Intake Form",
-        description="Comprehensive medical history including conditions, medications, allergies, surgical history, and social history.",
-        appointment_types=None,   # applies to all appointment types
+        id="credit_card_authorization",
+        title="Credit Card Authorization",
+        description="Step One billing authorization with cardholder, billing address, card type, card number, expiration, CVC, and authorization signature.",
+        appointment_types=None,
         category="required",
         is_required=True,
-        estimated_minutes=8,
+        estimated_minutes=3,
         sort_order=2,
-        file_template="Knowledge/forms/full_intake_rag_elevia.md",
-    ),
-    models.FormDefinition(
-        id="update",
-        title="Patient Update Form",
-        description="Update to existing medical records — changes in medications, conditions, or contact information since your last visit.",
-        appointment_types=None,
-        category="required",
-        is_required=False,
-        estimated_minutes=3,
-        sort_order=3,
-        file_template="Knowledge/forms/update_rag_elevia.md",
-    ),
-    # ── Supporting forms ────────────────────────────────────────────────────
-    models.FormDefinition(
-        id="vaccine",
-        title="Vaccination Record",
-        description="Upload or enter your immunization history (MMR, Tdap, COVID-19, Flu).",
-        appointment_types=None,
-        category="required",
-        is_required=True,
-        estimated_minutes=3,
-        sort_order=4,
-    ),
-    models.FormDefinition(
-        id="id_verify",
-        title="Photo ID Verification",
-        description="Upload a passport, green card, or state-issued photo ID.",
-        appointment_types=None,
-        category="required",
-        is_required=True,
-        estimated_minutes=2,
-        sort_order=5,
     ),
     models.FormDefinition(
         id="hipaa",
-        title="HIPAA Privacy Notice",
-        description="Acknowledge receipt of our Notice of Privacy Practices.",
+        title="HIPAA",
+        description="Local AlanBehrman HIPAA notice replica with name, email, date, and e-signature fields.",
+        appointment_types=None,
+        category="consent",
+        is_required=True,
+        estimated_minutes=2,
+        sort_order=3,
+    ),
+    models.FormDefinition(
+        id="provider_consent",
+        title="Provider-Specific Informed Consent",
+        description="Step Three informed consent selected dynamically from the chosen AlanBehrman provider.",
+        appointment_types=None,
+        category="consent",
+        is_required=True,
+        estimated_minutes=4,
+        sort_order=4,
+    ),
+    models.FormDefinition(
+        id="cancellation_policy",
+        title="Cancellation Policy",
+        description="Step Three cancellation policy acknowledgement.",
         appointment_types=None,
         category="consent",
         is_required=True,
         estimated_minutes=1,
+        sort_order=5,
+    ),
+    models.FormDefinition(
+        id="insurance_authorization",
+        title="Insurance Authorization",
+        description="Step Four insurance authorization for payer communication and benefit verification.",
+        appointment_types=None,
+        category="consent",
+        is_required=False,
+        estimated_minutes=3,
         sort_order=6,
     ),
     models.FormDefinition(
-        id="uscis_release",
-        title="USCIS Release of Medical Information",
-        description="Consent to share immigration medical exam results with USCIS.",
-        appointment_types=["immigration_medical_exam"],
+        id="surprise_billing",
+        title="Surprise Billing Policy",
+        description="Step Four billing disclosure acknowledgement.",
+        appointment_types=None,
         category="consent",
         is_required=True,
         estimated_minutes=1,
         sort_order=7,
     ),
     models.FormDefinition(
-        id="flu_vaccine_consent",
-        title="Flu Vaccine Consent",
-        description="Informed consent for seasonal influenza vaccination. Includes screening questions for contraindications and authorization to administer.",
+        id="release_information",
+        title="Consent & Authorization to Release Information",
+        description="Optional authorization for care coordination with another person or organization.",
         appointment_types=None,
-        category="consent",
-        is_required=True,
-        estimated_minutes=2,
+        category="optional",
+        is_required=False,
+        estimated_minutes=3,
         sort_order=8,
-        file_template="Knowledge/forms/flu_vaccine_consent_rag_elevia.md",
     ),
     models.FormDefinition(
-        id="electronic_comms_consent",
-        title="Electronic Communications Consent",
-        description="Authorize 1 Stop Medical to contact you via text, phone, and email for appointment reminders, test results, and care coordination.",
+        id="relational_intake",
+        title="Relational Therapy Initial Intake Form",
+        description="Added when relationship, couples, marriage, or family concerns are expressed.",
+        appointment_types=None,
+        category="required",
+        is_required=False,
+        estimated_minutes=5,
+        sort_order=9,
+    ),
+    models.FormDefinition(
+        id="coaching_consent",
+        title="Coaching Informed Consent",
+        description="Added when coaching, career, leadership, or life goal concerns are expressed.",
         appointment_types=None,
         category="consent",
-        is_required=True,
-        estimated_minutes=1,
-        sort_order=9,
-        file_template="Knowledge/forms/electronic_communications_consent_rag_elevia.md",
+        is_required=False,
+        estimated_minutes=2,
+        sort_order=10,
     ),
     models.FormDefinition(
         id="phq9",
         title="PHQ-9 Depression Screening",
-        description="9-item Patient Health Questionnaire for depression. Flags moderate-to-severe risk for clinical follow-up.",
-        appointment_types=None,
-        category="required",
-        is_required=True,
-        estimated_minutes=2,
-        sort_order=10,
-        file_template="Knowledge/forms/phq9_rag_elevia.md",
-    ),
-    models.FormDefinition(
-        id="gad7",
-        title="GAD-7 Anxiety Screening",
-        description="7-item Generalized Anxiety Disorder questionnaire. Scores ≥10 trigger clinical review.",
+        description="9-item Patient Health Questionnaire served only when depression or mood concerns are expressed.",
         appointment_types=None,
         category="required",
         is_required=True,
         estimated_minutes=2,
         sort_order=11,
-        file_template="Knowledge/forms/gad7_rag_elevia.md",
+        file_template="Knowledge/forms/phq9_rag_elevia.md",
     ),
     models.FormDefinition(
-        id="interpreter",
-        title="Interpreter Request",
-        description="Request a spoken-language interpreter for your appointment.",
+        id="gad7",
+        title="GAD-7 Anxiety Screening",
+        description="7-item Generalized Anxiety Disorder questionnaire served only when anxiety concerns are expressed.",
         appointment_types=None,
-        category="optional",
-        is_required=False,
-        estimated_minutes=1,
+        category="required",
+        is_required=True,
+        estimated_minutes=2,
         sort_order=12,
+        file_template="Knowledge/forms/gad7_rag_elevia.md",
     ),
 ]
 
 
+def upsert_form_definition(db, form):
+    existing = db.get(models.FormDefinition, form.id)
+    if not existing:
+        db.add(form)
+        return "inserted"
+
+    for field in [
+        "title",
+        "description",
+        "appointment_types",
+        "category",
+        "is_required",
+        "estimated_minutes",
+        "sort_order",
+        "file_template",
+    ]:
+        setattr(existing, field, getattr(form, field))
+    return "updated"
+
+
 def seed():
-    # Create tables
     models.Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
-    # ── Form definitions ────────────────────────────────────────────────────
-    inserted = 0
-    for f in FORM_DEFINITIONS:
-        if not db.get(models.FormDefinition, f.id):
-            db.add(f)
-            inserted += 1
+    db.execute(delete(models.PatientForm).where(models.PatientForm.form_id.in_(LEGACY_FORM_IDS)))
+    db.execute(delete(models.FormDefinition).where(models.FormDefinition.id.in_(LEGACY_FORM_IDS)))
     db.commit()
-    print(f"✓ Form definitions: {inserted} inserted, {len(FORM_DEFINITIONS) - inserted} already existed")
 
-    # ── Demo patient ────────────────────────────────────────────────────────
-    from datetime import date
+    inserted = 0
+    updated = 0
+    for form in FORM_DEFINITIONS:
+        result = upsert_form_definition(db, form)
+        inserted += result == "inserted"
+        updated += result == "updated"
+    db.commit()
+    print(f"AlanBehrman form definitions: {inserted} inserted, {updated} updated")
+
     patient = crud.create_patient(db, schemas.PatientCreate(
-        full_name="Paranjit Kaur",
-        first_name="Paranjit",
-        dob=date(1991, 3, 12),
+        full_name="Avery Johnson",
+        first_name="Avery",
+        dob=date(1990, 7, 14),
         gender="Female",
-        email="paranjit.kaur@example.com",
-        phone="(425) 555-0198",
+        email="avery.johnson@example.com",
+        phone="(404) 555-0188",
     ))
-    print(f"✓ Demo patient created: {patient.full_name}")
-    print(f"  Patient GUID: {patient.id}")
+    print(f"Demo client created: {patient.full_name}")
+    print(f"Client GUID: {patient.id}")
 
-    # ── Demo appointment ────────────────────────────────────────────────────
     appt = crud.create_appointment(db, schemas.AppointmentCreate(
         patient_id=patient.id,
-        appointment_type="immigration_medical_exam",
-        appointment_date=datetime(2026, 4, 22, 10, 30, tzinfo=timezone.utc),
-        provider_name="Dr. Ramakanth Vemuluri, MD",
+        appointment_type="therapy_consultation",
+        appointment_date=datetime(2026, 5, 21, 19, 30, tzinfo=timezone.utc),
+        provider_name="Meredith Mitchell, PMHNP-BC",
         clinic_location="Marietta, GA",
+        appointment_description="New client intake for anxiety, panic symptoms, low mood, and medication management questions.",
     ))
-    print(f"✓ Appointment created: {appt.appointment_type}")
-    print(f"  Appointment ID:  {appt.id}")
-    print(f"  Intake token:    {appt.intake_link_token}")
+    print(f"Appointment created: {appt.appointment_type}")
+    print(f"Appointment ID: {appt.id}")
+    print(f"Intake token: {appt.intake_link_token}")
 
-    # Show assigned forms
     from sqlalchemy import select
     rows = db.execute(
         select(models.PatientForm, models.FormDefinition)
@@ -196,15 +224,13 @@ def seed():
         .where(models.PatientForm.appointment_id == appt.id)
         .order_by(models.FormDefinition.sort_order)
     ).all()
-    print(f"\n  Assigned {len(rows)} forms:")
-    for pf, fd in rows:
-        req = "required" if fd.is_required else "optional"
-        print(f"    [{fd.category:8s}] {fd.id:15s}  {fd.title}  ({req})")
+    print(f"\nAssigned {len(rows)} forms:")
+    for patient_form, form_def in rows:
+        req = "required" if form_def.is_required else "optional"
+        print(f"  [{form_def.category:8s}] {patient_form.form_id:28s} {form_def.title} ({req})")
 
-    print(f"\n{'─'*60}")
-    print(f"🔗 Open the intake form:")
-    print(f"   http://localhost:8025/?t={appt.intake_link_token}")
-    print(f"{'─'*60}")
+    print("\nOpen the intake flow:")
+    print(f"  http://localhost:8025/?t={appt.intake_link_token}")
 
     db.close()
 

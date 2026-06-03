@@ -70,7 +70,7 @@ class AppointmentOut(BaseModel):
 class FormStatus(BaseModel):
     """Flattened view of a patient_form + its form_definition."""
     id: uuid.UUID           # patient_form.id (used in API calls to update status / save fields)
-    form_id: str            # form_definition.id  e.g. 'brief_i693'
+    form_id: str            # form_definition.id, e.g. 'provider_consent'
     title: str
     description: Optional[str] = None
     category: str

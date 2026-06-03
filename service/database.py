@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
-DB_URL = os.getenv("DB_URL", "postgresql://localhost:5432/elevia_1medical")
+DB_URL = os.getenv("DB_URL", "postgresql://localhost:5432/elevia_alanbehrman")
 
 engine = create_engine(DB_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

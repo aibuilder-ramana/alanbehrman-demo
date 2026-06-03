@@ -24,6 +24,18 @@ _ANXIETY_KW = [
     'trauma', 'hyperventil', 'palpitat', 'restless', 'fear', 'dread',
     'stress', 'tense', 'tension',
 ]
+_RELATIONAL_KW = [
+    'couple', 'partner', 'marriage', 'marital', 'relationship', 'family',
+    'relational',
+]
+_COACHING_KW = [
+    'coach', 'coaching', 'career', 'leadership', 'executive', 'life goal',
+    'goal',
+]
+_RELEASE_KW = [
+    'release', 'records', 'coordinate', 'school', 'attorney', 'court',
+    'doctor', 'physician', 'psychiatrist',
+]
 
 
 def _desc_matches(desc: str, keywords: list) -> bool:
@@ -98,6 +110,9 @@ def create_appointment(db: Session, data: schemas.AppointmentCreate) -> models.A
     desc = data.appointment_description or ''
     needs_phq9 = _desc_matches(desc, _DEPRESSION_KW)
     needs_gad7  = _desc_matches(desc, _ANXIETY_KW)
+    needs_relational = _desc_matches(desc, _RELATIONAL_KW)
+    needs_coaching = _desc_matches(desc, _COACHING_KW)
+    needs_release = _desc_matches(desc, _RELEASE_KW)
 
     # All form definitions, sorted
     all_forms = db.execute(
@@ -109,19 +124,16 @@ def create_appointment(db: Session, data: schemas.AppointmentCreate) -> models.A
         if f.id != 'update' and f.appointment_types and data.appointment_type not in f.appointment_types:
             continue
 
-        if patient_type == 'returning_recent':
-            # Returning recent: only update form + conditional screeners
-            if f.id not in ('update', 'phq9', 'gad7'):
-                continue
-        else:
-            # New or returning_stale: full form set, no update form
-            if f.id == 'update':
-                continue
-
-        # Conditional screeners — only if description matches
+        # Conditional AlanBehrman packet items.
         if f.id == 'phq9' and not needs_phq9:
             continue
         if f.id == 'gad7' and not needs_gad7:
+            continue
+        if f.id == 'relational_intake' and not needs_relational:
+            continue
+        if f.id == 'coaching_consent' and not needs_coaching:
+            continue
+        if f.id == 'release_information' and not needs_release:
             continue
 
         db.add(models.PatientForm(

@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AlanBehrman Intake</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="assets/alan-Behrman-Logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #f7f8f5;
+  --surface: #ffffff;
+  --surface-soft: #f2f5f1;
+  --ink: #1b2530;
+  --muted: #5f6b77;
+  --subtle: #85909b;
+  --line: #dfe5df;
+  --line-strong: #c8d3ca;
+  --green: #20745d;
+  --green-deep: #155541;
+  --green-soft: #e6f2ed;
+  --gold: #9b6d1f;
+  --gold-soft: #f6eddb;
+  --rose: #ab4459;
+  --rose-soft: #f7e6e9;
+  --shadow: 0 16px 44px rgba(21, 33, 44, .08);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+a { color: var(--green-deep); }
+
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  min-height: 72px;
+  padding: 14px 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.brand img { width: 174px; max-width: 44vw; height: auto; object-fit: contain; }
+.brand-divider { width: 1px; height: 30px; background: var(--line-strong); }
+.powered {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.powered img { width: 16px; height: 16px; }
+.top-meta { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; }
+.secure-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  color: var(--green-deep);
+  background: var(--green-soft);
+  border: 1px solid #cae4d8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.secure-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--green); }
+
+.layout {
+  flex: 1;
+  width: min(1240px, calc(100vw - 40px));
+  margin: 28px auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+}
+.side {
+  align-self: start;
+  position: sticky;
+  top: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+.side-title { font-weight: 700; margin-bottom: 4px; }
+.side-sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+.steps { display: grid; gap: 8px; }
+.step-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  color: var(--muted);
+}
+.step-row.active { color: var(--ink); background: var(--green-soft); border-color: #cae4d8; }
+.step-row.done { color: var(--green-deep); }
+.step-num {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-weight: 700;
+  font-size: 12px;
+}
+.step-row.active .step-num, .step-row.done .step-num {
+  color: #fff;
+  background: var(--green);
+  border-color: var(--green);
+}
+.step-label { font-weight: 650; font-size: 13px; }
+.step-help { color: var(--subtle); font-size: 12px; }
+.support {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.main {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.main-head {
+  padding: 30px 34px 20px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #fff, #fbfcfa);
+}
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green-deep);
+  background: var(--green-soft);
+  border: 1px solid #cae4d8;
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 13px;
+}
+h1, h2, h3, p { margin-top: 0; }
+h1 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+.lede { color: var(--muted); max-width: 760px; margin-bottom: 0; }
+.panel { padding: 28px 34px 34px; }
+.section-title { font-size: 18px; font-weight: 750; margin-bottom: 6px; }
+.section-copy { color: var(--muted); margin-bottom: 22px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.full { grid-column: 1 / -1; }
+.field { display: grid; gap: 7px; }
+.field label, .label {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+.input, select, textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+textarea { min-height: 112px; resize: vertical; }
+.input:focus, select:focus, textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(32, 116, 93, .12);
+}
+.hint { color: var(--subtle); font-size: 12px; }
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+.btn.primary:hover { background: var(--green-deep); }
+.btn.ghost:hover { background: var(--surface-soft); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn.icon { width: 44px; padding: 0; }
+
+.choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.choice {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+  text-align: left;
+  display: grid;
+  gap: 5px;
+}
+.choice.selected { border-color: var(--green); background: var(--green-soft); box-shadow: inset 0 0 0 1px var(--green); }
+.choice strong { font-size: 14px; }
+.choice span { color: var(--muted); font-size: 12px; }
+.provider-list { display: grid; gap: 10px; }
+.provider-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+  text-align: left;
+}
+.provider-card.selected { border-color: var(--green); background: var(--green-soft); }
+.provider-card strong { display: block; }
+.provider-card small { color: var(--muted); }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.upload-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.upload-card {
+  border: 1px dashed var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  padding: 16px;
+}
+.upload-title { font-weight: 750; margin-bottom: 8px; }
+.upload-zone {
+  display: block;
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 700;
+}
+.file-input { position: absolute; opacity: 0; pointer-events: none; }
+.status {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cae4d8;
+  background: var(--green-soft);
+  color: var(--green-deep);
+  font-size: 13px;
+}
+.status.warn { border-color: #ecdab5; background: var(--gold-soft); color: #6e4c14; }
+.card-type-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.card-type {
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  font-weight: 700;
+}
+.card-type.active { background: var(--green-soft); border-color: var(--green); color: var(--green-deep); }
+.checkline {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--surface-soft);
+}
+.checkline input { margin-top: 4px; }
+.checkline small { display: block; color: var(--muted); margin-top: 3px; }
+
+.hipaa-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  gap: 22px;
+}
+.notice-box {
+  height: 560px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 22px;
+}
+.notice-box h2 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: 42px;
+  margin-bottom: 18px;
+}
+.notice-box h3 { font-size: 15px; margin: 22px 0 8px; }
+.notice-box p, .notice-box li { color: var(--muted); font-size: 13px; }
+.signature-pad {
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+.signature-pad canvas {
+  display: block;
+  width: 100%;
+  height: 150px;
+  touch-action: none;
+}
+.signature-tools {
+  min-height: 38px;
+  padding: 0 10px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+}
+.link-button {
+  border: 0;
+  background: none;
+  color: var(--green-deep);
+  padding: 4px;
+  font-weight: 700;
+}
+
+.packet-list { display: grid; gap: 10px; margin-bottom: 20px; }
+.packet-row {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+}
+.packet-row.done { border-color: #cae4d8; background: var(--green-soft); }
+.packet-title { font-weight: 750; }
+.packet-meta { color: var(--muted); font-size: 13px; }
+.embedded-form {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 18px;
+}
+.score-grid { display: grid; gap: 12px; }
+.score-question {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+}
+.score-question strong { display: block; margin-bottom: 10px; }
+.score-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.score-options button {
+  min-height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.score-options button.active { background: var(--green); border-color: var(--green); color: #fff; }
+.score-box {
+  margin-top: 16px;
+  border: 1px solid #cae4d8;
+  background: var(--green-soft);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.score-num {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green-deep);
+}
+
+.summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.summary-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+}
+.summary-item .k { color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.summary-item .v { font-weight: 750; }
+.success-band {
+  border: 1px solid #cae4d8;
+  background: var(--green-soft);
+  color: var(--green-deep);
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.footer {
+  padding: 18px 32px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 920px) {
+  .layout { grid-template-columns: 1fr; width: min(100vw - 24px, 760px); margin: 16px auto; }
+  .side { position: static; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hipaa-form, .grid, .grid.three, .upload-grid, .summary-grid { grid-template-columns: 1fr; }
+  .score-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .main-head, .panel { padding-left: 20px; padding-right: 20px; }
+  .topbar { padding: 12px 18px; align-items: flex-start; flex-direction: column; }
+  .top-meta { width: 100%; justify-content: space-between; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.27.0/babel.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script type="text/babel">
+const { useEffect, useMemo, useRef, useState } = React;
+
+const LOCATIONS = [
+  { id: 'marietta', name: 'Marietta', address: '2862 Johnson Ferry Rd., Suite 150 & Suite 200, Marietta, GA 30062' },
+  { id: 'alpharetta', name: 'Alpharetta', address: '1041 Cambridge Square, Suite A, Alpharetta, GA 30009' },
+  { id: 'duluth', name: 'Duluth', address: '4855 River Green Parkway, Suite 330, Duluth, GA 30096' },
+  { id: 'dunwoody', name: 'Dunwoody', address: '2150 Peachford Rd., Suite I, Dunwoody, GA 30338' },
+  { id: 'new-orleans', name: 'New Orleans', address: '2517 Jena St., New Orleans, LA 70115' },
+];
+
+const PROVIDERS = [
+  { id: 'alan', name: 'Alan Behrman, Ph.D', role: 'Psychologist', locations: ['marietta'], consent: 'Informed Consent for Alan' },
+  { id: 'antonio', name: 'Antonio Cordero, LPC', role: 'Therapist', locations: ['alpharetta', 'duluth'], consent: 'Informed Consent for Antonio' },
+  { id: 'ariella', name: 'Ariella Peist, LCSW', role: 'Therapist', locations: ['alpharetta'], consent: 'Informed Consent for Ariella' },
+  { id: 'cristina', name: 'Cristina Lazaro, LPC', role: 'Therapist', locations: ['alpharetta', 'duluth'], consent: 'Informed Consent for Cristina' },
+  { id: 'emma', name: 'Emma Green, LAMFT', role: 'Therapist', locations: ['marietta', 'alpharetta', 'duluth'], consent: 'Informed Consent for Emma' },
+  { id: 'jamie', name: 'Jamie Goldberg, LPC, E-RYT', role: 'Therapist', locations: ['marietta', 'alpharetta'], consent: 'Informed Consent for Jamie' },
+  { id: 'jessica', name: 'Jessica Bosson, Psy.D', role: 'Psychologist', locations: ['duluth'], consent: 'Informed Consent for Jessica' },
+  { id: 'kailyn', name: 'Kailyn Blackmon, PsyD', role: 'Psychologist', locations: ['duluth'], consent: 'Informed Consent for Kailyn' },
+  { id: 'kelly', name: 'Kelly Villarreal, LMFT', role: 'Therapist', locations: ['alpharetta'], consent: 'Informed Consent for Kelly' },
+  { id: 'mary', name: 'Mary Schexnaydre, PA-C, CAQ Psychiatry', role: 'Psychiatric physician assistant', locations: ['new-orleans'], consent: 'Informed Consent for Mary' },
+  { id: 'meredith', name: 'Meredith Mitchell, PMHNP-BC', role: 'Psychiatric nurse practitioner', locations: ['marietta'], consent: 'Informed Consent for Meredith' },
+  { id: 'mona', name: 'Mona Chandra, Psy.D', role: 'Psychologist', locations: ['alpharetta'], consent: 'Informed Consent for Mona' },
+  { id: 'patty', name: 'Patty Postanowicz, Ph.D, LMFT', role: 'Therapist', locations: ['marietta'], consent: 'Informed Consent for Patty' },
+  { id: 'rachel', name: 'Rachel Barlev, LCSW', role: 'Therapist', locations: ['marietta'], consent: 'Informed Consent for Rachel' },
+  { id: 'rae', name: 'Rae Sidlauskas, MS LPC', role: 'Therapist', locations: ['new-orleans'], consent: 'Informed Consent for Rae' },
+  { id: 'sheldon', name: 'Sheldon Kay, LAPC', role: 'Therapist', locations: ['duluth'], consent: 'Informed Consent for Sheldon' },
+  { id: 'silvia', name: 'Silvia Lynch, LCSW', role: 'Therapist', locations: ['marietta'], consent: 'Informed Consent for Silvia' },
+  { id: 'tu', name: 'Tu Vo, LPC', role: 'Therapist', locations: ['marietta'], consent: 'Informed Consent for Tu' },
+  { id: 'vemuluri', name: 'Dr. Ramakanth Vemuluri, MD', role: 'Psychiatrist', locations: ['duluth', 'dunwoody'], consent: 'Informed Consent for Dr. Ram' },
+  { id: 'whitney', name: 'Whitney Rudd, LMFT', role: 'Therapist', locations: ['marietta'], consent: 'Informed Consent for Whitney' },
+  { id: 'ashley-legros', name: 'Ashley LeGros, MEd, PLPC, NCC', role: 'Therapist', locations: ['new-orleans'], consent: 'Informed Consent for Ashley LeGros' },
+  { id: 'ashley-lee', name: 'Ashley Lee, PMHNP-BC', role: 'Psychiatric nurse practitioner', locations: ['new-orleans'], consent: 'Informed Consent Ashley Lee' },
+  { id: 'david', name: 'David Dolese, LPC', role: 'Therapist', locations: ['new-orleans'], consent: 'Informed Consent for David' },
+];
+
+const PHQ9_QUESTIONS = [
+  'Little interest or pleasure in doing things',
+  'Feeling down, depressed, or hopeless',
+  'Trouble falling or staying asleep, or sleeping too much',
+  'Feeling tired or having little energy',
+  'Poor appetite or overeating',
+  'Feeling bad about yourself, or that you have let yourself or your family down',
+  'Trouble concentrating on things',
+  'Moving or speaking slowly, or being unusually restless',
+  'Thoughts that you would be better off dead or of hurting yourself',
+];
+
+const GAD7_QUESTIONS = [
+  'Feeling nervous, anxious, or on edge',
+  'Not being able to stop or control worrying',
+  'Worrying too much about different things',
+  'Trouble relaxing',
+  'Being so restless that it is hard to sit still',
+  'Becoming easily annoyed or irritable',
+  'Feeling afraid as if something awful might happen',
+];
+
+const STEPS = [
+  ['Start', 'Client, concern, provider'],
+  ['Step One', 'Credit card authorization'],
+  ['Step Two', 'HIPAA review and signature'],
+  ['Step Three', 'Provider consent'],
+  ['Done', 'Review and handoff'],
+];
+
+const INITIAL_PATIENT = {
+  fullName: '',
+  dob: '',
+  phone: '',
+  email: '',
+  locationId: LOCATIONS[0].id,
+  providerId: '',
+  appointmentTime: 'First available appointment',
+  concern: '',
+  insuranceMode: 'upload',
+  insuranceCarrier: '',
+  memberId: '',
+  groupId: '',
+  policyholder: '',
+};
+
+const INITIAL_CARD = {
+  mode: 'upload',
+  yourName: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  phone: '',
+  email: '',
+  cardType: '',
+  cardNumber: '',
+  expiration: '',
+  cvc: '',
+  authorization: false,
+};
+
+function IconCheck() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M13.2 4.4 6.7 11 3 7.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function onlyDigits(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function normalizeOcrDigits(value) {
+  return String(value || '')
+    .replace(/[Oo]/g, '0')
+    .replace(/[IiLl|]/g, '1')
+    .replace(/[Ss]/g, '5')
+    .replace(/[Bb]/g, '8');
+}
+
+function formatCardNumber(value) {
+  return onlyDigits(value).slice(0, 19).replace(/(.{4})/g, '$1 ').trim();
+}
+
+function passesLuhn(value) {
+  const digits = onlyDigits(value);
+  if (digits.length < 12) return false;
+  let sum = 0;
+  let doubleDigit = false;
+  for (let index = digits.length - 1; index >= 0; index -= 1) {
+    let n = Number(digits[index]);
+    if (doubleDigit) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    doubleDigit = !doubleDigit;
+  }
+  return sum % 10 === 0;
+}
+
+function inferCardType(cardNumber, text = '') {
+  const digits = onlyDigits(cardNumber);
+  const upper = String(text).toUpperCase();
+  if (/AMEX|AMERICAN\s+EXPRESS/.test(upper) || /^3[47]/.test(digits)) return 'Amex';
+  if (/DISCOVER/.test(upper) || /^(6011|65|64[4-9])/.test(digits)) return 'Discover';
+  const firstTwo = Number(digits.slice(0, 2));
+  const firstFour = Number(digits.slice(0, 4));
+  if (/MASTERCARD|MASTER\s*CARD/.test(upper) || (firstTwo >= 51 && firstTwo <= 55) || (firstFour >= 2221 && firstFour <= 2720)) return 'Mastercard';
+  if (/\bVISA\b/.test(upper) || /^4/.test(digits)) return 'Visa';
+  return '';
+}
+
+function extractCardNumber(text) {
+  const normalized = normalizeOcrDigits(text);
+  const candidates = [...normalized.matchAll(/(?:\d[\s-]*){12,19}/g)]
+    .map(match => onlyDigits(match[0]))
+    .filter(digits => digits.length >= 13 && digits.length <= 19)
+    .sort((a, b) => Number(passesLuhn(b)) - Number(passesLuhn(a)) || b.length - a.length);
+  return candidates[0] || '';
+}
+
+function extractExpiration(text) {
+  const normalized = normalizeOcrDigits(text);
+  const match = normalized.match(/\b(0[1-9]|1[0-2])\s*[\/.\-]\s*(\d{2}|\d{4})\b/);
+  return match ? `${match[1]}/${match[2].slice(-2)}` : '';
+}
+
+function extractName(text) {
+  const blocked = /\b(BANK|CARD|CREDIT|DEBIT|VALID|THRU|UNTIL|VISA|MASTERCARD|MASTER|AMEX|AMERICAN|EXPRESS|DISCOVER|MEMBER|CUSTOMER|SIGNATURE|AUTHORIZED|ELECTRONIC|USE|ONLY|VOID)\b/;
+  const lines = String(text || '').split(/\r?\n/)
+    .map(line => line.replace(/[^A-Za-z\s'.-]/g, ' ').replace(/\s+/g, ' ').trim())
+    .filter(line => line.length >= 5 && line.length <= 34 && /[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(line));
+  const hit = lines.find(line => {
+    const upper = line.toUpperCase();
+    return upper === line && !blocked.test(upper);
+  }) || lines.find(line => !blocked.test(line.toUpperCase()));
+  return hit ? hit.replace(/\b\w/g, char => char.toUpperCase()) : '';
+}
+
+function extractCvc(text, side) {
+  const normalized = normalizeOcrDigits(text);
+  const labeled = normalized.match(/\b(?:CVC|CVV|CID|SECURITY\s*CODE)\D{0,18}(\d{3,4})\b/i);
+  if (labeled) return labeled[1];
+  if (side !== 'back') return '';
+  const groups = normalized
+    .replace(/(?:\d[\s-]*){12,19}/g, ' ')
+    .replace(/\b(0[1-9]|1[0-2])\s*[\/.\-]\s*(\d{2}|\d{4})\b/g, ' ')
+    .match(/\b\d{3,4}\b/g);
+  return groups ? groups[groups.length - 1] : '';
+}
+
+function extractCreditCardFields(text, side) {
+  const cardNumber = extractCardNumber(text);
+  return {
+    cardType: inferCardType(cardNumber, text),
+    cardNumber: formatCardNumber(cardNumber),
+    expiration: extractExpiration(text),
+    cvc: extractCvc(text, side),
+    yourName: side === 'front' ? extractName(text) : '',
+  };
+}
+
+function detectScreeners(concern) {
+  const text = String(concern || '');
+  return {
+    gad7: /\b(anxi\w*|panic\w*|worr\w*|nervous\w*|stress\w*|ptsd|trauma\w*|fear\w*|phobia\w*|restless\w*|tension)\b/i.test(text),
+    phq9: /\b(depress\w*|sad|grief|hopeless\w*|worthless\w*|low mood|loss of interest|anhedonia|suicid\w*|self[-\s]?harm|down|mood)\b/i.test(text),
+  };
+}
+
+function buildPacket(patient, selectedProvider) {
+  const concern = patient.concern || '';
+  const screeners = detectScreeners(concern);
+  const forms = [
+    { id: 'provider-consent', step: 'Step Three', title: selectedProvider?.consent || 'Provider Informed Consent', reason: `Selected provider: ${selectedProvider?.name || 'provider to be assigned'}`, kind: 'provider' },
+    { id: 'cancellation', step: 'Step Three', title: 'Cancellation Policy', reason: 'Required for appointment confirmation.', kind: 'cancellation' },
+    { id: 'client-info', step: 'Step Two', title: 'Client Information', reason: 'Standard client profile information.', kind: 'client' },
+    { id: 'surprise-billing', step: 'Step Four', title: 'Surprise Billing Policy', reason: 'Billing disclosure included for applicable services.', kind: 'billing' },
+  ];
+  if (patient.insuranceMode !== 'none') {
+    forms.push({ id: 'insurance-authorization', step: 'Step Four', title: 'Insurance Authorization', reason: 'Added because insurance details were provided.', kind: 'insurance' });
+  }
+  if (/\b(couple|partner|marriage|marital|relationship|family|relational)\b/i.test(concern)) {
+    forms.push({ id: 'relational-intake', step: 'Step Four', title: 'Relational Therapy Initial Intake Form', reason: 'Added because the concern appears relational or family-oriented.', kind: 'relational' });
+  }
+  if (/\b(coach|coaching|career|leadership|executive|life goal|goal)\b/i.test(concern)) {
+    forms.push({ id: 'coaching-consent', step: 'Step Four', title: 'Coaching Informed Consent', reason: 'Added because coaching goals were mentioned.', kind: 'coaching' });
+  }
+  if (/\b(release|records|coordinate|school|attorney|court|doctor|physician|psychiatrist)\b/i.test(concern)) {
+    forms.push({ id: 'release-information', step: 'Step Four', title: 'Consent & Authorization to Release Information', reason: 'Added because coordination or records were mentioned.', kind: 'release' });
+  }
+  if (screeners.gad7) forms.push({ id: 'gad7', step: 'Dynamic Screener', title: 'GAD-7 Anxiety Screening', reason: 'Added because anxiety-related concerns were expressed.', kind: 'gad7' });
+  if (screeners.phq9) forms.push({ id: 'phq9', step: 'Dynamic Screener', title: 'PHQ-9 Depression Screening', reason: 'Added because depression or mood concerns were expressed.', kind: 'phq9' });
+  return forms;
+}
+
+function Topbar({ patientName }) {
+  return (
+    <header className="topbar">
+      <div className="brand">
+        <img src="assets/alan-Behrman-Logo.png" alt="Alan Behrman & Associates" />
+        <div className="brand-divider" />
+        <span className="powered">
+          <span>Powered by</span>
+          <img src="assets/elevia-logo.png" alt="" />
+          <strong>Elevia</strong>
+        </span>
+      </div>
+      <div className="top-meta">
+        <span className="secure-pill"><span className="secure-dot" />Secure intake</span>
+        <span>{patientName || 'New client'}</span>
+      </div>
+    </header>
+  );
+}
+
+function StepRail({ step, completed }) {
+  return (
+    <aside className="side">
+      <div className="side-title">AlanBehrman intake</div>
+      <div className="side-sub">One flow for scheduling, authorization, consent, and dynamic paperwork.</div>
+      <div className="steps">
+        {STEPS.map(([label, help], index) => {
+          const done = completed.includes(index);
+          return (
+            <div className={`step-row${step === index ? ' active' : ''}${done ? ' done' : ''}`} key={label}>
+              <div className="step-num">{done ? <IconCheck /> : index + 1}</div>
+              <div>
+                <div className="step-label">{label}</div>
+                <div className="step-help">{help}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="support">
+        <strong>Need help?</strong><br />
+        ATL: <a href="tel:7703617864">770.361.7864</a><br />
+        NOLA: <a href="tel:5044145467">504.414.5467</a><br />
+        <a href="mailto:info@alanbehrman.com">info@alanbehrman.com</a>
+      </div>
+    </aside>
+  );
+}
+
+function SignaturePad({ onChange }) {
+  const canvasRef = useRef(null);
+  const drawingRef = useRef(false);
+  const inkRef = useRef(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.floor(rect.width * scale));
+    canvas.height = Math.max(1, Math.floor(rect.height * scale));
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#1b2530';
+  }, []);
+
+  const point = event => {
+    const rect = canvasRef.current.getBoundingClientRect();
+    const source = event.touches?.[0] || event;
+    return { x: source.clientX - rect.left, y: source.clientY - rect.top };
+  };
+
+  const start = event => {
+    event.preventDefault();
+    const ctx = canvasRef.current.getContext('2d');
+    const p = point(event);
+    drawingRef.current = true;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    if (!inkRef.current) {
+      inkRef.current = true;
+      onChange(true);
+    }
+  };
+
+  const draw = event => {
+    if (!drawingRef.current) return;
+    event.preventDefault();
+    const ctx = canvasRef.current.getContext('2d');
+    const p = point(event);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  };
+
+  const stop = () => {
+    drawingRef.current = false;
+  };
+
+  const clear = () => {
+    const canvas = canvasRef.current;
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    inkRef.current = false;
+    onChange(false);
+  };
+
+  return (
+    <div className="signature-pad">
+      <canvas
+        ref={canvasRef}
+        onMouseDown={start}
+        onMouseMove={draw}
+        onMouseUp={stop}
+        onMouseLeave={stop}
+        onTouchStart={start}
+        onTouchMove={draw}
+        onTouchEnd={stop}
+        aria-label="Draw e-signature"
+      />
+      <div className="signature-tools">
+        <span>E-Signature</span>
+        <button className="link-button" type="button" onClick={clear}>Clear</button>
+      </div>
+    </div>
+  );
+}
+
+function IntakeStart({ patient, setPatient, onNext }) {
+  const locationProviders = PROVIDERS.filter(provider => provider.locations.includes(patient.locationId));
+  const selectedProvider = PROVIDERS.find(provider => provider.id === patient.providerId);
+  const canContinue = patient.fullName && patient.dob && patient.phone && patient.email && patient.concern && selectedProvider;
+
+  useEffect(() => {
+    if (!locationProviders.some(provider => provider.id === patient.providerId)) {
+      setPatient(data => ({ ...data, providerId: locationProviders[0]?.id || '' }));
+    }
+  }, [patient.locationId]);
+
+  const set = (key, value) => setPatient(data => ({ ...data, [key]: value }));
+
+  return (
+    <>
+      <div className="main-head">
+        <div className="kicker">AlanBehrman client intake</div>
+        <h1>Start a secure intake.</h1>
+        <p className="lede">Enter the client details, choose the right provider, and Elevia will serve only the consent and screening forms that fit this visit.</p>
+      </div>
+      <div className="panel">
+        <div className="section-title">Client details</div>
+        <p className="section-copy">This information is used to prepare the paperwork packet and hold the requested appointment.</p>
+        <div className="grid">
+          <div className="field">
+            <label htmlFor="fullName">Full name</label>
+            <input id="fullName" className="input" value={patient.fullName} onChange={e => set('fullName', e.target.value)} autoComplete="name" />
+          </div>
+          <div className="field">
+            <label htmlFor="dob">Date of birth</label>
+            <input id="dob" className="input" type="date" value={patient.dob} onChange={e => set('dob', e.target.value)} />
+          </div>
+          <div className="field">
+            <label htmlFor="phone">Phone</label>
+            <input id="phone" className="input" value={patient.phone} onChange={e => set('phone', e.target.value)} autoComplete="tel" />
+          </div>
+          <div className="field">
+            <label htmlFor="email">Email</label>
+            <input id="email" className="input" type="email" value={patient.email} onChange={e => set('email', e.target.value)} autoComplete="email" />
+          </div>
+          <div className="field full">
+            <label htmlFor="concern">Presenting concern or care goal</label>
+            <textarea id="concern" value={patient.concern} onChange={e => set('concern', e.target.value)} placeholder="Example: anxiety and panic, depression, couples therapy, medication management, coaching goals..." />
+            <div className="hint">GAD-7, PHQ-9, relational intake, coaching consent, and release forms are added only when the concern calls for them.</div>
+          </div>
+        </div>
+
+        <div className="section-title" style={{ marginTop: 28 }}>Location and provider</div>
+        <div className="choice-grid">
+          {LOCATIONS.map(location => (
+            <button
+              type="button"
+              className={`choice${patient.locationId === location.id ? ' selected' : ''}`}
+              onClick={() => set('locationId', location.id)}
+              key={location.id}
+            >
+              <strong>{location.name}</strong>
+              <span>{location.address}</span>
+            </button>
+          ))}
+        </div>
+        <div className="provider-list" style={{ marginTop: 14 }}>
+          {locationProviders.map(provider => (
+            <button
+              type="button"
+              className={`provider-card${patient.providerId === provider.id ? ' selected' : ''}`}
+              onClick={() => set('providerId', provider.id)}
+              key={provider.id}
+            >
+              <span>
+                <strong>{provider.name}</strong>
+                <small>{provider.role}</small>
+              </span>
+              <span className="tag">Step Three consent</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="section-title" style={{ marginTop: 28 }}>Insurance</div>
+        <div className="choice-grid">
+          {[
+            ['upload', 'Upload insurance card', 'Use photos of the front and back of the card.'],
+            ['manual', 'Enter insurance details', 'Type the payer, member, and group details.'],
+            ['none', 'Self-pay or not available', 'Continue without insurance information.'],
+          ].map(([value, label, help]) => (
+            <button type="button" className={`choice${patient.insuranceMode === value ? ' selected' : ''}`} onClick={() => set('insuranceMode', value)} key={value}>
+              <strong>{label}</strong>
+              <span>{help}</span>
+            </button>
+          ))}
+        </div>
+        {patient.insuranceMode === 'manual' && (
+          <div className="grid" style={{ marginTop: 16 }}>
+            <div className="field">
+              <label htmlFor="carrier">Insurance carrier</label>
+              <input id="carrier" className="input" value={patient.insuranceCarrier} onChange={e => set('insuranceCarrier', e.target.value)} />
+            </div>
+            <div className="field">
+              <label htmlFor="memberId">Member ID</label>
+              <input id="memberId" className="input" value={patient.memberId} onChange={e => set('memberId', e.target.value)} />
+            </div>
+            <div className="field">
+              <label htmlFor="groupId">Group ID</label>
+              <input id="groupId" className="input" value={patient.groupId} onChange={e => set('groupId', e.target.value)} />
+            </div>
+            <div className="field">
+              <label htmlFor="policyholder">Policyholder</label>
+              <input id="policyholder" className="input" value={patient.policyholder} onChange={e => set('policyholder', e.target.value)} />
+            </div>
+          </div>
+        )}
+
+        <div className="actions">
+          <span className="hint">Next: the exact Step One credit card authorization fields.</span>
+          <button className="btn primary" onClick={onNext} disabled={!canContinue}>Continue</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function CreditCardStep({ card, setCard, patient, uploads, setUploads, onBack, onNext }) {
+  const [ocr, setOcr] = useState({});
+
+  useEffect(() => {
+    setCard(data => ({
+      ...data,
+      yourName: data.yourName || patient.fullName,
+      phone: data.phone || patient.phone,
+      email: data.email || patient.email,
+    }));
+  }, []);
+
+  const set = (key, value) => setCard(data => ({ ...data, [key]: value }));
+  const required = ['yourName', 'address', 'city', 'state', 'zip', 'phone', 'email', 'cardType', 'cardNumber', 'expiration', 'cvc'];
+  const uploadReady = card.mode === 'manual' || (uploads.front && uploads.back);
+  const canContinue = required.every(key => String(card[key] || '').trim()) && card.authorization && uploadReady;
+
+  async function readImage(side, files) {
+    const file = files?.[0];
+    if (!file) return;
+    setUploads(data => ({ ...data, [side]: file.name || `${side} image` }));
+    set('mode', 'upload');
+    if (!file.type.startsWith('image/')) {
+      setOcr(data => ({ ...data, [side]: 'Upload saved. OCR works with image files only.' }));
+      return;
+    }
+    if (!window.Tesseract?.recognize) {
+      setOcr(data => ({ ...data, [side]: 'Upload saved. OCR library is unavailable, so review fields manually.' }));
+      return;
+    }
+    setOcr(data => ({ ...data, [side]: 'Reading image...' }));
+    try {
+      const result = await window.Tesseract.recognize(file, 'eng', {
+        logger: progress => {
+          if (progress.status === 'recognizing text') {
+            setOcr(data => ({ ...data, [side]: `Reading image... ${Math.round((progress.progress || 0) * 100)}%` }));
+          }
+        },
+      });
+      const fields = extractCreditCardFields(result?.data?.text || '', side);
+      setCard(data => ({
+        ...data,
+        yourName: data.yourName || fields.yourName,
+        cardType: fields.cardType || data.cardType,
+        cardNumber: fields.cardNumber || data.cardNumber,
+        expiration: fields.expiration || data.expiration,
+        cvc: fields.cvc || data.cvc,
+      }));
+      setOcr(data => ({ ...data, [side]: fields.cardNumber || fields.expiration || fields.cvc ? 'OCR extracted card details. Please review before continuing.' : 'No confident OCR fields found. Please review manually.' }));
+    } catch (error) {
+      console.warn(error);
+      setOcr(data => ({ ...data, [side]: 'OCR failed for this image. Please review manually.' }));
+    }
+  }
+
+  const UploadCard = ({ side, title }) => (
+    <div className="upload-card">
+      <div className="upload-title">{title}</div>
+      <label className="upload-zone" htmlFor={`cc-${side}`}>Upload or take photo</label>
+      <input id={`cc-${side}`} className="file-input" type="file" accept="image/*" capture="environment" onChange={e => readImage(side, e.target.files)} />
+      {uploads[side] && <div className="status">{uploads[side]}</div>}
+      {ocr[side] && <div className={`status${ocr[side].includes('failed') || ocr[side].includes('No confident') ? ' warn' : ''}`}>{ocr[side]}</div>}
+    </div>
+  );
+
+  return (
+    <>
+      <div className="main-head">
+        <div className="kicker">Step One</div>
+        <h1>Credit Card Authorization</h1>
+        <p className="lede">These are the fields listed on AlanBehrman's Step One form. Card photos are processed in the browser to prefill the fields for review.</p>
+      </div>
+      <div className="panel">
+        <div className="choice-grid">
+          <button type="button" className={`choice${card.mode === 'upload' ? ' selected' : ''}`} onClick={() => set('mode', 'upload')}>
+            <strong>Upload card photos</strong>
+            <span>Front and back, with quick OCR extraction.</span>
+          </button>
+          <button type="button" className={`choice${card.mode === 'manual' ? ' selected' : ''}`} onClick={() => set('mode', 'manual')}>
+            <strong>Enter manually</strong>
+            <span>Type the authorization details yourself.</span>
+          </button>
+        </div>
+        {card.mode === 'upload' && (
+          <div className="upload-grid" style={{ marginTop: 18 }}>
+            <UploadCard side="front" title="Credit card front" />
+            <UploadCard side="back" title="Credit card back" />
+          </div>
+        )}
+        <div className="grid" style={{ marginTop: 22 }}>
+          <div className="field full">
+            <label>Your name</label>
+            <input className="input" value={card.yourName} onChange={e => set('yourName', e.target.value)} autoComplete="cc-name" />
+          </div>
+          <div className="field full">
+            <label>Address</label>
+            <input className="input" value={card.address} onChange={e => set('address', e.target.value)} autoComplete="billing street-address" />
+          </div>
+          <div className="field">
+            <label>City</label>
+            <input className="input" value={card.city} onChange={e => set('city', e.target.value)} autoComplete="billing address-level2" />
+          </div>
+          <div className="field">
+            <label>State</label>
+            <input className="input" value={card.state} onChange={e => set('state', e.target.value.toUpperCase().slice(0, 2))} autoComplete="billing address-level1" />
+          </div>
+          <div className="field">
+            <label>Zip</label>
+            <input className="input" value={card.zip} onChange={e => set('zip', e.target.value)} inputMode="numeric" autoComplete="billing postal-code" />
+          </div>
+          <div className="field">
+            <label>Phone</label>
+            <input className="input" value={card.phone} onChange={e => set('phone', e.target.value)} autoComplete="tel" />
+          </div>
+          <div className="field full">
+            <label>Email</label>
+            <input className="input" type="email" value={card.email} onChange={e => set('email', e.target.value)} autoComplete="email" />
+          </div>
+          <div className="field full">
+            <div className="label">Card type</div>
+            <div className="card-type-row">
+              {['Amex', 'Discover', 'Mastercard', 'Visa'].map(type => (
+                <button type="button" className={`card-type${card.cardType === type ? ' active' : ''}`} onClick={() => set('cardType', type)} key={type}>{type}</button>
+              ))}
+            </div>
+          </div>
+          <div className="field">
+            <label>Card Number</label>
+            <input className="input" value={card.cardNumber} onChange={e => set('cardNumber', formatCardNumber(e.target.value))} inputMode="numeric" autoComplete="cc-number" />
+            {onlyDigits(card.cardNumber).length >= 12 && !passesLuhn(card.cardNumber) && <div className="hint">Please double-check the card number.</div>}
+          </div>
+          <div className="field">
+            <label>Expiration Date</label>
+            <input className="input" value={card.expiration} onChange={e => set('expiration', e.target.value)} placeholder="MM/YY" autoComplete="cc-exp" />
+          </div>
+          <div className="field">
+            <label>CVC</label>
+            <input className="input" value={card.cvc} onChange={e => set('cvc', onlyDigits(e.target.value).slice(0, 4))} inputMode="numeric" autoComplete="cc-csc" />
+          </div>
+        </div>
+        <label className="checkline" style={{ marginTop: 18 }}>
+          <input type="checkbox" checked={card.authorization} onChange={e => set('authorization', e.target.checked)} />
+          <span>
+            <strong>I authorize Alan Behrman & Associates to keep this card on file for appointment-related charges after staff confirmation.</strong>
+            <small>No charge happens inside this prototype. Staff reviews billing details before confirmation.</small>
+          </span>
+        </label>
+        <div className="actions">
+          <button className="btn ghost" onClick={onBack}>Back</button>
+          <button className="btn primary" onClick={onNext} disabled={!canContinue}>Continue to HIPAA</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function HipaaStep({ patient, onBack, onSubmit }) {
+  const parts = patient.fullName.trim().split(/\s+/);
+  const [firstName, setFirstName] = useState(parts[0] || '');
+  const [lastName, setLastName] = useState(parts.slice(1).join(' ') || '');
+  const [email, setEmail] = useState(patient.email || '');
+  const [signed, setSigned] = useState(false);
+  const today = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+  const canSubmit = firstName && lastName && /\S+@\S+\.\S+/.test(email) && signed;
+
+  const submit = event => {
+    event.preventDefault();
+    if (canSubmit) onSubmit({ firstName, lastName, email, date: today });
+  };
+
+  return (
+    <>
+      <div className="main-head">
+        <div className="kicker">Step Two</div>
+        <h1>HIPAA</h1>
+        <p className="lede">This is a local replica of AlanBehrman's HIPAA form fields and signing experience. It does not embed or call an outside form service.</p>
+      </div>
+      <form className="panel hipaa-form" onSubmit={submit}>
+        <div className="notice-box">
+          <h2>HIPAA</h2>
+          <h3>I. Commitment to Your Privacy</h3>
+          <p>Alan Behrman & Associates, PC maintains the privacy of protected health information and explains patient rights related to health information used in treatment, payment, and practice operations.</p>
+          <h3>II. Legal Duty to Safeguard Protected Health Information</h3>
+          <p>The practice is required to keep protected information private, follow applicable privacy duties, and limit use or disclosure to what is permitted or required by law.</p>
+          <h3>III. Changes to This Notice</h3>
+          <p>The practice may revise privacy practices for records it maintains. The current notice is available upon request.</p>
+          <h3>IV. Uses and Disclosures</h3>
+          <ul>
+            <li>Treatment and care coordination with licensed providers involved in care.</li>
+            <li>Health care operations, scheduling, quality review, licensing, compliance, and administration.</li>
+            <li>Payment activity such as billing, claims, and insurance communication.</li>
+            <li>Business associate services under privacy safeguards.</li>
+          </ul>
+          <h3>V. Special Circumstances</h3>
+          <p>Information may be disclosed when required for public health, legal process, safety, abuse reporting, health oversight, military or national security needs, correctional institutions, research authorization, worker compensation, appointment reminders, and other specifically required situations.</p>
+          <h3>VI. Written Authorization</h3>
+          <p>Uses not described in the notice generally require written authorization, which may be revoked in writing for future use.</p>
+          <h3>VII. Patient Rights</h3>
+          <ul>
+            <li>Request access to or copies of protected health information.</li>
+            <li>Ask for restrictions, confidential communications, corrections, and disclosure accounting.</li>
+            <li>Choose someone authorized to act on the patient's behalf.</li>
+            <li>Request a copy of the notice by email or paper.</li>
+          </ul>
+          <h3>VIII. Complaints and Responsibilities</h3>
+          <p>Privacy concerns may be raised with the practice or appropriate oversight office. The practice must protect information, follow this notice, and notify affected patients if a breach compromises privacy or security.</p>
+        </div>
+        <div>
+          <div className="section-title">Signature fields</div>
+          <p className="section-copy">After you submit this HIPAA form, the intake automatically moves to the next step.</p>
+          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+            <div className="field">
+              <label>First Name</label>
+              <input className="input" value={firstName} onChange={e => setFirstName(e.target.value)} autoComplete="given-name" />
+            </div>
+            <div className="field">
+              <label>Last Name</label>
+              <input className="input" value={lastName} onChange={e => setLastName(e.target.value)} autoComplete="family-name" />
+            </div>
+            <div className="field full">
+              <label>Email</label>
+              <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
+              <div className="hint">example@example.com</div>
+            </div>
+            <div className="field full">
+              <label>Date</label>
+              <input className="input" value={today} readOnly />
+            </div>
+            <div className="field full">
+              <label>E-Signature</label>
+              <SignaturePad onChange={setSigned} />
+            </div>
+          </div>
+          <div className="actions">
+            <button type="button" className="btn ghost" onClick={onBack}>Back</button>
+            <button className="btn primary" type="submit" disabled={!canSubmit}>Submit</button>
+          </div>
+        </div>
+      </form>
+    </>
+  );
+}
+
+function ScoreForm({ type, onComplete }) {
+  const questions = type === 'phq9' ? PHQ9_QUESTIONS : GAD7_QUESTIONS;
+  const label = type === 'phq9' ? 'PHQ-9' : 'GAD-7';
+  const [answers, setAnswers] = useState({});
+  const score = Object.keys(answers).length === questions.length
+    ? Object.values(answers).reduce((sum, value) => sum + value, 0)
+    : null;
+  const severity = score === null
+    ? ''
+    : type === 'phq9'
+      ? score <= 4 ? 'Minimal' : score <= 9 ? 'Mild' : score <= 14 ? 'Moderate' : score <= 19 ? 'Moderately severe' : 'Severe'
+      : score <= 4 ? 'Minimal' : score <= 9 ? 'Mild' : score <= 14 ? 'Moderate' : 'Severe';
+
+  return (
+    <div className="score-grid">
+      {questions.map((question, index) => (
+        <div className="score-question" key={question}>
+          <strong>{label} · {index + 1}. {question}</strong>
+          <div className="score-options">
+            {[
+              ['Not at all', 0],
+              ['Several days', 1],
+              ['More than half', 2],
+              ['Nearly every day', 3],
+            ].map(([text, value]) => (
+              <button type="button" className={answers[index] === value ? 'active' : ''} onClick={() => setAnswers(data => ({ ...data, [index]: value }))} key={value}>{text}</button>
+            ))}
+          </div>
+        </div>
+      ))}
+      {score !== null && (
+        <div className="score-box">
+          <div className="score-num">{score}</div>
+          <div>
+            <strong>{severity} {type === 'phq9' ? 'depression' : 'anxiety'} range</strong>
+            <div className="hint">Score saved for clinical review. This screening does not replace provider evaluation.</div>
+          </div>
+        </div>
+      )}
+      <div className="actions">
+        <span className="hint">{Object.keys(answers).length}/{questions.length} answered</span>
+        <button type="button" className="btn primary" disabled={score === null} onClick={onComplete}>Mark complete</button>
+      </div>
+    </div>
+  );
+}
+
+function LocalForm({ form, patient, provider, onComplete }) {
+  if (form.kind === 'gad7' || form.kind === 'phq9') {
+    return <ScoreForm type={form.kind} onComplete={onComplete} />;
+  }
+  const title = form.kind === 'provider' ? provider?.consent || form.title : form.title;
+  return (
+    <div className="embedded-form">
+      <h3>{title}</h3>
+      {form.kind === 'provider' && (
+        <>
+          <p>This consent is surfaced because {provider?.name} was selected for the appointment. It records consent for services, telehealth or in-person care when applicable, client responsibilities, privacy boundaries, fees, cancellations, and emergency limits.</p>
+          <div className="grid">
+            <div className="field">
+              <label>Provider</label>
+              <input className="input" value={provider?.name || ''} readOnly />
+            </div>
+            <div className="field">
+              <label>Client</label>
+              <input className="input" defaultValue={patient.fullName} />
+            </div>
+            <div className="field full">
+              <label>Questions or exceptions</label>
+              <textarea placeholder="Optional notes for the care team" />
+            </div>
+          </div>
+        </>
+      )}
+      {form.kind === 'cancellation' && <p>I understand appointment cancellation and late arrival policies may apply and agree to contact the office as early as possible if I need to reschedule.</p>}
+      {form.kind === 'client' && (
+        <div className="grid">
+          <div className="field"><label>Preferred name</label><input className="input" /></div>
+          <div className="field"><label>Emergency contact</label><input className="input" /></div>
+          <div className="field full"><label>Current medications or relevant history</label><textarea /></div>
+        </div>
+      )}
+      {form.kind === 'billing' && <p>I acknowledge the billing disclosure and understand that payer processing may affect final patient responsibility.</p>}
+      {form.kind === 'insurance' && (
+        <div className="grid">
+          <div className="field"><label>Insurance carrier</label><input className="input" defaultValue={patient.insuranceCarrier} /></div>
+          <div className="field"><label>Member ID</label><input className="input" defaultValue={patient.memberId} /></div>
+          <div className="field"><label>Group ID</label><input className="input" defaultValue={patient.groupId} /></div>
+          <div className="field"><label>Policyholder</label><input className="input" defaultValue={patient.policyholder || patient.fullName} /></div>
+        </div>
+      )}
+      {form.kind === 'relational' && <p>This intake gathers relationship or family context, goals, participants, scheduling needs, and safety considerations for relational therapy.</p>}
+      {form.kind === 'coaching' && <p>This consent records coaching goals, scope, limits, confidentiality expectations, and how coaching differs from psychotherapy.</p>}
+      {form.kind === 'release' && (
+        <div className="grid">
+          <div className="field"><label>Recipient name</label><input className="input" /></div>
+          <div className="field"><label>Recipient organization</label><input className="input" /></div>
+          <div className="field full"><label>Purpose of release</label><textarea /></div>
+        </div>
+      )}
+      <label className="checkline" style={{ marginTop: 16 }}>
+        <input type="checkbox" />
+        <span><strong>I have reviewed this form and authorize submission for staff review.</strong></span>
+      </label>
+      <div className="actions">
+        <span className="hint">Signed date: {new Date().toLocaleDateString('en-US')}</span>
+        <button type="button" className="btn primary" onClick={onComplete}>Mark complete</button>
+      </div>
+    </div>
+  );
+}
+
+function DynamicFormsStep({ patient, provider, completedForms, setCompletedForms, onBack, onNext }) {
+  const forms = useMemo(() => buildPacket(patient, provider), [patient, provider]);
+  const [activeId, setActiveId] = useState(forms[0]?.id || '');
+  const activeForm = forms.find(form => form.id === activeId) || forms[0];
+  const completeCount = forms.filter(form => completedForms[form.id]).length;
+  const allDone = completeCount === forms.length;
+
+  useEffect(() => {
+    if (!forms.some(form => form.id === activeId)) setActiveId(forms[0]?.id || '');
+  }, [forms.length]);
+
+  const markDone = id => {
+    setCompletedForms(data => ({ ...data, [id]: true }));
+  };
+
+  return (
+    <>
+      <div className="main-head">
+        <div className="kicker">Step Three and Dynamic Forms</div>
+        <h1>Provider consent and tailored paperwork.</h1>
+        <p className="lede">The provider-specific consent is selected from Step Three. Additional forms appear only when the concern or insurance details make them relevant.</p>
+      </div>
+      <div className="panel">
+        <div className="section-title">Paperwork packet</div>
+        <p className="section-copy">{completeCount} of {forms.length} forms complete.</p>
+        <div className="packet-list">
+          {forms.map(form => (
+            <button type="button" className={`packet-row${completedForms[form.id] ? ' done' : ''}`} onClick={() => setActiveId(form.id)} key={form.id}>
+              <span>
+                <span className="packet-title">{form.title}</span>
+                <span className="packet-meta"><br />{form.step} · {form.reason}</span>
+              </span>
+              <span className="tag">{completedForms[form.id] ? 'Done' : 'Open'}</span>
+            </button>
+          ))}
+        </div>
+        {activeForm && (
+          <LocalForm form={activeForm} patient={patient} provider={provider} onComplete={() => markDone(activeForm.id)} />
+        )}
+        <div className="actions">
+          <button className="btn ghost" onClick={onBack}>Back</button>
+          <button className="btn primary" onClick={onNext} disabled={!allDone}>Finish intake</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DoneStep({ patient, provider, card, completedForms, onRestart }) {
+  const forms = buildPacket(patient, provider);
+  return (
+    <>
+      <div className="main-head">
+        <div className="kicker">Complete</div>
+        <h1>AlanBehrman intake restored.</h1>
+        <p className="lede">The client flow now stays within AlanBehrman intake: authorization, HIPAA, provider consent, and dynamic clinical screeners.</p>
+      </div>
+      <div className="panel">
+        <div className="success-band">
+          <strong>Ready for staff review.</strong><br />
+          Confirmation and paperwork handoff can be sent to {patient.email || 'the client'}.
+        </div>
+        <div className="summary-grid">
+          <div className="summary-item"><div className="k">Client</div><div className="v">{patient.fullName}</div></div>
+          <div className="summary-item"><div className="k">Provider</div><div className="v">{provider?.name}</div></div>
+          <div className="summary-item"><div className="k">Location</div><div className="v">{LOCATIONS.find(loc => loc.id === patient.locationId)?.name}</div></div>
+          <div className="summary-item"><div className="k">Credit card</div><div className="v">{card.cardType} ending {onlyDigits(card.cardNumber).slice(-4)}</div></div>
+          <div className="summary-item"><div className="k">HIPAA</div><div className="v">Signed locally</div></div>
+          <div className="summary-item"><div className="k">Forms</div><div className="v">{forms.filter(form => completedForms[form.id]).length}/{forms.length} complete</div></div>
+        </div>
+        <div className="actions">
+          <button className="btn ghost" onClick={onRestart}>Start another intake</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function App() {
+  const [step, setStep] = useState(0);
+  const [completed, setCompleted] = useState([]);
+  const [patient, setPatient] = useState(INITIAL_PATIENT);
+  const [card, setCard] = useState(INITIAL_CARD);
+  const [uploads, setUploads] = useState({});
+  const [hipaa, setHipaa] = useState(null);
+  const [completedForms, setCompletedForms] = useState({});
+
+  const provider = PROVIDERS.find(item => item.id === patient.providerId);
+
+  const go = nextStep => {
+    setCompleted(items => [...new Set([...items, step])]);
+    setStep(nextStep);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const back = previousStep => {
+    setStep(previousStep);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const restart = () => {
+    setStep(0);
+    setCompleted([]);
+    setPatient(INITIAL_PATIENT);
+    setCard(INITIAL_CARD);
+    setUploads({});
+    setHipaa(null);
+    setCompletedForms({});
+  };
+
+  return (
+    <div className="app-shell">
+      <Topbar patientName={patient.fullName} />
+      <div className="layout">
+        <StepRail step={step} completed={completed} />
+        <main className="main">
+          {step === 0 && <IntakeStart patient={patient} setPatient={setPatient} onNext={() => go(1)} />}
+          {step === 1 && <CreditCardStep card={card} setCard={setCard} patient={patient} uploads={uploads} setUploads={setUploads} onBack={() => back(0)} onNext={() => go(2)} />}
+          {step === 2 && <HipaaStep patient={patient} onBack={() => back(1)} onSubmit={data => { setHipaa(data); go(3); }} />}
+          {step === 3 && <DynamicFormsStep patient={patient} provider={provider} completedForms={completedForms} setCompletedForms={setCompletedForms} onBack={() => back(2)} onNext={() => go(4)} />}
+          {step === 4 && <DoneStep patient={patient} provider={provider} card={card} hipaa={hipaa} completedForms={completedForms} onRestart={restart} />}
+        </main>
+      </div>
+      <footer className="footer">
+        <span>Alan Behrman & Associates · Secure patient intake</span>
+        <span>ATL: 770.361.7864 · NOLA: 504.414.5467 · info@alanbehrman.com</span>
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

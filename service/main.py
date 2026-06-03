@@ -23,7 +23,7 @@ from service.routes import patients, appointments, forms
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="1 Stop Medical — User Service",
+    title="AlanBehrman — Patient Intake Service",
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",

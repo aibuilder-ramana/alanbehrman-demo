@@ -157,6 +157,55 @@ button { font-family: var(--f-ui); }
 .auth-check small { display: block; color: var(--ink-3); font-size: 11.5px; margin-top: 3px; }
 .appt-reminder { background: var(--cream); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 18px; font-size: 13px; color: var(--ink-2); }
 
+/* Card scan UI */
+.cc-scan-section { margin-bottom: 4px; }
+.cc-scan-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin-bottom: 10px; }
+.cc-scan-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cc-scan-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  background: var(--cream);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 1.586;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: border-color .15s, background .15s;
+  user-select: none;
+}
+.cc-scan-zone:hover { border-color: var(--sage); background: var(--sage-soft); }
+.cc-scan-zone.has-img { border-style: solid; border-color: var(--sage); }
+.cc-scan-icon { font-size: 20px; opacity: .55; line-height: 1; }
+.cc-scan-zone-lbl { font-size: 11.5px; color: var(--ink-3); font-weight: 600; text-align: center; line-height: 1.3; }
+.cc-scan-zone-sub { font-size: 10px; color: var(--ink-3); opacity: .7; }
+.cc-scan-preview-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cc-scan-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+}
+.cc-scan-line {
+  width: 75%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--sage), transparent);
+  border-radius: 2px;
+  animation: scanLine 1.1s ease-in-out infinite alternate;
+}
+@keyframes scanLine { from { transform: translateY(-14px) scaleX(.6); } to { transform: translateY(14px) scaleX(1); } }
+.cc-scan-overlay-text { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: .04em; }
+.cc-scan-badge {
+  position: absolute; top: 6px; right: 6px;
+  background: var(--sage); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px;
+}
+.cc-extracted-note { font-size: 11.5px; color: var(--sage); margin-top: 9px; display: flex; align-items: center; gap: 5px; font-weight: 600; }
+.cc-scan-or { display: flex; align-items: center; gap: 10px; margin: 18px 0 14px; color: var(--ink-3); font-size: 12px; font-weight: 500; }
+.cc-scan-or::before, .cc-scan-or::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
 /* Matching / sending spinner */
 .spinner-wrap { display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 12px 0 8px; }
 .spin-ring { width: 56px; height: 56px; border-radius: 50%; border: 2.5px solid var(--sage); border-top-color: transparent; animation: spin .8s linear infinite; }
@@ -184,6 +233,27 @@ button { font-family: var(--f-ui); }
 .sso-btn2.apple  { background: #111; border: 1px solid #111; color: #fff; }
 .sso-btn2.msft   { background: #fff; border: 1px solid #dadce0; color: #3c4043; box-shadow: 0 1px 2px rgba(60,64,67,.12); }
 .sso-success { padding: 12px 14px; background: var(--sage-soft); border-radius: var(--radius-sm); border: 1px solid var(--sage); font-size: 13px; color: var(--ink-2); display: flex; gap: 10px; align-items: flex-start; }
+
+/* Inline clinical screener (GAD-7 / PHQ-9) */
+.screener-qs { display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; }
+.screener-row { padding: 14px 0; border-bottom: 1px solid var(--border); }
+.screener-row:last-child { border-bottom: none; }
+.screener-q { font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.5; margin-bottom: 10px; }
+.screener-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.screener-opt { padding: 6px 11px; border-radius: 20px; border: 1px solid var(--border); background: #fff; font-size: 12px; color: var(--ink-2); cursor: pointer; transition: background .12s, border-color .12s, color .12s; white-space: nowrap; }
+.screener-opt:hover:not(.on) { border-color: var(--sage); color: var(--sage); }
+.screener-opt.on { background: var(--sage); border-color: var(--sage); color: #fff; font-weight: 600; }
+.screener-meta { font-size: 11.5px; color: var(--ink-3); margin-bottom: 16px; }
+.assessment-count { font-size: 11px; color: var(--sage); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 2px; }
+
+/* Consent (provider JotForm) screen */
+.consent-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--cream); border-radius: var(--radius-sm); margin-bottom: 14px; }
+.consent-provider-badge { font-size: 13px; color: var(--ink-2); flex: 1; }
+.consent-provider-badge strong { display: block; font-size: 14px; color: var(--ink); }
+.consent-frame-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; }
+.consent-frame { width: 100%; height: 560px; border: none; display: block; }
+.consent-note { font-size: 12px; color: var(--ink-3); text-align: center; margin: 10px 0 0; }
+.consent-done-btn { margin-top: 14px; width: 100%; }
 
 /* Responsive */
 @media (max-width:600px) {
@@ -296,6 +366,40 @@ const LOCATIONS = [{
 }];
 const CONCERNS = ['Anxiety', 'Depression', 'Relationship issues', 'Trauma / PTSD', 'Life transitions', 'Stress', 'Grief & loss', 'Family conflict', 'Self-esteem', 'ADHD', 'Couples therapy', 'Other'];
 const DAYS = ['Weekdays', 'Weekends', 'Mondays', 'Fridays', 'Any day'];
+
+/* ── Assessment question banks & concern routing ─────────────────────── */
+const SCORE_OPTS = ['Not at all', 'Several days', 'More than half the days', 'Nearly every day'];
+const GAD7_Qs = [
+  'Feeling nervous, anxious, or on edge',
+  'Not being able to stop or control worrying',
+  'Worrying too much about different things',
+  'Trouble relaxing',
+  'Being so restless that it is hard to sit still',
+  'Becoming easily annoyed or irritable',
+  'Feeling afraid, as if something awful might happen',
+];
+const PHQ9_Qs = [
+  'Little interest or pleasure in doing things',
+  'Feeling down, depressed, or hopeless',
+  'Trouble falling or staying asleep, or sleeping too much',
+  'Feeling tired or having little energy',
+  'Poor appetite or overeating',
+  'Feeling bad about yourself — or that you are a failure or have let yourself or your family down',
+  'Trouble concentrating on things, such as reading or watching TV',
+  'Moving or speaking so slowly that other people could have noticed, or the opposite — being fidgety or restless',
+  'Thoughts that you would be better off dead, or thoughts of hurting yourself in some way',
+];
+const CONCERN_RELATIONAL = ['Relationship issues', 'Couples therapy', 'Family conflict'];
+const CONCERN_COACHING   = ['Life transitions', 'Stress', 'Grief & loss', 'Self-esteem'];
+
+function buildAssessmentForms(chips) {
+  const forms = [];
+  if (chips.includes('Anxiety'))                      forms.push({ type: 'gad7' });
+  if (chips.includes('Depression'))                   forms.push({ type: 'phq9' });
+  if (chips.some(c => CONCERN_RELATIONAL.includes(c))) forms.push({ type: 'jotform', url: 'https://form.jotform.com/221715084103041', title: 'Relational Therapy Assessment' });
+  if (chips.some(c => CONCERN_COACHING.includes(c)))   forms.push({ type: 'jotform', url: 'https://form.jotform.com/221714008041037', title: 'Coaching Intake Assessment' });
+  return forms;
+}
 const TIMES = ['Morning (before noon)', 'Afternoon (noon–4 pm)', 'Evening (after 4 pm)', 'First available'];
 function makeAppts(locId, prefTimes) {
   const loc = LOCATIONS.find(l => l.id === locId) || LOCATIONS[0];
@@ -308,6 +412,45 @@ function makeAppts(locId, prefTimes) {
     provider: loc.providers[i % loc.providers.length],
     location: loc.name
   }));
+}
+
+/* ── Provider-specific informed consent forms (JotForm) ───────────────── */
+const PROVIDER_FORMS = {
+  'Alan':               'https://form.jotform.com/221714358632051',
+  'Antonio Cordero':    'https://form.jotform.com/253634431730149',
+  'Ariella Peist':      'https://form.jotform.com/243585488783173',
+  'Ashlie Martinez':    'https://form.jotform.com/231696417230152',
+  'Ashley LeGros':      'https://form.jotform.com/243395167527162',
+  'Ashley Lee':         'https://form.jotform.com/260634458185160',
+  'Cristina Lazaro':    'https://form.jotform.com/232268847664166',
+  'David Dolese':       'https://form.jotform.com/241682627706159',
+  'Dr. Ramakanth Vemuluri': 'https://form.jotform.com/231905216758157',
+  'Emma Green':         'https://form.jotform.com/243315513754151',
+  'Jamie Goldberg':     'https://form.jotform.com/221714413446147',
+  'Jessica Bosson':     'https://form.jotform.com/221715115548150',
+  'Kailyn Blackmon':    'https://form.jotform.com/253095510725152',
+  'Kelly Villarreal':   'https://form.jotform.com/221715468284158',
+  'Mary':               'https://form.jotform.com/250866202080147',
+  'Meredith Mitchell':  'https://form.jotform.com/250624884918165',
+  'Mona Chandra':       'https://form.jotform.com/221715421341141',
+  'Patty Postanowicz':  'https://form.jotform.com/221714625324147',
+  'Rachel Barlev':      'https://form.jotform.com/230594784987174',
+  'Rae Sidlauskas':     'https://form.jotform.com/251944457244159',
+  'Sheldon Kay':        'https://form.jotform.com/221733993729165',
+  'Silvia Lynch':       'https://form.jotform.com/221714616018147',
+  'Tu Vo':              'https://form.jotform.com/221715183819156',
+  'Whitney Rudd':       'https://form.jotform.com/240196995599176',
+};
+function getConsentUrl(providerFullName) {
+  if (!providerFullName) return null;
+  // Try exact prefix match first (longest match wins)
+  const keys = Object.keys(PROVIDER_FORMS).sort((a, b) => b.length - a.length);
+  for (const key of keys) {
+    if (providerFullName.startsWith(key) || providerFullName.includes(key)) {
+      return PROVIDER_FORMS[key];
+    }
+  }
+  return null;
 }
 
 /* ── Shared SVG logos ─────────────────────────────────────────────────── */
@@ -410,9 +553,9 @@ function S0_Welcome({
     style: {
       fontSize: 34
     }
-  }, "We're glad", /*#__PURE__*/React.createElement("br", null), "you're ", /*#__PURE__*/React.createElement("em", null, "here.")), /*#__PURE__*/React.createElement("p", {
+  }, "Welcome to ", /*#__PURE__*/React.createElement("em", null, "Alan Behrman"), /*#__PURE__*/React.createElement("br", null), "& Associates."), /*#__PURE__*/React.createElement("p", {
     className: "card-sub"
-  }, "This short form helps us match you with the right provider and schedule your first appointment. It takes about 5\u201310 minutes."), /*#__PURE__*/React.createElement("div", {
+  }, "We\u2019re glad you\u2019re here. This short form helps us match you with the right provider and schedule your first appointment. It takes about 5\u201310 minutes."), /*#__PURE__*/React.createElement("div", {
     className: "hipaa-ack"
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
@@ -432,7 +575,7 @@ function S0_Welcome({
       color: 'var(--ink-3)',
       textAlign: 'center'
     }
-  }, "\uD83D\uDD12 Secure & confidential \xB7 HIPAA protected"));
+  }, "\u{1F512} Secure & confidential \xB7 HIPAA protected"));
 }
 function S1_Name({
   d,
@@ -686,6 +829,111 @@ function S5_Concern({
     can: !!can
   }));
 }
+/* ── Reusable inline screener (GAD-7 / PHQ-9) ────────────────────────── */
+function InlineScreener({ label, countLabel, questions, onDone, onBack, isLast }) {
+  const [answers, setAnswers] = useState({});
+  const allAnswered = questions.every((_, i) => answers[i] !== undefined);
+  const score = Object.values(answers).reduce((s, v) => s + Number(v), 0);
+  return /*#__PURE__*/React.createElement("div", { className: "v2-card" },
+    countLabel && /*#__PURE__*/React.createElement("div", { className: "assessment-count" }, countLabel),
+    /*#__PURE__*/React.createElement("div", { className: "eyebrow" }, label),
+    /*#__PURE__*/React.createElement("h2", { className: "card-title" },
+      "How often ", /*#__PURE__*/React.createElement("em", null, "in the last 2 weeks?")),
+    /*#__PURE__*/React.createElement("p", { className: "screener-meta" },
+      "Over the last 2 weeks, how often have you been bothered by any of the following?"),
+    /*#__PURE__*/React.createElement("div", { className: "screener-qs" },
+      questions.map((q, i) =>
+        /*#__PURE__*/React.createElement("div", { key: i, className: "screener-row" },
+          /*#__PURE__*/React.createElement("div", { className: "screener-q" }, `${i + 1}. ${q}`),
+          /*#__PURE__*/React.createElement("div", { className: "screener-opts" },
+            SCORE_OPTS.map((opt, v) =>
+              /*#__PURE__*/React.createElement("button", {
+                key: v,
+                className: `screener-opt${answers[i] === v ? ' on' : ''}`,
+                onClick: () => setAnswers(a => ({ ...a, [i]: v }))
+              }, opt)
+            )
+          )
+        )
+      )
+    ),
+    /*#__PURE__*/React.createElement(Nav, {
+      onBack,
+      onNext: () => onDone(score),
+      can: allAnswered,
+      label: isLast ? 'Continue' : 'Next assessment →'
+    })
+  );
+}
+
+/* ── JotForm assessment wrapper ───────────────────────────────────────── */
+function JotFormAssessment({ title, url, countLabel, onNext, onBack, isLast }) {
+  const [done, setDone] = useState(false);
+  return /*#__PURE__*/React.createElement("div", { className: "v2-card" },
+    countLabel && /*#__PURE__*/React.createElement("div", { className: "assessment-count" }, countLabel),
+    /*#__PURE__*/React.createElement("div", { className: "eyebrow" }, "Assessment"),
+    /*#__PURE__*/React.createElement("h2", { className: "card-title" }, /*#__PURE__*/React.createElement("em", null, title)),
+    /*#__PURE__*/React.createElement("p", { className: "card-sub" },
+      "Please complete the form below, then check the box to continue."),
+    /*#__PURE__*/React.createElement("div", { className: "consent-frame-wrap" },
+      /*#__PURE__*/React.createElement("iframe", { src: url, className: "consent-frame", title })),
+    /*#__PURE__*/React.createElement("label", { className: "auth-check", style: { marginTop: 16 } },
+      /*#__PURE__*/React.createElement("input", {
+        type: "checkbox", checked: done,
+        onChange: e => setDone(e.target.checked)
+      }),
+      /*#__PURE__*/React.createElement("span", null, "I have completed this assessment form.")),
+    /*#__PURE__*/React.createElement(Nav, {
+      onBack,
+      onNext,
+      can: done,
+      label: isLast ? 'Continue' : 'Next assessment →'
+    })
+  );
+}
+
+/* ── Assessment orchestrator ──────────────────────────────────────────── */
+function S_Assessments({ d, set, next, back }) {
+  const chips = d.concern_chips || [];
+  const forms = buildAssessmentForms(chips);
+  const [formIdx, setFormIdx] = useState(0);
+
+  useEffect(() => {
+    if (forms.length === 0) next();
+  }, []);
+
+  if (forms.length === 0) return null;
+
+  const current = forms[formIdx];
+  const isLast = formIdx >= forms.length - 1;
+  const countLabel = forms.length > 1 ? `Assessment ${formIdx + 1} of ${forms.length}` : null;
+  const handleDone = (score) => {
+    if (current.type === 'gad7') set(x => ({ ...x, gad7_score: score }));
+    if (current.type === 'phq9') set(x => ({ ...x, phq9_score: score }));
+    if (isLast) { next(); } else { setFormIdx(i => i + 1); }
+  };
+  const handleBack = formIdx === 0 ? back : () => setFormIdx(i => i - 1);
+
+  if (current.type === 'gad7') {
+    return /*#__PURE__*/React.createElement(InlineScreener, {
+      label: 'Anxiety Screening (GAD-7)', countLabel,
+      questions: GAD7_Qs,
+      onDone: handleDone, onBack: handleBack, isLast
+    });
+  }
+  if (current.type === 'phq9') {
+    return /*#__PURE__*/React.createElement(InlineScreener, {
+      label: 'Depression Screening (PHQ-9)', countLabel,
+      questions: PHQ9_Qs,
+      onDone: handleDone, onBack: handleBack, isLast
+    });
+  }
+  return /*#__PURE__*/React.createElement(JotFormAssessment, {
+    title: current.title, url: current.url, countLabel,
+    onNext: () => handleDone(null), onBack: handleBack, isLast
+  });
+}
+
 function S6_Location({
   d,
   set,
@@ -803,61 +1051,106 @@ function S7_Schedule({
     can: true
   }));
 }
-function S8_Insurance({
-  d,
-  set,
-  next,
-  back
-}) {
-  const [mode, setMode] = useState(d.ins_mode || '');
+function S8_Insurance({ d, set, next, back }) {
+  const [mode,    setMode]    = useState(d.ins_mode    || '');
   const [carrier, setCarrier] = useState(d.ins_carrier || '');
-  const [membId, setMembId] = useState(d.ins_member || '');
-  const can = mode === 'no' || mode === 'unsure' || mode === 'yes' && carrier.trim();
-  const go = () => {
+  const [membId,  setMembId]  = useState(d.ins_member  || '');
+  const [group,   setGroup]   = useState(d.ins_group   || '');
+  const [cardPreview, setCardPreview] = useState(null);
+  const [cardState,   setCardState]   = useState('idle');
+  const insCardRef = useRef(null);
+
+  const handleInsScan = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      setCardPreview(ev.target.result);
+      setCardState('scanning');
+      setTimeout(() => {
+        const carriers = ['Blue Cross Blue Shield', 'Aetna', 'UnitedHealthcare', 'Cigna', 'Humana'];
+        setCarrier(carriers[Math.floor(Math.random() * carriers.length)]);
+        setMembId('MBR' + String(Math.floor(100000000 + Math.random() * 900000000)));
+        setGroup('GRP' + String(Math.floor(10000 + Math.random() * 90000)));
+        setMode('yes');
+        setCardState('done');
+      }, 1800);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const can = mode === 'no' || mode === 'unsure' || (mode === 'yes' && carrier.trim());
+  const go  = () => {
     if (!can) return;
-    set(x => ({
-      ...x,
-      ins_mode: mode,
-      ins_carrier: carrier,
-      ins_member: membId
-    }));
+    set(x => ({ ...x, ins_mode: mode, ins_carrier: carrier, ins_member: membId, ins_group: group }));
     next();
   };
-  return /*#__PURE__*/React.createElement("div", {
-    className: "v2-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "eyebrow"
-  }, "Step 8 of 8"), /*#__PURE__*/React.createElement("h2", {
-    className: "card-title"
-  }, "Do you have ", /*#__PURE__*/React.createElement("em", null, "insurance?")), /*#__PURE__*/React.createElement("div", {
-    className: "chips",
-    style: {
-      marginBottom: mode === 'yes' ? 24 : 8
-    }
-  }, [['yes', 'Yes, I have insurance'], ['no', 'No / Self-pay'], ['unsure', 'Not sure yet']].map(([v, l]) => /*#__PURE__*/React.createElement("button", {
-    key: v,
-    className: `chip${mode === v ? ' on' : ''}`,
-    onClick: () => setMode(v)
-  }, l))), mode === 'yes' && /*#__PURE__*/React.createElement("div", {
-    className: "f-group"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "f-item"
-  }, /*#__PURE__*/React.createElement("label", null, "Insurance carrier"), /*#__PURE__*/React.createElement("input", {
-    value: carrier,
-    onChange: e => setCarrier(e.target.value),
-    placeholder: "Blue Cross, Aetna, UHC\u2026",
-    autoFocus: true
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "f-item"
-  }, /*#__PURE__*/React.createElement("label", null, "Member ID (optional)"), /*#__PURE__*/React.createElement("input", {
-    value: membId,
-    onChange: e => setMembId(e.target.value),
-    placeholder: "Found on your card"
-  }))), /*#__PURE__*/React.createElement(Nav, {
-    onBack: back,
-    onNext: go,
-    can: !!can && !!mode
-  }));
+
+  return /*#__PURE__*/React.createElement("div", { className: "v2-card" },
+    /*#__PURE__*/React.createElement("div", { className: "eyebrow" }, "Step 8 of 8"),
+    /*#__PURE__*/React.createElement("h2", { className: "card-title" }, "Do you have ", /*#__PURE__*/React.createElement("em", null, "insurance?")),
+    /*#__PURE__*/React.createElement("div", { className: "chips", style: { marginBottom: mode === 'yes' ? 20 : 8 } },
+      [['yes', 'Yes, I have insurance'], ['no', 'No / Self-pay'], ['unsure', 'Not sure yet']].map(([v, l]) =>
+        /*#__PURE__*/React.createElement("button", {
+          key: v,
+          className: `chip${mode === v ? ' on' : ''}`,
+          onClick: () => setMode(v)
+        }, l)
+      )
+    ),
+
+    /* \u2500\u2500 Insurance card scan (shown when "yes") \u2500\u2500 */
+    mode === 'yes' && /*#__PURE__*/React.createElement(React.Fragment, null,
+      /*#__PURE__*/React.createElement("div", { className: "cc-scan-section" },
+        /*#__PURE__*/React.createElement("div", { className: "cc-scan-label" }, "Scan your insurance card"),
+        /*#__PURE__*/React.createElement("div", { style: { maxWidth: 260 } },
+          /*#__PURE__*/React.createElement(CardScanZone, {
+            label: "Insurance card (front)",
+            sub: "Tap to take photo or upload",
+            preview: cardPreview,
+            state: cardState,
+            onClick: () => insCardRef.current && insCardRef.current.click()
+          })
+        ),
+        /*#__PURE__*/React.createElement("input", {
+          ref: insCardRef, type: "file", accept: "image/*",
+          style: { display: 'none' },
+          onChange: e => handleInsScan(e.target.files[0])
+        }),
+        cardState === 'done' && /*#__PURE__*/React.createElement("p", { className: "cc-extracted-note" },
+          "\u2713 Insurance details extracted \u2014 please review below."
+        )
+      ),
+      /*#__PURE__*/React.createElement("div", { className: "cc-scan-or" }, "or enter manually"),
+      /*#__PURE__*/React.createElement("div", { className: "f-group" },
+        /*#__PURE__*/React.createElement("div", { className: "f-item" },
+          /*#__PURE__*/React.createElement("label", null, "Insurance carrier"),
+          /*#__PURE__*/React.createElement("input", {
+            value: carrier,
+            onChange: e => setCarrier(e.target.value),
+            placeholder: "Blue Cross, Aetna, UHC\u2026"
+          })
+        ),
+        /*#__PURE__*/React.createElement("div", { className: "f-item" },
+          /*#__PURE__*/React.createElement("label", null, "Member ID"),
+          /*#__PURE__*/React.createElement("input", {
+            value: membId,
+            onChange: e => setMembId(e.target.value),
+            placeholder: "Found on your card"
+          })
+        ),
+        /*#__PURE__*/React.createElement("div", { className: "f-item" },
+          /*#__PURE__*/React.createElement("label", null, "Group number (optional)"),
+          /*#__PURE__*/React.createElement("input", {
+            value: group,
+            onChange: e => setGroup(e.target.value),
+            placeholder: "Group / plan number"
+          })
+        )
+      )
+    ),
+
+    /*#__PURE__*/React.createElement(Nav, { onBack: back, onNext: go, can: !!can && !!mode })
+  );
 }
 function S9_Fit({
   d,
@@ -989,95 +1282,195 @@ function S11_Appointment({
     label: "Choose this time"
   }));
 }
-function S12_Payment({
+function S_Consent({
   d,
-  set,
   next,
   back
 }) {
-  const [cc, setCc] = useState({
-    name: '',
-    num: '',
-    exp: '',
-    cvc: '',
-    zip: '',
-    auth: false
-  });
-  const upd = (k, v) => setCc(c => ({
-    ...c,
-    [k]: v
-  }));
-  const can = cc.name && cc.num.replace(/\s/g, '').length >= 15 && cc.exp && cc.cvc && cc.zip && cc.auth;
-  const go = () => {
-    if (!can) return;
-    set(x => ({
-      ...x,
-      cc_saved: true
-    }));
-    next();
-  };
+  const providerName = d.appt?.provider?.n || '';
+  const consentUrl = getConsentUrl(providerName);
+  const [acknowledged, setAcknowledged] = useState(false);
   return /*#__PURE__*/React.createElement("div", {
     className: "v2-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "Step 3 \xB7 Hold your appointment"), /*#__PURE__*/React.createElement("h2", {
+  }, "Informed Consent"), /*#__PURE__*/React.createElement("h2", {
     className: "card-title"
-  }, "Secure ", /*#__PURE__*/React.createElement("em", null, "your spot.")), /*#__PURE__*/React.createElement("p", {
+  }, "Review & sign your ", /*#__PURE__*/React.createElement("em", null, "consent form.")), /*#__PURE__*/React.createElement("p", {
     className: "card-sub"
-  }, "To hold your time, we save a card on file. ", /*#__PURE__*/React.createElement("strong", null, "No charge happens today"), " \u2014 a staff member reviews everything first."), d.appt && /*#__PURE__*/React.createElement("div", {
-    className: "appt-reminder"
-  }, /*#__PURE__*/React.createElement("strong", null, d.appt.time), " \xB7 ", d.appt.provider.n, " \xB7 ", d.appt.location), /*#__PURE__*/React.createElement("div", {
-    className: "cc-grid"
+  }, "Your provider requires a signed informed consent before your first appointment. Please read and complete the form below."), /*#__PURE__*/React.createElement("div", {
+    className: "consent-header"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "f-item full"
-  }, /*#__PURE__*/React.createElement("label", null, "Cardholder name"), /*#__PURE__*/React.createElement("input", {
-    value: cc.name,
-    onChange: e => upd('name', e.target.value),
-    placeholder: "Name on card",
-    autoComplete: "cc-name"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "f-item full"
-  }, /*#__PURE__*/React.createElement("label", null, "Card number"), /*#__PURE__*/React.createElement("input", {
-    value: cc.num,
-    onChange: e => upd('num', e.target.value),
-    placeholder: "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022",
-    inputMode: "numeric",
-    autoComplete: "cc-number"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "f-item"
-  }, /*#__PURE__*/React.createElement("label", null, "Expiration"), /*#__PURE__*/React.createElement("input", {
-    value: cc.exp,
-    onChange: e => upd('exp', e.target.value),
-    placeholder: "MM / YY",
-    autoComplete: "cc-exp"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "f-item"
-  }, /*#__PURE__*/React.createElement("label", null, "CVC"), /*#__PURE__*/React.createElement("input", {
-    value: cc.cvc,
-    onChange: e => upd('cvc', e.target.value),
-    placeholder: "\u2022\u2022\u2022",
-    inputMode: "numeric",
-    autoComplete: "cc-csc"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "f-item"
-  }, /*#__PURE__*/React.createElement("label", null, "Billing ZIP"), /*#__PURE__*/React.createElement("input", {
-    value: cc.zip,
-    onChange: e => upd('zip', e.target.value),
-    placeholder: "ZIP",
-    inputMode: "numeric",
-    autoComplete: "postal-code"
-  }))), /*#__PURE__*/React.createElement("label", {
-    className: "auth-check"
+    className: "consent-provider-badge"
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--ink-3)'}
+  }, "Your provider"), /*#__PURE__*/React.createElement("strong", null, providerName || 'Your provider'))), consentUrl ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "consent-frame-wrap"
+  }, /*#__PURE__*/React.createElement("iframe", {
+    src: consentUrl,
+    className: "consent-frame",
+    title: `Informed Consent – ${providerName}`,
+    allow: "camera; microphone"
+  })), /*#__PURE__*/React.createElement("p", {
+    className: "consent-note"
+  }, "Complete and submit the form above, then click Continue.")) : /*#__PURE__*/React.createElement("div", {
+    style: {padding: '24px', textAlign: 'center', color: 'var(--ink-3)', fontSize: 14, background: 'var(--cream)', borderRadius: 'var(--radius-sm)'}
+  }, "Your provider's consent form will be sent to your email before your appointment."), /*#__PURE__*/React.createElement("label", {
+    className: "auth-check",
+    style: {marginTop: 16}
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
-    checked: cc.auth,
-    onChange: e => upd('auth', e.target.checked)
-  }), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "I authorize Alan Behrman & Associates to hold this card for billing after staff confirmation."), /*#__PURE__*/React.createElement("small", null, "No charge occurs without prior confirmation. This demo does not process a real payment."))), /*#__PURE__*/React.createElement(Nav, {
+    checked: acknowledged,
+    onChange: e => setAcknowledged(e.target.checked)
+  }), /*#__PURE__*/React.createElement("span", null, "I have read and submitted the informed consent form above.")), /*#__PURE__*/React.createElement(Nav, {
     onBack: back,
-    onNext: go,
-    can: !!can,
-    label: "Hold my appointment"
+    onNext: next,
+    can: acknowledged || !consentUrl,
+    label: "Continue to payment"
   }));
+}
+
+function CardScanZone({ label, sub, preview, state, onClick }) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: `cc-scan-zone${preview ? ' has-img' : ''}`,
+    onClick
+  },
+    preview
+      ? /*#__PURE__*/React.createElement(React.Fragment, null,
+          /*#__PURE__*/React.createElement("img", { src: preview, className: "cc-scan-preview-img", alt: label }),
+          state === 'scanning'
+            ? /*#__PURE__*/React.createElement("div", { className: "cc-scan-overlay" },
+                /*#__PURE__*/React.createElement("div", { className: "cc-scan-line" }),
+                /*#__PURE__*/React.createElement("div", { className: "cc-scan-overlay-text" }, "Extracting\u2026")
+              )
+            : state === 'done'
+              ? /*#__PURE__*/React.createElement("div", { className: "cc-scan-badge" }, "\u2713 Extracted")
+              : null
+        )
+      : /*#__PURE__*/React.createElement(React.Fragment, null,
+          /*#__PURE__*/React.createElement("div", { className: "cc-scan-icon" }, "\ud83d\udcf7"),
+          /*#__PURE__*/React.createElement("div", { className: "cc-scan-zone-lbl" }, label),
+          sub && /*#__PURE__*/React.createElement("div", { className: "cc-scan-zone-sub" }, sub)
+        )
+  );
+}
+
+function S12_Payment({ d, set, next, back }) {
+  const [cc, setCc] = useState({ name: '', num: '', exp: '', cvc: '', zip: '', auth: false });
+  const [frontPreview, setFrontPreview] = useState(null);
+  const [backPreview,  setBackPreview]  = useState(null);
+  const [frontState,   setFrontState]   = useState('idle');
+  const [backState,    setBackState]    = useState('idle');
+  const frontRef = useRef(null);
+  const backRef  = useRef(null);
+
+  const upd = (k, v) => setCc(c => ({ ...c, [k]: v }));
+
+  const handleScan = (side, file) => {
+    if (!file) return;
+    const setPreview = side === 'front' ? setFrontPreview : setBackPreview;
+    const setState   = side === 'front' ? setFrontState   : setBackState;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      setPreview(ev.target.result);
+      setState('scanning');
+      setTimeout(() => {
+        if (side === 'front') {
+          const name = [d.first, d.last].filter(Boolean).join(' ').toUpperCase() || 'CARDHOLDER';
+          const groups = Array.from({ length: 4 }, () => String(Math.floor(1000 + Math.random() * 9000)));
+          const num = groups.join(' ');
+          const mo = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+          const yr = String(new Date().getFullYear() + 2 + Math.floor(Math.random() * 3)).slice(-2);
+          setCc(c => ({ ...c, name, num, exp: `${mo} / ${yr}` }));
+        } else {
+          setCc(c => ({ ...c, cvc: String(Math.floor(100 + Math.random() * 900)) }));
+        }
+        setState('done');
+      }, 1800);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const anyExtracted = frontState === 'done' || backState === 'done';
+  const can = cc.name && cc.num.replace(/\s/g, '').length >= 15 && cc.exp && cc.cvc && cc.zip && cc.auth;
+  const go  = () => { if (!can) return; set(x => ({ ...x, cc_saved: true })); next(); };
+
+  return /*#__PURE__*/React.createElement("div", { className: "v2-card" },
+    /*#__PURE__*/React.createElement("div", { className: "eyebrow" }, "Step 3 \xB7 Hold your appointment"),
+    /*#__PURE__*/React.createElement("h2",  { className: "card-title" }, "Secure ", /*#__PURE__*/React.createElement("em", null, "your spot.")),
+    /*#__PURE__*/React.createElement("p",   { className: "card-sub" },
+      "To hold your time, we save a card on file. ",
+      /*#__PURE__*/React.createElement("strong", null, "No charge happens today"),
+      " \u2014 a staff member reviews everything first."
+    ),
+    d.appt && /*#__PURE__*/React.createElement("div", { className: "appt-reminder" },
+      /*#__PURE__*/React.createElement("strong", null, d.appt.time), " \xB7 ", d.appt.provider.n, " \xB7 ", d.appt.location
+    ),
+
+    /* \u2500\u2500 Card scan \u2500\u2500 */
+    /*#__PURE__*/React.createElement("div", { className: "cc-scan-section" },
+      /*#__PURE__*/React.createElement("div", { className: "cc-scan-label" }, "Scan your card"),
+      /*#__PURE__*/React.createElement("div", { className: "cc-scan-row" },
+        /*#__PURE__*/React.createElement(CardScanZone, {
+          label: "Front of card", sub: "Tap to take photo or upload",
+          preview: frontPreview, state: frontState,
+          onClick: () => frontRef.current && frontRef.current.click()
+        }),
+        /*#__PURE__*/React.createElement(CardScanZone, {
+          label: "Back of card", sub: "For CVC",
+          preview: backPreview, state: backState,
+          onClick: () => backRef.current && backRef.current.click()
+        })
+      ),
+      /*#__PURE__*/React.createElement("input", {
+        ref: frontRef, type: "file", accept: "image/*",
+        style: { display: 'none' },
+        onChange: e => handleScan('front', e.target.files[0])
+      }),
+      /*#__PURE__*/React.createElement("input", {
+        ref: backRef, type: "file", accept: "image/*",
+        style: { display: 'none' },
+        onChange: e => handleScan('back', e.target.files[0])
+      }),
+      anyExtracted && /*#__PURE__*/React.createElement("p", { className: "cc-extracted-note" },
+        "\u2713 Card details extracted \u2014 please review and confirm below."
+      )
+    ),
+
+    /*#__PURE__*/React.createElement("div", { className: "cc-scan-or" }, "or enter manually"),
+
+    /* \u2500\u2500 Manual fields \u2500\u2500 */
+    /*#__PURE__*/React.createElement("div", { className: "cc-grid" },
+      /*#__PURE__*/React.createElement("div", { className: "f-item full" },
+        /*#__PURE__*/React.createElement("label", null, "Cardholder name"),
+        /*#__PURE__*/React.createElement("input", { value: cc.name, onChange: e => upd('name', e.target.value), placeholder: "Name on card", autoComplete: "cc-name" })
+      ),
+      /*#__PURE__*/React.createElement("div", { className: "f-item full" },
+        /*#__PURE__*/React.createElement("label", null, "Card number"),
+        /*#__PURE__*/React.createElement("input", { value: cc.num, onChange: e => upd('num', e.target.value), placeholder: "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022", inputMode: "numeric", autoComplete: "cc-number" })
+      ),
+      /*#__PURE__*/React.createElement("div", { className: "f-item" },
+        /*#__PURE__*/React.createElement("label", null, "Expiration"),
+        /*#__PURE__*/React.createElement("input", { value: cc.exp, onChange: e => upd('exp', e.target.value), placeholder: "MM / YY", autoComplete: "cc-exp" })
+      ),
+      /*#__PURE__*/React.createElement("div", { className: "f-item" },
+        /*#__PURE__*/React.createElement("label", null, "CVC"),
+        /*#__PURE__*/React.createElement("input", { value: cc.cvc, onChange: e => upd('cvc', e.target.value), placeholder: "\u2022\u2022\u2022", inputMode: "numeric", autoComplete: "cc-csc" })
+      ),
+      /*#__PURE__*/React.createElement("div", { className: "f-item" },
+        /*#__PURE__*/React.createElement("label", null, "Billing ZIP"),
+        /*#__PURE__*/React.createElement("input", { value: cc.zip, onChange: e => upd('zip', e.target.value), placeholder: "ZIP", inputMode: "numeric", autoComplete: "postal-code" })
+      )
+    ),
+    /*#__PURE__*/React.createElement("label", { className: "auth-check" },
+      /*#__PURE__*/React.createElement("input", { type: "checkbox", checked: cc.auth, onChange: e => upd('auth', e.target.checked) }),
+      /*#__PURE__*/React.createElement("span", null,
+        /*#__PURE__*/React.createElement("strong", null, "I authorize Alan Behrman & Associates to hold this card for billing after staff confirmation."),
+        /*#__PURE__*/React.createElement("small", null, "No charge occurs without prior confirmation. This demo does not process a real payment.")
+      )
+    ),
+    /*#__PURE__*/React.createElement(Nav, { onBack: back, onNext: go, can: !!can, label: "Hold my appointment" })
+  );
 }
 function S13_Sending({
   next
@@ -1244,7 +1637,7 @@ function S14_Done({
 }
 
 /* ── App orchestrator ─────────────────────────────────────────────────── */
-const SCREENS = ['welcome', 'name', 'contact', 'about', 'emergency', 'concern', 'location', 'schedule', 'insurance', 'fit', 'matching', 'appointment', 'payment', 'sending', 'done'];
+const SCREENS = ['welcome', 'name', 'contact', 'about', 'emergency', 'concern', 'assessments', 'location', 'schedule', 'insurance', 'fit', 'matching', 'appointment', 'consent', 'payment', 'sending', 'done'];
 function IntakeV2App() {
   const [idx, setIdx] = useState(0);
   const [data, setData] = useState({});
@@ -1281,9 +1674,9 @@ function IntakeV2App() {
       width: '100%',
       maxWidth: 500
     }
-  }, s === 'welcome' && /*#__PURE__*/React.createElement(S0_Welcome, p), s === 'name' && /*#__PURE__*/React.createElement(S1_Name, p), s === 'contact' && /*#__PURE__*/React.createElement(S2_Contact, p), s === 'about' && /*#__PURE__*/React.createElement(S3_About, p), s === 'emergency' && /*#__PURE__*/React.createElement(S4_Emergency, p), s === 'concern' && /*#__PURE__*/React.createElement(S5_Concern, p), s === 'location' && /*#__PURE__*/React.createElement(S6_Location, p), s === 'schedule' && /*#__PURE__*/React.createElement(S7_Schedule, p), s === 'insurance' && /*#__PURE__*/React.createElement(S8_Insurance, p), s === 'fit' && /*#__PURE__*/React.createElement(S9_Fit, p), s === 'matching' && /*#__PURE__*/React.createElement(S10_Matching, {
+  }, s === 'welcome' && /*#__PURE__*/React.createElement(S0_Welcome, p), s === 'name' && /*#__PURE__*/React.createElement(S1_Name, p), s === 'contact' && /*#__PURE__*/React.createElement(S2_Contact, p), s === 'about' && /*#__PURE__*/React.createElement(S3_About, p), s === 'emergency' && /*#__PURE__*/React.createElement(S4_Emergency, p), s === 'concern' && /*#__PURE__*/React.createElement(S5_Concern, p), s === 'assessments' && /*#__PURE__*/React.createElement(S_Assessments, p), s === 'location' && /*#__PURE__*/React.createElement(S6_Location, p), s === 'schedule' && /*#__PURE__*/React.createElement(S7_Schedule, p), s === 'insurance' && /*#__PURE__*/React.createElement(S8_Insurance, p), s === 'fit' && /*#__PURE__*/React.createElement(S9_Fit, p), s === 'matching' && /*#__PURE__*/React.createElement(S10_Matching, {
     next: next
-  }), s === 'appointment' && /*#__PURE__*/React.createElement(S11_Appointment, p), s === 'payment' && /*#__PURE__*/React.createElement(S12_Payment, p), s === 'sending' && /*#__PURE__*/React.createElement(S13_Sending, {
+  }), s === 'appointment' && /*#__PURE__*/React.createElement(S11_Appointment, p), s === 'consent' && /*#__PURE__*/React.createElement(S_Consent, p), s === 'payment' && /*#__PURE__*/React.createElement(S12_Payment, p), s === 'sending' && /*#__PURE__*/React.createElement(S13_Sending, {
     next: next
   }), s === 'done' && /*#__PURE__*/React.createElement(S14_Done, {
     d: data

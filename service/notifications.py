@@ -7,7 +7,7 @@ Configure in service/.env:
   SMTP_USER        = your@gmail.com
   SMTP_PASSWORD    = your_app_password
   FROM_EMAIL       = your@gmail.com        (defaults to SMTP_USER)
-  FROM_NAME        = 1 Stop Medical Services
+  FROM_NAME        = Alan Behrman & Associates
 
   TWILIO_ACCOUNT_SID = ACxxx...
   TWILIO_AUTH_TOKEN  = xxx...
@@ -30,7 +30,7 @@ SMTP_PORT  = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER  = os.getenv("SMTP_USER",  "")
 SMTP_PASS  = os.getenv("SMTP_PASSWORD", "")
 FROM_EMAIL = os.getenv("FROM_EMAIL", SMTP_USER)
-FROM_NAME  = os.getenv("FROM_NAME",  "1 Stop Medical Services")
+FROM_NAME  = os.getenv("FROM_NAME",  "Alan Behrman & Associates")
 
 TWILIO_SID  = os.getenv("TWILIO_ACCOUNT_SID", "")
 TWILIO_TOK  = os.getenv("TWILIO_AUTH_TOKEN",  "")
@@ -57,8 +57,8 @@ def _fmt_date(dt) -> str:
 _EMAIL_HTML = """\
 <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#1e2a38;background:#fff;border-radius:12px">
   <div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #e8eff5">
-    <span style="font-size:16px;font-weight:700;color:#1e2a38">1 Stop Medical Services</span>
-    <span style="font-size:13px;color:#8a99aa;margin-left:8px">· Marietta &amp; Duluth, GA</span>
+    <span style="font-size:16px;font-weight:700;color:#1e2a38">Alan Behrman &amp; Associates</span>
+    <span style="font-size:13px;color:#8a99aa;margin-left:8px">· Secure client intake</span>
   </div>
 
   <h2 style="font-size:22px;font-weight:700;margin:0 0 6px;letter-spacing:-0.3px">
@@ -72,7 +72,7 @@ _EMAIL_HTML = """\
 
   <div style="background:#f0faf8;border:1px solid #c0e8e0;border-radius:10px;padding:18px 22px;margin-bottom:28px">
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#2a7a6a;margin-bottom:8px">
-      📋 Intake forms status
+      Intake forms status
     </div>
     <div style="display:flex;align-items:baseline;gap:8px">
       <span style="font-size:36px;font-weight:800;color:#186655">{forms_done}</span>
@@ -94,9 +94,10 @@ _EMAIL_HTML = """\
   </a>
 
   <p style="font-size:13px;color:#8a99aa;line-height:1.6;margin:0">
-    Questions? Call us at <a href="tel:2533978683" style="color:#2a7fd4">(253) 397-8683</a>
+    Questions? Call ATL at <a href="tel:7703617864" style="color:#2a7fd4">770.361.7864</a>
+    or NOLA at <a href="tel:5044145467" style="color:#2a7fd4">504.414.5467</a>
     or reply to this email.<br/>
-    1 Stop Medical Services · Marietta &amp; Duluth, GA
+    Alan Behrman &amp; Associates
   </p>
 </div>
 """
@@ -174,7 +175,7 @@ def send_reminder_sms(
     remaining_s = "s" if remaining != 1 else ""
 
     body = (
-        f"Hi {first_name}, this is 1 Stop Medical. "
+        f"Hi {first_name}, this is Alan Behrman & Associates. "
         f"You have {remaining} intake form{remaining_s} remaining "
         f"({forms_done}/{forms_total} done) before your "
         f"{appt_type} on {appt_date_str}. "

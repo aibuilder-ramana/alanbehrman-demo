@@ -316,14 +316,18 @@ button { font-family: inherit; }
   padding: clamp(28px, 5vh, 72px) clamp(20px, 5vw, 60px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* flex-start + auto margins on child avoids the top-clip bug when content overflows */
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
 }
+/* vertically center when content fits; stick to top when it overflows */
 .welcome-b .right > * {
   max-width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .welcome-b .right::before {
   content: '';
@@ -1644,9 +1648,26 @@ textarea.basic-input {
   background: white;
 }
 .dynamic-screener-body {
-  padding: 14px;
+  padding: 0;
   max-height: min(68vh, 620px);
   overflow: auto;
+}
+
+/* HIPAA form lives inside dynamic-screener-body — let the outer container own all scrolling */
+.dynamic-screener-body .hipaa-local-form {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.dynamic-screener-body .hipaa-local-scroll {
+  max-height: none;
+  overflow: visible;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--hair);
+}
+.dynamic-screener-body .hipaa-fields {
+  padding: 18px 24px 24px;
 }
 .confirmation-panel {
   width: 100%;
@@ -4397,9 +4418,9 @@ function extractCreditCardFields(text, side) {
 
 /* ── Patient data (fallback — overridden by API when ?t= token present) ─── */
 const PATIENT = {
-  name: 'Paranjit Kaur',
-  first: 'Paranjit',
-  appt: 'Immigration Medical Exam',
+  name: 'Avery Johnson',
+  first: 'Avery',
+  appt: 'Therapy Consultation',
   date: 'Tue, Apr 22 · 10:30 AM',
   provider: 'Dr. Ramakanth Vemuluri, MD',
 };
@@ -4789,7 +4810,7 @@ function LocalHipaaForm({ initialName = '', initialEmail = '', onSubmit }) {
   }
 
   return (
-    <form className="hipaa-local-form" onSubmit={handleSubmit}>
+    <form className="hipaa-local-form" onSubmit={handleSubmit} autoComplete="off">
       <div className="hipaa-local-scroll">
         <h1 className="hipaa-form-heading">HIPAA</h1>
         <div className="hipaa-notice-copy">
@@ -4819,11 +4840,11 @@ function LocalHipaaForm({ initialName = '', initialEmail = '', onSubmit }) {
           <div className="hipaa-field-label">Name<span className="hipaa-required">*</span></div>
           <div className="hipaa-name-grid">
             <div className="hipaa-subfield">
-              <input className="hipaa-input" value={firstName} onChange={e => setFirstName(e.target.value)} autoComplete="given-name" />
+              <input className="hipaa-input" value={firstName} onChange={e => setFirstName(e.target.value)} autoComplete="off" />
               <small>First Name</small>
             </div>
             <div className="hipaa-subfield">
-              <input className="hipaa-input" value={lastName} onChange={e => setLastName(e.target.value)} autoComplete="family-name" />
+              <input className="hipaa-input" value={lastName} onChange={e => setLastName(e.target.value)} autoComplete="off" />
               <small>Last Name</small>
             </div>
           </div>
@@ -4831,7 +4852,7 @@ function LocalHipaaForm({ initialName = '', initialEmail = '', onSubmit }) {
         <div className="hipaa-field-row">
           <label htmlFor="hipaa-email">Email<span className="hipaa-required">*</span></label>
           <div className="hipaa-subfield">
-            <input id="hipaa-email" className="hipaa-input" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
+            <input id="hipaa-email" className="hipaa-input" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="off" />
             <small>example@example.com</small>
           </div>
         </div>
@@ -5174,15 +5195,15 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null, privacyAck
         dob: patient.dob || '',
         email: patient.email || '',
         phone: patient.phone || '',
-        source: 'Tebra',
+        source: 'AlanBehrman records',
         confidence: 'High confidence match',
       },
       {
-        name: 'Paranjit Kaur',
+        name: 'Avery Johnson',
         dob: '',
         email: 'paranjit@example.com',
-        phone: '2533978683',
-        source: 'TherapyNotes',
+        phone: '6789872784',
+        source: 'AlanBehrman scheduling record',
         confidence: 'Existing chart located',
       },
       {
@@ -5190,7 +5211,7 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null, privacyAck
         dob: '1988-09-12',
         email: 'avery.johnson@example.com',
         phone: '4045550188',
-        source: 'Tebra',
+        source: 'AlanBehrman records',
         confidence: 'Existing chart located',
       },
     ].filter(r => r.name);
@@ -5235,7 +5256,7 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null, privacyAck
         : {
             status: 'new',
             name: basicInfo.name.trim(),
-            source: 'Tebra + TherapyNotes',
+            source: 'AlanBehrman client records',
             confidence: 'No matching chart found',
           };
       setMatchResult(result);
@@ -5912,22 +5933,22 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null, privacyAck
             />
           </div>
         ) : matchStage === 'basic' ? (
-          <form className="basic-info-panel" onSubmit={handleBasicSubmit}>
+          <form className="basic-info-panel" onSubmit={handleBasicSubmit} autoComplete="off">
             <div className="privacy-saved">✓ Privacy acknowledgement saved</div>
             <h2>Patient basic information</h2>
             <p>These details are used only to find your chart and route the correct intake workflow.</p>
             <div className="basic-form-grid">
               <div className="basic-field full">
                 <label htmlFor="basic-name">Name</label>
-                <input id="basic-name" className="basic-input" value={basicInfo.name} onChange={e => setBasic('name', e.target.value)} placeholder="Full legal name" autoComplete="name" />
+                <input id="basic-name" className="basic-input" value={basicInfo.name} onChange={e => setBasic('name', e.target.value)} placeholder="Full legal name" autoComplete="off" />
               </div>
               <div className="basic-field">
                 <label htmlFor="basic-dob">Date of birth</label>
-                <input id="basic-dob" className="basic-input" type="date" value={basicInfo.dob} onChange={e => setBasic('dob', e.target.value)} />
+                <input id="basic-dob" className="basic-input" type="date" value={basicInfo.dob} onChange={e => setBasic('dob', e.target.value)} autoComplete="off" />
               </div>
               <div className="basic-field">
                 <label htmlFor="basic-gender">Gender</label>
-                <select id="basic-gender" className="basic-input" value={basicInfo.gender} onChange={e => setBasic('gender', e.target.value)}>
+                <select id="basic-gender" className="basic-input" value={basicInfo.gender} onChange={e => setBasic('gender', e.target.value)} autoComplete="off">
                   <option value="">Select</option>
                   <option>Female</option>
                   <option>Male</option>
@@ -5937,15 +5958,15 @@ function WelcomePage({ onChoose, patient = PATIENT, intakeCtx = null, privacyAck
               </div>
               <div className="basic-field">
                 <label htmlFor="basic-phone">Phone</label>
-                <input id="basic-phone" className="basic-input" value={basicInfo.phone} onChange={e => setBasic('phone', e.target.value)} placeholder="(555) 555-5555" autoComplete="tel" />
+                <input id="basic-phone" className="basic-input" value={basicInfo.phone} onChange={e => setBasic('phone', e.target.value)} placeholder="(555) 555-5555" autoComplete="off" />
               </div>
               <div className="basic-field">
                 <label htmlFor="basic-email">Email</label>
-                <input id="basic-email" className="basic-input" type="email" value={basicInfo.email} onChange={e => setBasic('email', e.target.value)} placeholder="you@example.com" autoComplete="email" />
+                <input id="basic-email" className="basic-input" type="email" value={basicInfo.email} onChange={e => setBasic('email', e.target.value)} placeholder="you@example.com" autoComplete="off" />
               </div>
               <div className="basic-field full">
                 <label htmlFor="basic-address">Address</label>
-                <textarea id="basic-address" className="basic-input" value={basicInfo.address} onChange={e => setBasic('address', e.target.value)} placeholder="Street, city, state, ZIP" autoComplete="street-address" />
+                <textarea id="basic-address" className="basic-input" value={basicInfo.address} onChange={e => setBasic('address', e.target.value)} placeholder="Street, city, state, ZIP" autoComplete="off" />
               </div>
               <div className="basic-field full">
                 <label htmlFor="basic-emergency">Emergency contact</label>
@@ -6730,7 +6751,7 @@ function EcommsConsentForm() {
       <div className="fv-section">
         <div className="fv-section-title">Contact Preferences</div>
         <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:16,lineHeight:1.55}}>
-          1 Stop Medical contacts patients for appointment reminders, test results, care coordination, and health maintenance. Choose how you'd like us to reach you.
+          AlanBehrman contacts patients for appointment reminders, test results, care coordination, and health maintenance. Choose how you'd like us to reach you.
         </p>
         {[
           { key:'text',  label:'Text Messages (SMS)',  sub:'Appointment reminders, result notifications, care plan updates. Msg & data rates may apply. Reply STOP to unsubscribe.' },
@@ -6753,7 +6774,7 @@ function EcommsConsentForm() {
             {family && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
           </div>
           <div>
-            <div className="fv-check-label">Authorize 1 Stop Medical to discuss my medical information with family members</div>
+            <div className="fv-check-label">Authorize AlanBehrman to discuss my medical information with family members</div>
             <div className="fv-check-sub">Includes diagnosis, test results, treatment plans, and care received.</div>
           </div>
         </div>
@@ -7102,7 +7123,7 @@ function BriefI693Form() {
     <>
       <div className="fv-section"><div className="fv-section-title">Communication Consent</div>
         <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:14,lineHeight:1.55}}>
-          1 Stop Medical communicates via phone, email, and/or text for appointment reminders, test results, plan of care, and health maintenance.
+          AlanBehrman communicates via phone, email, and/or text for appointment reminders, test results, plan of care, and health maintenance.
         </p>
         <YN label="I consent to receive Text Messages" k="consent_text" />
         <YN label="I consent to receive Phone Calls" k="consent_phone" />
@@ -7200,7 +7221,7 @@ function BriefI693Form() {
 
     /* 11 — Sexual Health */
     <>
-      <div className="fv-section-note">USCIS requires completion of the STD risk assessment for immigration medical exams.</div>
+      <div className="fv-section-note">USCIS requires completion of the STD risk assessment for therapy consultations.</div>
       <div className="fv-section"><div className="fv-section-title">Sexual Activity</div>
         <YN label="Have you ever been sexually active?" k="sexually_active" />
         <YN label="Have you been seen at an STD clinic before?" k="std_clinic_visit" />
@@ -7581,8 +7602,8 @@ function PatientUpdateForm() {
       <div className="fv-section">
         <div className="fv-consent-block">
           <h4>Insurance Billing Authorization</h4>
-          <p>I authorize 1 Stop Medical Services to release any information acquired during my examination and treatment to my insurance company or its representatives for the purpose of processing claims and benefits determination.</p>
-          <p>I assign and authorize direct payment of all insurance benefits to 1 Stop Medical Services for covered services rendered. I understand I am financially responsible for any balance not covered by my insurance.</p>
+          <p>I authorize Alan Behrman & Associates to release any information acquired during my examination and treatment to my insurance company or its representatives for the purpose of processing claims and benefits determination.</p>
+          <p>I assign and authorize direct payment of all insurance benefits to Alan Behrman & Associates for covered services rendered. I understand I am financially responsible for any balance not covered by my insurance.</p>
           <p>I authorize the use of my signature on all insurance submissions.</p>
         </div>
         <YN label="I authorize release of medical information for insurance billing" k="authorize_release" />
@@ -8168,7 +8189,7 @@ function FullIntakeForm() {
         <div className="fv-consent-block">
           <h4>Attestation</h4>
           <p>I certify that the information provided in this intake form is true and accurate to the best of my knowledge. I understand that providing false information may affect my care and billing.</p>
-          <p>I authorize 1 Stop Medical Services to use this information for treatment, payment, and healthcare operations as described in the HIPAA Privacy Notice.</p>
+          <p>I authorize Alan Behrman & Associates to use this information for treatment, payment, and healthcare operations as described in the HIPAA Privacy Notice.</p>
         </div>
         <div className="fv-sig-line">Patient / Guardian signature:</div>
         <div className="fv-sig-field">Tap to sign</div>
@@ -8218,8 +8239,8 @@ function FormViewerBody({ form }) {
   );
   if (id === 'uscis_release') return (
     <ConsentForm title="USCIS Release of Medical Information"
-      body="<h4>Authorization to Release Medical Information</h4><p>I authorize 1 Stop Medical Services and its civil surgeon to release the results of my immigration medical examination (Form I-693) to the United States Citizenship and Immigration Services (USCIS).</p><p>This information will be used to process my adjustment of status application. The civil surgeon is required by USCIS to seal the completed I-693 and provide it to me in a sealed envelope to submit with my immigration application.</p><p>This authorization is valid for the duration of my immigration medical examination process.</p>"
-      fields={[{label:'I authorize release of my immigration medical exam results to USCIS', sub:'Required for adjustment of status applications.'}]}
+      body="<h4>Authorization to Release Medical Information</h4><p>I authorize Alan Behrman & Associates and its civil surgeon to release the results of my therapy consultationination (Form I-693) to the United States Citizenship and Immigration Services (USCIS).</p><p>This information will be used to process my adjustment of status application. The civil surgeon is required by USCIS to seal the completed I-693 and provide it to me in a sealed envelope to submit with my immigration application.</p><p>This authorization is valid for the duration of my therapy consultationination process.</p>"
+      fields={[{label:'I authorize release of my therapy consultation results to USCIS', sub:'Required for adjustment of status applications.'}]}
     />
   );
   if (id === 'id_verify') return (
@@ -8333,7 +8354,7 @@ function DocItem({ item, inProgress, onClick }) {
 /* Fallback static list when no intakeCtx available */
 const STATIC_FORMS = {
   required: [
-    { id:'brief_i693',  title:'Brief I-693 Form',               description:'USCIS immigration medical examination form. Required for adjustment of status.', estimated_minutes:4, is_required:true,  status:'not_started' },
+    { id:'brief_i693',  title:'Brief I-693 Form',               description:'USCIS therapy consultationination form. Required for adjustment of status.', estimated_minutes:4, is_required:true,  status:'not_started' },
     { id:'full_intake', title:'Medical Full Intake Form',         description:'Comprehensive medical history, medications, allergies, and surgical history.',   estimated_minutes:8, is_required:true,  status:'not_started' },
     { id:'vaccine',     title:'Vaccination Record',              description:'Upload or enter your immunization history (MMR, Tdap, COVID-19, Flu).',          estimated_minutes:3, is_required:true,  status:'not_started' },
     { id:'id_verify',   title:'Photo ID Verification',           description:'Upload a passport, green card, or state-issued photo ID.',                      estimated_minutes:2, is_required:true,  status:'not_started' },
@@ -8479,7 +8500,7 @@ function DocListPage({ onBack, onHome, onSwitchToAI, patient = PATIENT, intakeCt
         </div>
         <div className="side-card">
           <h4>Need help?</h4>
-          <p>Call us at <a href="tel:2533978683">(253) 397-8683</a> — 8 am–6 pm PT — or email <a href="mailto:intake@1stopmedical.com">intake@1stopmedical.com</a>.</p>
+          <p>Call us at <a href="tel:6789872784">(678) 987-2784</a> — 8 am–6 pm PT — or email <a href="mailto:intake@alanbehrman.com">intake@alanbehrman.com</a>.</p>
         </div>
       </aside>
     </div>
@@ -8507,12 +8528,12 @@ const FORM_DEFS = [
 ];
 
 const SCRIPT = [
-  { role:'ai',   text:`Hi __FIRST__ — I'm Ellie, your AI intake assistant. I'll help you finish your immigration medical exam paperwork in just a few minutes. Your answers are encrypted and saved as we go.`, delay:600 },
+  { role:'ai',   text:`Hi __FIRST__ — I'm Ellie, your AI intake assistant. I'll help you finish your therapy consultation paperwork in just a few minutes. Your answers are encrypted and saved as we go.`, delay:600 },
   { role:'ai',   text:`Before we start: I'll fill out Form I-693, your medical history, and a few consents. You can type, speak, or upload documents at any time. Ready to begin?`, chips:["Yes, let's start","Tell me more first"], delay:900 },
   { role:'user', text:"Yes, let's start" },
   { role:'ai',   text:"Great. Let's confirm the basics. Can you confirm your full legal name as it appears on your passport?", delay:700 },
-  { role:'user', text:"Paranjit Kaur" },
-  { fill:{ form:'i693', field:'name', value:'Paranjit Kaur' } },
+  { role:'user', text:"Avery Johnson" },
+  { fill:{ form:'i693', field:'name', value:'Avery Johnson' } },
   { role:'ai',   text:"Thanks. And your date of birth?", delay:500 },
   { role:'user', text:"March 12, 1991" },
   { fill:{ form:'i693', field:'dob',  value:'Mar 12, 1991' } },
@@ -8739,7 +8760,7 @@ function AIIntakePage({ onBack, onHome, intakeCtx, patient = PATIENT }) {
               Ellie · AI intake assistant
               <span className="ch-live"><span className="dot" /> Active</span>
             </div>
-            <div className="ch-sub">An Elevia product · Reviewed by Onestop Medical staff</div>
+            <div className="ch-sub">An Elevia product · Reviewed by AlanBehrman staff</div>
           </div>
           <div className="ch-tools">
             <button className="icon-btn" title="Download transcript"><I.download /></button>
@@ -8809,7 +8830,7 @@ function AIIntakePage({ onBack, onHome, intakeCtx, patient = PATIENT }) {
             <div>Press <strong style={{color:'var(--ink-3)'}}>Enter</strong> to send</div>
           </div>
           <div className="ci-footer">
-            Ellie can make mistakes. An Onestop Medical nurse will verify your entries before your exam.
+            Ellie can make mistakes. An AlanBehrman nurse will verify your entries before your exam.
             {' '}· <span style={{color:'var(--ink-3)',fontWeight:500}}>Ellie is an Elevia product</span>
           </div>
         </div>
@@ -8821,7 +8842,7 @@ function AIIntakePage({ onBack, onHome, intakeCtx, patient = PATIENT }) {
 /* ── Clinic Portal ───────────────────────────────────────────────────────── */
 
 const APPT_TYPES = [
-  { value: 'immigration_medical_exam', label: 'Immigration Medical Exam' },
+  { value: 'therapy_consultation', label: 'Therapy Consultation' },
   { value: 'primary_care',             label: 'Primary Care Visit' },
   { value: 'annual_physical',          label: 'Annual Physical' },
   { value: 'pre_employment',           label: 'Pre-Employment Physical' },
@@ -8835,7 +8856,7 @@ function apptTypeLabel(val) {
   return (APPT_TYPES.find(t => t.value === val) || { label: val.replace(/_/g,' ') }).label;
 }
 function apptTypeBadgeClass(val) {
-  if (val === 'immigration_medical_exam') return 'appt-type-badge imm';
+  if (val === 'therapy_consultation') return 'appt-type-badge imm';
   if (val === 'annual_physical' || val === 'pre_employment') return 'appt-type-badge phys';
   return 'appt-type-badge';
 }
@@ -9441,7 +9462,7 @@ function genChartData(patient) {
   const rnd = (n) => seed % n;
   const genderM = (patient.gender || '').toLowerCase().startsWith('m');
   const apptType = patient.next_appointment_type || 'primary_care';
-  const isImmigration = apptType === 'immigration_medical_exam';
+  const isImmigration = apptType === 'therapy_consultation';
 
   const allProblems = [
     { name:'Hypothyroidism', icd:'E03.9', onset:'2019-03', status:'Active', severity:'Mild' },
@@ -9509,7 +9530,7 @@ function genChartData(patient) {
     { name:'CBC — WBC', val: (5.8 + rnd(30)/10).toFixed(1) + ' K/µL', range:'4.5–11.0', flag:'N', date:'Mar 2026' },
   ];
 
-  const VISIT_TYPES = ['Primary Care Follow-up', 'Immigration Medical Exam', 'Annual Physical', 'Urgent Care Visit', 'Pre-Placement Physical', 'Telehealth — Medication Review', 'Lab Follow-up', 'Preventive Care'];
+  const VISIT_TYPES = ['Primary Care Follow-up', 'Therapy Consultation', 'Annual Physical', 'Urgent Care Visit', 'Pre-Placement Physical', 'Telehealth — Medication Review', 'Lab Follow-up', 'Preventive Care'];
   const PROVIDERS = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
   const SUMMARIES = [
     'Patient reports stable symptoms. BP within acceptable range. Medication refills provided.',
@@ -9578,7 +9599,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
   const [noteSaved, setNoteSaved] = React.useState(false);
 
   const LOAD_STEPS = [
-    'Connecting to Tebra & Therapy Notes…',
+    'Connecting to AlanBehrman client records…',
     'Pulling patient record & problem list…',
     'Loading medications, labs & vitals…',
     'Generating AI chart summary…',
@@ -9618,7 +9639,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
         <div style={{background:'linear-gradient(135deg, var(--teal-soft), var(--sage-soft))',border:'1px solid var(--hair)',borderRadius:'var(--radius)',padding:'14px 16px',marginBottom:16,display:'flex',alignItems:'flex-start',gap:12}}>
           <div style={{fontSize:22,flexShrink:0}}>🤖</div>
           <div>
-            <div style={{fontSize:12,fontWeight:700,color:'var(--teal-deep)',marginBottom:4,textTransform:'uppercase',letterSpacing:'0.05em'}}>AI Chart Summary — Generated by Elevia · Sourced from Tebra & Therapy Notes</div>
+            <div style={{fontSize:12,fontWeight:700,color:'var(--teal-deep)',marginBottom:4,textTransform:'uppercase',letterSpacing:'0.05em'}}>AI Chart Summary — Generated by Elevia · Sourced from AlanBehrman client records</div>
             <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.65}}>
               <strong>{patient.full_name}</strong>{age ? `, ${age}yo` : ''}{patient.gender ? ` ${patient.gender}` : ''}, presents with {problems.slice(0,2).map(p=>p.name).join(' and ')}. Currently on {meds.length} active medications. {allergies[0]?.substance !== 'NKDA' ? `Known allergy to ${allergies[0]?.substance}.` : 'No known drug allergies.'} Last seen {visits[0]?.dateStr} for {visits[0]?.type}. Vitals at last visit: BP {vitals.bp} mmHg, BMI {vitals.bmi}. {parseInt(vitals.bmi) > 29 ? 'BMI elevated.' : ''} Labs from March 2026 reviewed — {labs.filter(l=>l.flag==='H').length > 0 ? `${labs.filter(l=>l.flag==='H').map(l=>l.name).join(', ')} flagged above reference range.` : 'all within reference range.'}
             </div>
@@ -9647,7 +9668,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
             ))}
           </div>
         </div>
-        <div className="chart-sec-title">Recent Vitals <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Recent Vitals <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <div className="chart-vitals-grid">
           {[
             { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag },
@@ -9670,7 +9691,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'problems') return (
       <div>
-        <div className="chart-sec-title">Problem List <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Problem List <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <table className="chart-table">
           <thead><tr><th>Problem</th><th>ICD-10</th><th>Onset</th><th>Status</th><th>Severity</th></tr></thead>
           <tbody>
@@ -9690,7 +9711,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'meds') return (
       <div>
-        <div className="chart-sec-title">Medication List <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Medication List <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <table className="chart-table">
           <thead><tr><th>Medication</th><th>Dose</th><th>Frequency</th><th>Route</th><th>Prescriber</th><th>Since</th></tr></thead>
           <tbody>
@@ -9711,7 +9732,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'allergies') return (
       <div>
-        <div className="chart-sec-title">Allergy &amp; Adverse Reactions <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Allergy &amp; Adverse Reactions <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <div style={{marginBottom:16}}>
           {allergies.map(a => (
             <span key={a.substance} className={`chart-allergy-tag ${a.severity.toLowerCase()}`}>
@@ -9737,7 +9758,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'vitals') return (
       <div>
-        <div className="chart-sec-title">Vitals — Last Recorded <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Vitals — Last Recorded <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <div className="chart-vitals-grid" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
           {[
             { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag, note: parseInt(vitals.bp)>130?'Stage 1 hypertension range':'' },
@@ -9763,7 +9784,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'labs') return (
       <div>
-        <div className="chart-sec-title">Laboratory Results <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Laboratory Results <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <div style={{background:'var(--surface)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',overflow:'hidden',marginBottom:16}}>
           <div style={{display:'flex',padding:'7px 12px',background:'var(--bg-tint)',borderBottom:'1px solid var(--hair)',fontSize:10.5,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:'var(--ink-4)',gap:0}}>
             <span style={{flex:2}}>Test Name</span><span style={{flex:1}}>Result</span><span style={{flex:1.5}}>Reference Range</span><span style={{flex:0.5}}>Flag</span><span style={{flex:1}}>Date</span>
@@ -9788,7 +9809,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'visits') return (
       <div>
-        <div className="chart-sec-title">Visit History <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Visit History <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <div className="chart-timeline">
           {visits.map((v,i) => (
             <div key={i} className="chart-visit">
@@ -9813,7 +9834,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
 
     if (tab === 'immunization') return (
       <div>
-        <div className="chart-sec-title">Immunization Record <span className="chart-sec-badge tebra">Tebra & Therapy Notes</span></div>
+        <div className="chart-sec-title">Immunization Record <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
         <table className="chart-table">
           <thead><tr><th>Vaccine</th><th>Date / Status</th><th>Series</th><th>Source</th></tr></thead>
           <tbody>
@@ -9862,7 +9883,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
               setNoteText(''); setNoteSaved(true);
               setTimeout(() => setNoteSaved(false), 2500);
             }}>Save Note</button>
-            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to Tebra & Therapy Notes</span>}
+            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to AlanBehrman client records</span>}
             <span style={{fontSize:11,color:'var(--ink-4)',marginLeft:'auto'}}>Signed as: {assignedProvider}</span>
           </div>
         </div>
@@ -9886,7 +9907,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
         )}
 
         {/* Mock historical notes */}
-        <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Prior Notes — From Tebra & Therapy Notes</div>
+        <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Prior Notes — From AlanBehrman client records</div>
         {[
           { type:'Progress Note', author: assignedProvider, date:'Apr 8, 2026 · 10:30 AM', text:`${patient.full_name} seen today for follow-up. Patient reports feeling well. BP ${chartData.vitals.bp} mmHg — slight improvement since last visit. Medications reviewed and continued without changes. Counseled on low-sodium diet. Return to clinic in 3 months or sooner PRN.` },
           { type:'SOAP Note', author:'Meredith Mitchell, PMHNP-BC', date:'Feb 12, 2026 · 2:15 PM', text:`S: Patient c/o mild fatigue and occasional headaches. No chest pain or shortness of breath.\nO: BP 136/88, HR 74, Wt stable. Labs reviewed — LDL slightly elevated.\nA: Hypertension, controlled. Hyperlipidemia.\nP: Continue current antihypertensive. Increase atorvastatin to 40 mg. Dietary counseling provided. F/U in 6 weeks.` },
@@ -9926,7 +9947,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
           <div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Provider</div><div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{assignedProvider}</div></div>
           <div className="chart-divider"/>
           <div className="chart-encounter-badge">{apptTypeLabel(patient.next_appointment_type || 'primary_care')}</div>
-          <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI · Tebra & Therapy Notes</div>
+          <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI · AlanBehrman client records</div>
           <button className="chart-close" onClick={onClose}>✕</button>
         </div>
 
@@ -9955,7 +9976,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
             <div className="chart-loading" style={{width:'100%'}}>
               <div className="chart-loading-orb">🏥</div>
               <div className="chart-loading-title">Loading clinical chart…</div>
-              <div className="chart-loading-sub">Pulling data from Tebra & Therapy Notes · AI processing</div>
+              <div className="chart-loading-sub">Pulling data from AlanBehrman client records · AI processing</div>
               <div className="chart-loading-steps">
                 {LOAD_STEPS.map((s, i) => (
                   <div key={i} className={`chart-load-row${loadStep>i?' done':loadStep===i?' active':''}`}>
@@ -10170,7 +10191,7 @@ const SCHED_PROVIDERS = [
   { id: 'postanowicz', name: 'Patty Postanowicz',       cred: 'PhD, LMFT', specialty: 'Family Therapy',            avatar: 'PP', color: 'oklch(58% 0.13 290)', bg: 'oklch(96% 0.03 290)',  text: 'oklch(28% 0.12 290)' },
 ];
 const SCHED_APPT_COLORS = {
-  immigration_medical_exam: { bg:'oklch(97% 0.04 55)', border:'oklch(60% 0.15 55)', text:'oklch(28% 0.12 55)', label:'Immigration Exam' },
+  therapy_consultation: { bg:'oklch(97% 0.04 55)', border:'oklch(60% 0.15 55)', text:'oklch(28% 0.12 55)', label:'Immigration Exam' },
   primary_care:             { bg:'var(--teal-soft)',   border:'var(--teal)',         text:'var(--teal-deep)',   label:'Primary Care'    },
   pre_placement:            { bg:'var(--sage-soft)',   border:'var(--sage)',         text:'oklch(33% 0.09 200)',label:'Pre-Placement'   },
   annual_physical:          { bg:'oklch(96% 0.04 285)',border:'oklch(58% 0.14 285)',text:'oklch(28% 0.12 285)',label:'Physical'        },
@@ -10286,10 +10307,10 @@ function SchedulesView({ onBack, onHome }) {
           <div className="sched-title-row">
             <span className="sched-title-text">Schedules</span>
             {syncState === 'syncing' && (
-              <span className="tebra-badge syncing"><span className="spin">↻</span> Syncing with Tebra & Therapy Notes…</span>
+              <span className="tebra-badge syncing"><span className="spin">↻</span> Syncing with AlanBehrman client records…</span>
             )}
             {syncState === 'synced' && (
-              <span className="tebra-badge synced">✓ Tebra & Therapy Notes synced · {lastSync ? lastSync.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : ''}</span>
+              <span className="tebra-badge synced">✓ AlanBehrman client records synced · {lastSync ? lastSync.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : ''}</span>
             )}
           </div>
           {!loading && (
@@ -10460,7 +10481,7 @@ function SchedulesView({ onBack, onHome }) {
 
 /* ── Insurance Authorization View ─────────────────────────────────────────── */
 const INS_PATIENTS = [
-  { id: 'p1', name: 'Paranjit Kaur',    initials: 'PK', insurance: 'UnitedHealthcare PPO', appt: 'Immigration Medical Exam',    dob: 'Mar 12, 1991', authComplexity: 'Standard' },
+  { id: 'p1', name: 'Avery Johnson',    initials: 'PK', insurance: 'UnitedHealthcare PPO', appt: 'Therapy Consultation',    dob: 'Mar 12, 1991', authComplexity: 'Standard' },
   { id: 'p2', name: 'Harold Mercer',    initials: 'HM', insurance: 'Aetna HMO',            appt: 'Primary Care Follow-up',      dob: 'Jun 4, 1966',  authComplexity: 'Complex' },
   { id: 'p3', name: 'Sofia Delgado',    initials: 'SD', insurance: 'Cigna PPO',             appt: 'Pre-Placement Physical',      dob: 'Sep 22, 1988', authComplexity: 'Standard' },
 ];
@@ -10538,10 +10559,10 @@ function InsuranceAuthView({ onBack, onHome }) {
                 <div className="ins-flow-icon">🛡</div>
                 <div>
                   <div className="ins-flow-title">Validate Insurance</div>
-                  <div className="ins-flow-desc">Pull insurance details from Tebra & Therapy Notes, verify active coverage, determine copay and deductible amounts for the visit.</div>
+                  <div className="ins-flow-desc">Pull insurance details from AlanBehrman client records, verify active coverage, determine copay and deductible amounts for the visit.</div>
                 </div>
                 <div className="ins-flow-meta">
-                  <span>🔗 Tebra & Therapy Notes sync</span>
+                  <span>🔗 AlanBehrman client records sync</span>
                   <span>⏱ ~1 min</span>
                   <span>💰 Copay determination</span>
                 </div>
@@ -10572,7 +10593,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
     { label: 'Payer Rules Lookup', subs: ['Query coverage policy', 'Validate criteria met', 'Confirm submission channel'], badge: 'auto' },
     { label: 'Auth Packet Submission', subs: ['Assemble clinical packet', 'Submit via payer portal API', 'Reference number issued'], badge: 'auto' },
     { label: 'Status Polling', subs: ['Day 1–3: polling daily', 'Day 4: no decision yet', 'Auto-escalate — P2P request'], badge: 'auto' },
-    { label: 'Decision Received', subs: ['Auth decision logged', 'Syncing to Tebra & Therapy Notes', 'Scheduling triggered'], badge: 'auto' },
+    { label: 'Decision Received', subs: ['Auth decision logged', 'Syncing to AlanBehrman client records', 'Scheduling triggered'], badge: 'auto' },
   ];
 
   const addMsg = (role, content) => setMsgs(m => [...m, { role, content, id: Date.now() + Math.random() }]);
@@ -10586,8 +10607,8 @@ function InsPreAuth({ patient, onBack, onHome }) {
       [600, () => { setTyping(true); }],
       [1800, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Hello — I'm the Pre-Authorization agent. I'll handle the prior auth for ${patient.name}'s upcoming ${patient.appt} with ${patient.insurance}. Starting now.` }); }],
       [2400, () => { setStep(1); setSubStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Auth Request', items: ['EHR order detected', 'CPT code auth check', 'Payer rule match confirmed'], delays: [0, 900, 1800] }); }],
-      [5200, () => { setSubStep(3); setStep(2); setSubStep(1); addMsg('agent', { type: 'text', text: 'Auth trigger confirmed. Pulling clinical data from Tebra & Therapy Notes now.' }); }],
-      [5800, () => { addMsg('agent', { type: 'scan', title: 'Step 2 · Clinical Extraction (Tebra & Therapy Notes)', items: ['Pull labs & diagnosis codes', 'Pull prior visit history', 'Verify ordering provider NPI'], delays: [0, 1000, 2100] }); }],
+      [5200, () => { setSubStep(3); setStep(2); setSubStep(1); addMsg('agent', { type: 'text', text: 'Auth trigger confirmed. Pulling clinical data from AlanBehrman client records now.' }); }],
+      [5800, () => { addMsg('agent', { type: 'scan', title: 'Step 2 · Clinical Extraction (AlanBehrman client records)', items: ['Pull labs & diagnosis codes', 'Pull prior visit history', 'Verify ordering provider NPI'], delays: [0, 1000, 2100] }); }],
       [9000, () => { setStep(3); setSubStep(1); addMsg('agent', { type: 'clinical', patient }); }],
       [10200, () => { setStep(4); setSubStep(1); addMsg('agent', { type: 'payer', patient }); }],
       [11800, () => { setStep(5); setSubStep(1); addMsg('agent', { type: 'text', text: 'Payer criteria verified. Assembling auth packet and submitting to ' + patient.insurance + '.' }); }],
@@ -10632,8 +10653,8 @@ function InsPreAuth({ patient, onBack, onHome }) {
           <div className="ins-card">
             <div className="ins-card-header">
               <span style={{fontSize:13}}>🏥</span>
-              <div><div className="ins-card-title">Clinical Data — Extracted from Tebra & Therapy Notes</div><div className="ins-card-sub">{m.content.patient.name} · {m.content.patient.dob}</div></div>
-              <div className="ins-card-badge ins-badge-source">Tebra & Therapy Notes</div>
+              <div><div className="ins-card-title">Clinical Data — Extracted from AlanBehrman client records</div><div className="ins-card-sub">{m.content.patient.name} · {m.content.patient.dob}</div></div>
+              <div className="ins-card-badge ins-badge-source">AlanBehrman client records</div>
             </div>
             <div className="ins-card-grid">
               <div className="ins-cg-item"><div className="ins-cg-label">Appointment</div><div className="ins-cg-val">{m.content.patient.appt}</div></div>
@@ -10692,7 +10713,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
               <div className="ins-card-badge ins-badge-ok">Submitted</div>
             </div>
             <div className="ins-card-body">
-              {[['Patient','Paranjit Kaur'],['CPT','99213'],['DX Code','Z02.89'],['Provider','Dr. Ramakanth Vemuluri, MD'],['Ref #','UHC-PA-2026-0421'],['Submitted','Apr 22, 2026 · 10:14 AM']].map(([k,v]) => (
+              {[['Patient','Avery Johnson'],['CPT','99213'],['DX Code','Z02.89'],['Provider','Dr. Ramakanth Vemuluri, MD'],['Ref #','UHC-PA-2026-0421'],['Submitted','Apr 22, 2026 · 10:14 AM']].map(([k,v]) => (
                 <div key={k} className="ins-row"><span className="ins-row-key">{k}</span><span className="ins-row-val">{v}</span></div>
               ))}
             </div>
@@ -10735,7 +10756,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
             <div className="ins-result-icon">✅</div>
             <div>
               <div className="ins-result-title">Authorization Approved</div>
-              <div className="ins-result-sub">{m.content.patient.insurance} has approved prior auth for CPT 99213.<br/>Authorization synced to Tebra & Therapy Notes. Procedure scheduling triggered.</div>
+              <div className="ins-result-sub">{m.content.patient.insurance} has approved prior auth for CPT 99213.<br/>Authorization synced to AlanBehrman client records. Procedure scheduling triggered.</div>
               <div className="ins-ref">Auth #: UHC-AUTH-2026-99213-PK</div>
             </div>
           </div>
@@ -10849,7 +10870,7 @@ function InsValidate({ patient, onBack, onHome }) {
   const msgsRef = React.useRef(null);
 
   const VAL_STEPS = [
-    { label: 'EHR Insurance Lookup', subs: ['Connect to Tebra & Therapy Notes', 'Fetch insurance record', 'Extract policy details'] },
+    { label: 'EHR Insurance Lookup', subs: ['Connect to AlanBehrman client records', 'Fetch insurance record', 'Extract policy details'] },
     { label: 'Coverage Verification', subs: ['Verify plan active', 'Check eligibility dates', 'Confirm benefit year'] },
     { label: 'Copay Determination', subs: ['Apply CPT fee schedule', 'Calculate patient share', 'Check deductible status'] },
     { label: 'Validation Complete', subs: ['Results logged to EHR', 'Staff notified', 'Ready for check-in'] },
@@ -10864,8 +10885,8 @@ function InsValidate({ patient, onBack, onHome }) {
   React.useEffect(() => {
     const seq = [
       [500,  () => setTyping(true)],
-      [1600, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Starting insurance validation for ${patient.name}. Connecting to Tebra & Therapy Notes to pull coverage details from ${patient.insurance}.` }); }],
-      [2200, () => { setStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · Tebra & Therapy Notes Lookup', items: ['Connect to Tebra & Therapy Notes', 'Fetch insurance record', 'Extract policy details'], delays: [0, 800, 1700] }); }],
+      [1600, () => { setTyping(false); addMsg('agent', { type: 'text', text: `Starting insurance validation for ${patient.name}. Connecting to AlanBehrman client records to pull coverage details from ${patient.insurance}.` }); }],
+      [2200, () => { setStep(1); addMsg('agent', { type: 'scan', title: 'Step 1 · AlanBehrman client records Lookup', items: ['Connect to AlanBehrman client records', 'Fetch insurance record', 'Extract policy details'], delays: [0, 800, 1700] }); }],
       [5200, () => { setStep(2); addMsg('agent', { type: 'coverage', patient }); }],
       [6400, () => { setStep(3); addMsg('agent', { type: 'text', text: 'Coverage verified — plan is active. Running copay calculation for the scheduled appointment type.' }); }],
       [7200, () => { addMsg('agent', { type: 'copay', patient }); }],
@@ -10890,7 +10911,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <div className="ins-card-header">
             <span style={{fontSize:13}}>🔗</span>
             <div><div className="ins-card-title">{m.content.title}</div></div>
-            <div className="ins-card-badge ins-badge-source">Tebra &amp; Therapy Notes</div>
+            <div className="ins-card-badge ins-badge-source">AlanBehrman records &amp; Therapy Notes</div>
           </div>
           <div className="ins-card-body">
             {m.content.items.map((item, i) => (
@@ -10906,7 +10927,7 @@ function InsValidate({ patient, onBack, onHome }) {
         <div className="ins-card">
           <div className="ins-card-header">
             <span style={{fontSize:13}}>🛡</span>
-            <div><div className="ins-card-title">Insurance Coverage — Verified</div><div className="ins-card-sub">{m.content.patient.insurance} · Retrieved from Tebra &amp; Therapy Notes</div></div>
+            <div><div className="ins-card-title">Insurance Coverage — Verified</div><div className="ins-card-sub">{m.content.patient.insurance} · Retrieved from AlanBehrman records &amp; Therapy Notes</div></div>
             <div className="ins-card-badge ins-badge-ok">Active</div>
           </div>
           <div className="ins-card-grid">
@@ -10958,7 +10979,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <div className="ins-result-icon">✓</div>
           <div>
             <div className="ins-result-title">Insurance Validated</div>
-            <div className="ins-result-sub">{m.content.patient.name} has active {m.content.patient.insurance} coverage.<br/>Patient copay: <strong>$37.00</strong> at time of service. Results logged to Tebra & Therapy Notes.</div>
+            <div className="ins-result-sub">{m.content.patient.name} has active {m.content.patient.insurance} coverage.<br/>Patient copay: <strong>$37.00</strong> at time of service. Results logged to AlanBehrman client records.</div>
             <div className="ins-ref">Validation ID: VAL-2026-0422-{m.content.patient.initials}</div>
           </div>
         </div>
@@ -11012,7 +11033,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <div className="ins-sb-footer">
             <div className="ins-sf-row"><span className="ins-sf-label">Patient</span><span className="ins-sf-val">{patient.name}</span></div>
             <div className="ins-sf-row"><span className="ins-sf-label">Insurance</span><span className="ins-sf-val teal">{patient.insurance}</span></div>
-            <div className="ins-sf-row"><span className="ins-sf-label">Source</span><span className="ins-sf-val">Tebra & Therapy Notes</span></div>
+            <div className="ins-sf-row"><span className="ins-sf-label">Source</span><span className="ins-sf-val">AlanBehrman client records</span></div>
           </div>
         </div>
         <div className="ins-chat">
@@ -11089,14 +11110,14 @@ function ClinicDashboard({ onNavigate }) {
         <div className="clinic-tile" onClick={() => onNavigate('schedules')}>
           <div className="ct-icon">🗓</div>
           <div className="ct-title">Schedules</div>
-          <div className="ct-sub">Weekly calendar view of appointments by provider. Syncs with Tebra & Therapy Notes in real time.</div>
+          <div className="ct-sub">Weekly calendar view of appointments by provider. Syncs with AlanBehrman client records in real time.</div>
           <div className="ct-cta">Open calendar <span>→</span></div>
         </div>
 
         <div className="clinic-tile" onClick={() => onNavigate('insurance')}>
           <div className="ct-icon">🛡</div>
           <div className="ct-title">Insurance Authorization</div>
-          <div className="ct-sub">Submit prior authorizations and validate patient insurance coverage with AI-assisted workflows powered by Tebra & Therapy Notes.</div>
+          <div className="ct-sub">Submit prior authorizations and validate patient insurance coverage with AI-assisted workflows powered by AlanBehrman client records.</div>
           <div className="ct-cta">Get started <span>→</span></div>
         </div>
       </div>
