@@ -13,7 +13,7 @@ Configure in service/.env:
   TWILIO_AUTH_TOKEN  = xxx...
   TWILIO_FROM_NUMBER = +12535550100
 
-  APP_BASE_URL     = http://localhost:8020  (used in intake links)
+  APP_BASE_URL     = http://localhost:8025  (used in intake links)
 
 If credentials are absent, channels are skipped and the call returns False.
 """
@@ -36,7 +36,7 @@ TWILIO_SID  = os.getenv("TWILIO_ACCOUNT_SID", "")
 TWILIO_TOK  = os.getenv("TWILIO_AUTH_TOKEN",  "")
 TWILIO_FROM = os.getenv("TWILIO_FROM_NUMBER", "")
 
-APP_BASE_URL = os.getenv("APP_BASE_URL", "http://localhost:8020")
+APP_BASE_URL = os.getenv("APP_BASE_URL", "http://localhost:8025")
 
 
 def _appt_type_label(raw: str) -> str:

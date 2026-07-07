@@ -106,6 +106,48 @@ class FieldValueOut(BaseModel):
     collection_method: Optional[str]
 
 
+# ── Clinical notes (Tebra-style) ──────────────────────────────────────────────
+
+class DiagnosisCode(BaseModel):
+    pointer: str
+    code: str
+    description: str
+
+
+class ProcedureCode(BaseModel):
+    code: str
+    description: str
+    units: int = 1
+    modifiers: List[str] = []
+
+
+class ClinicalNoteOut(BaseModel):
+    id: uuid.UUID
+    patient_id: uuid.UUID
+    appointment_id: Optional[uuid.UUID] = None
+    tebra_encounter_id: Optional[str] = None
+    tebra_chart_number: Optional[str] = None
+    tebra_case_id: Optional[str] = None
+    note_type: str
+    encounter_date: datetime
+    service_location: Optional[str] = None
+    place_of_service_code: Optional[str] = None
+    rendering_provider_name: str
+    rendering_provider_npi: Optional[str] = None
+    chief_complaint: Optional[str] = None
+    subjective: Optional[str] = None
+    objective: Optional[str] = None
+    assessment: Optional[str] = None
+    plan: Optional[str] = None
+    diagnosis_codes: List[DiagnosisCode] = []
+    procedure_codes: List[ProcedureCode] = []
+    encounter_status: str
+    signed_by: Optional[str] = None
+    signed_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}
+
+
 # ── Intake context (returned by /intake/{token}) ─────────────────────────────
 
 class IntakeContext(BaseModel):
@@ -161,5 +203,6 @@ class PatientSummary(BaseModel):
     next_forms_total: int = 0
     next_forms_completed: int = 0
     next_intake_token: Optional[str] = None
+    provider_name: Optional[str] = None
 
     model_config = {"from_attributes": True}

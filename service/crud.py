@@ -275,7 +275,9 @@ def list_patients_with_stats(
             .order_by(models.Appointment.appointment_date.desc())
         ).scalars().all()
 
-        # Find the next upcoming appointment with pending forms
+        # Find the nearest upcoming appointment (regardless of form completion —
+        # a fully-completed appointment should still surface here, just with
+        # zero pending forms, rather than disappear from the registry).
         next_appt = None
         next_forms_total = 0
         next_forms_completed = 0
@@ -285,13 +287,13 @@ def list_patients_with_stats(
                     select(models.PatientForm)
                     .where(models.PatientForm.appointment_id == a.id)
                 ).scalars().all()
-                total = len(form_rows)
-                done = sum(1 for f in form_rows if f.status == "completed")
-                if total > done:  # has pending forms
-                    next_appt = a
-                    next_forms_total = total
-                    next_forms_completed = done
-                    break
+                next_appt = a
+                next_forms_total = len(form_rows)
+                next_forms_completed = sum(1 for f in form_rows if f.status == "completed")
+                break
+
+        provider_name = (next_appt or (appts[0] if appts else None))
+        provider_name = provider_name.provider_name if provider_name else None
 
         result.append(schemas.PatientSummary(
             id=p.id,
@@ -310,8 +312,19 @@ def list_patients_with_stats(
             next_forms_total=next_forms_total,
             next_forms_completed=next_forms_completed,
             next_intake_token=next_appt.intake_link_token if next_appt else None,
+            provider_name=provider_name,
         ))
     return result
+
+
+# ── Clinical notes ────────────────────────────────────────────────────────────
+
+def list_clinical_notes(db: Session, patient_id: uuid.UUID) -> List[models.ClinicalNote]:
+    return db.execute(
+        select(models.ClinicalNote)
+        .where(models.ClinicalNote.patient_id == patient_id)
+        .order_by(models.ClinicalNote.encounter_date.desc())
+    ).scalars().all()
 
 
 def list_upcoming_appointments(

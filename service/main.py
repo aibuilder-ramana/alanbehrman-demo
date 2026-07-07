@@ -1,6 +1,6 @@
 """
 Run from elevia-alanbehrman/:
-    uvicorn service.main:app --port 8020 --reload
+    uvicorn service.main:app --port 8025 --reload
 """
 import os
 import sys
@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from service.database import engine
 from service import models
-from service.routes import patients, appointments, forms
+from service.routes import patients, appointments, forms, reports
 
 # Create all tables on first run
 models.Base.metadata.create_all(bind=engine)
@@ -41,6 +41,7 @@ app.add_middleware(
 app.include_router(patients.router,     prefix="/api/patients",     tags=["patients"])
 app.include_router(appointments.router, prefix="/api",               tags=["appointments"])
 app.include_router(forms.router,        prefix="/api",               tags=["forms"])
+app.include_router(reports.router,      prefix="/api",               tags=["reports"])
 
 # Serve the frontend
 @app.get("/", include_in_schema=False)
@@ -50,6 +51,10 @@ def serve_index():
 @app.get("/intake-v2", include_in_schema=False)
 def serve_intake_v2():
     return FileResponse(os.path.join(_ROOT, "intake-v2.html"))
+
+@app.get("/intake-v3", include_in_schema=False)
+def serve_intake_v3():
+    return FileResponse(os.path.join(_ROOT, "intake-v3.html"))
 
 # Static asset directories
 for _name, _rel in [("assets", "assets"), ("resources", "resources"), ("data", "data")]:

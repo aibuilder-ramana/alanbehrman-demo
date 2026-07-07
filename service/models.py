@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import (
-    Column, String, Boolean, Date, DateTime, Integer,
+    Column, String, Boolean, Date, DateTime, Integer, Numeric,
     ForeignKey, Text, UniqueConstraint, Index,
 )
 from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY
@@ -107,6 +107,85 @@ class FormFieldValue(Base):
         UniqueConstraint("patient_form_id", "field_id", name="uq_form_field"),
         Index("idx_ffv_patient_form", "patient_form_id"),
     )
+
+
+class ClinicalNote(Base):
+    """
+    Treatment/progress note mimicking the fields captured by the Tebra EMR
+    (encounter-linked documentation: chart/case identifiers, service location,
+    place of service, rendering provider, SOAP body, and coded diagnoses/
+    procedures). Seeded as synthetic data for demo patients.
+    """
+    __tablename__ = "clinical_notes"
+
+    id                     = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    patient_id             = Column(UUID(as_uuid=True), ForeignKey("patients.id", ondelete="CASCADE"), nullable=False)
+    appointment_id         = Column(UUID(as_uuid=True), ForeignKey("appointments.id", ondelete="SET NULL"), nullable=True)
+
+    # Tebra encounter/chart identifiers
+    tebra_encounter_id     = Column(String(20))       # e.g. "ENC-100482"
+    tebra_chart_number     = Column(String(20))        # patient chart number, e.g. "CH-000231"
+    tebra_case_id          = Column(String(20))        # Tebra "Case" grouping id
+
+    note_type              = Column(String(30), nullable=False, default="Progress Note")  # Progress Note | SOAP Note | Intake Note | Telephone Note
+    encounter_date         = Column(DateTime(timezone=True), nullable=False)
+    service_location       = Column(String(255))       # Tebra Service Location name
+    place_of_service_code  = Column(String(5))          # CMS POS code, e.g. "11", "02"
+
+    rendering_provider_name = Column(String(255), nullable=False)
+    rendering_provider_npi  = Column(String(10))
+
+    chief_complaint        = Column(Text)
+    subjective              = Column(Text)
+    objective               = Column(Text)
+    assessment              = Column(Text)
+    plan                    = Column(Text)
+
+    diagnosis_codes         = Column(JSONB, default=list)  # [{"pointer":"A","code":"F41.1","description":"Anxiety disorder"}]
+    procedure_codes         = Column(JSONB, default=list)  # [{"code":"90837","description":"Psychotherapy, 60 min","units":1,"modifiers":[]}]
+
+    encounter_status        = Column(String(30), nullable=False, default="Rendered")  # Rendered | Charge Entry | Approved for Billing | Billed
+    signed_by                = Column(String(255))
+    signed_at                = Column(DateTime(timezone=True))
+
+    created_at               = Column(DateTime(timezone=True), default=_now)
+
+    __table_args__ = (Index("idx_clinical_notes_patient", "patient_id"),)
+
+
+class BillingRecord(Base):
+    """
+    A billed encounter (claim) — the minimum viable revenue-cycle fact table
+    for the Business Reports MVP: one row per billed appointment, covering
+    charges, insurance adjustments, payments, and claim status. Appointments
+    with no row here are "unbilled encounters" (a leakage signal). Synthetic
+    data only; no clinical content.
+    """
+    __tablename__ = "billing_records"
+
+    id                = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    appointment_id    = Column(UUID(as_uuid=True), ForeignKey("appointments.id", ondelete="CASCADE"), nullable=False)
+    patient_id        = Column(UUID(as_uuid=True), ForeignKey("patients.id", ondelete="CASCADE"), nullable=False)
+    provider_name     = Column(String(255))
+
+    service_category  = Column(String(100))    # e.g. "Individual Psychotherapy", "Psychiatric Medication Management"
+    cpt_code          = Column(String(10))
+
+    charge_amount     = Column(Numeric(10, 2), nullable=False)      # gross billed
+    allowed_amount    = Column(Numeric(10, 2), nullable=False)      # contracted/expected collectible
+    adjustment_amount = Column(Numeric(10, 2), nullable=False)      # charge - allowed (contractual write-down)
+    paid_amount       = Column(Numeric(10, 2), nullable=False, default=0)
+    patient_balance    = Column(Numeric(10, 2), nullable=False, default=0)  # allowed - paid
+
+    claim_status      = Column(String(20), nullable=False, default="submitted")  # paid | pending | denied | partial
+    denial_reason     = Column(String(255))
+
+    billing_date      = Column(Date, nullable=False)
+    payment_date      = Column(Date)
+
+    created_at        = Column(DateTime(timezone=True), default=_now)
+
+    __table_args__ = (Index("idx_billing_appointment", "appointment_id"),)
 
 
 class IntakeSession(Base):

@@ -35,3 +35,8 @@ def update_patient(patient_id: uuid.UUID, data: schemas.PatientUpdate, db: Sessi
     if not p:
         raise HTTPException(status_code=404, detail="Patient not found")
     return p
+
+
+@router.get("/{patient_id}/notes", response_model=List[schemas.ClinicalNoteOut])
+def list_patient_notes(patient_id: uuid.UUID, db: Session = Depends(get_db)):
+    return crud.list_clinical_notes(db, patient_id)

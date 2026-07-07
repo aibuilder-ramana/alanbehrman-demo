@@ -3452,6 +3452,88 @@ textarea.basic-input {
 }
 .empty-state-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
 
+/* ── Business Reports ──────────────────────────────────────────────────────
+   Categorical (provider identity) and status (AR aging risk) hues are picked
+   per the dataviz skill's method — fixed order, contrast-checked against the
+   app's light surface — not eyeballed. */
+:root {
+  --rpt-provider-1: #1f74bf;   /* Vemuluri — matches Schedules provider color */
+  --rpt-provider-2: #ba5d1d;   /* Mitchell */
+  --rpt-provider-3: #7a6bc1;   /* Postanowicz */
+  --rpt-ordinal-1: #86b6ef;    /* retention funnel, lightest → darkest */
+  --rpt-ordinal-2: #5598e7;
+  --rpt-ordinal-3: #2a78d6;
+  --rpt-ordinal-4: #1c5cab;
+  --rpt-ordinal-5: #104281;
+  --rpt-status-good: #0ca30c;
+  --rpt-status-warning: #fab219;
+  --rpt-status-serious: #ec835a;
+  --rpt-status-critical: #d03b3b;
+}
+.rpt-mock-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  color: oklch(45% 0.1 80); background: oklch(95% 0.04 80); border: 1px solid oklch(87% 0.06 80);
+  border-radius: 20px; padding: 4px 11px; margin-bottom: 14px;
+}
+.rpt-section { margin-top: 34px; }
+.rpt-section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.rpt-section-title { font-family: 'Instrument Serif', serif; font-size: 19px; color: var(--ink); letter-spacing: -0.01em; }
+.rpt-section-sub { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+
+.rpt-kpi-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+}
+.rpt-kpi-tile {
+  background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.rpt-kpi-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--ink-4); margin-bottom: 6px;
+}
+.rpt-kpi-value {
+  font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.rpt-kpi-sub { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+
+.rpt-bar-chart { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
+.rpt-bar-row { display: grid; grid-template-columns: 148px 1fr 92px; align-items: center; gap: 10px; }
+.rpt-bar-label { font-size: 12.5px; color: var(--ink-2); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rpt-bar-track { position: relative; height: 14px; background: var(--bg-tint); border-radius: 4px; overflow: hidden; }
+.rpt-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; transition: width 0.4s; }
+.rpt-bar-value { font-size: 12.5px; color: var(--ink-2); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+
+.rpt-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0 18px; }
+.rpt-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); }
+.rpt-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+.rpt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.rpt-table th {
+  text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--ink-4); padding: 8px 12px; border-bottom: 1px solid var(--hair-strong);
+  white-space: nowrap;
+}
+.rpt-table td { padding: 10px 12px; border-bottom: 1px solid var(--hair); color: var(--ink-2); white-space: nowrap; }
+.rpt-table tr:last-child td { border-bottom: none; }
+.rpt-table td.rpt-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.rpt-funnel { display: flex; flex-direction: column; gap: 8px; }
+.rpt-funnel-row { display: grid; grid-template-columns: 140px 1fr 130px; align-items: center; gap: 10px; }
+.rpt-funnel-label { font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+.rpt-funnel-track { height: 22px; background: var(--bg-tint); border-radius: 4px; overflow: hidden; }
+.rpt-funnel-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+.rpt-funnel-meta { font-size: 12px; color: var(--ink-3); text-align: right; font-variant-numeric: tabular-nums; }
+
+.rpt-status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.rpt-status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.rpt-status-label { font-size: 12.5px; color: var(--ink-2); font-weight: 600; width: 90px; flex-shrink: 0; }
+.rpt-status-track { flex: 1; height: 14px; background: var(--bg-tint); border-radius: 4px; overflow: hidden; }
+.rpt-status-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+.rpt-status-value { font-size: 12.5px; color: var(--ink-2); font-weight: 600; width: 76px; text-align: right; font-variant-numeric: tabular-nums; }
+
 /* ── Schedules View ─────────────────────────────────────────────────────── */
 .sched-view {
   display: flex;
@@ -3908,49 +3990,113 @@ textarea.basic-input {
 /* ── Clinical Chart Overlay ──────────────────────────────────────────────── */
 .chart-overlay {
   position: fixed; inset: 0; z-index: 1000;
-  background: rgba(10, 18, 28, 0.72);
-  backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 16px;
+  background: rgba(16, 23, 29, 0.58);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: stretch; justify-content: center;
+  padding: 18px;
   animation: fadeIn 0.2s ease;
 }
 .chart-panel {
-  width: 100%; max-width: 1180px; height: 92vh;
-  background: var(--surface);
-  border-radius: 14px;
+  width: min(1480px, 100%);
+  height: min(94vh, 1040px);
+  background:
+    radial-gradient(circle at top left, oklch(99% 0.012 185), transparent 28%),
+    linear-gradient(180deg, oklch(98.9% 0.006 92), oklch(98.2% 0.005 88));
+  border-radius: 26px;
   overflow: hidden;
   display: flex; flex-direction: column;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(20,30,40,0.08);
-  animation: chartSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 40px 100px rgba(8,18,28,0.26), 0 0 0 1px rgba(20,30,40,0.06);
+  animation: chartSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @keyframes chartSlideUp { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: none; } }
 
 /* Chart header bar */
 .chart-header {
-  background: oklch(20% 0.018 240);
-  padding: 0 20px;
-  height: 56px;
-  display: flex; align-items: center; gap: 16px;
-  flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  background:
+    radial-gradient(circle at top right, oklch(30% 0.04 195 / 0.55), transparent 22%),
+    linear-gradient(180deg, oklch(20% 0.022 220), oklch(16% 0.018 220));
+  padding: 24px 30px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px 26px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.chart-mrn { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
-.chart-pt-name { font-size: 17px; font-weight: 600; color: white; letter-spacing: -0.01em; }
-.chart-pt-meta { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 1px; }
-.chart-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
-.chart-encounter-badge {
-  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
-  background: oklch(55% 0.14 250 / 0.2); color: oklch(75% 0.1 250);
-  border: 1px solid oklch(55% 0.14 250 / 0.3);
+.chart-head-main { min-width: 0; }
+.chart-mrn { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.44); margin-bottom: 4px; }
+.chart-pt-name-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.chart-pt-name {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(34px, 3.1vw, 46px);
+  line-height: 0.96;
+  font-weight: 400;
+  color: white;
+  letter-spacing: -0.03em;
 }
+.chart-pt-meta {
+  font-size: 13px;
+  color: rgba(255,255,255,0.74);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 9px;
+}
+.chart-pt-meta strong { color: rgba(255,255,255,0.98); font-weight: 600; }
+.chart-pt-dx { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.chart-dx-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.82);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 11px;
+  font-weight: 600;
+}
+.chart-dx-chip code { font-size: 10px; color: rgba(255,255,255,0.56); }
+.chart-head-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+.chart-head-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.chart-head-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
+}
+.chart-head-chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+.chart-head-chip.risk-low { background: oklch(28% 0.06 160 / 0.35); color: oklch(86% 0.05 160); border-color: oklch(55% 0.08 160 / 0.25); }
+.chart-head-chip.risk-low .dot { background: oklch(80% 0.08 160); }
+.chart-head-chip.risk-moderate { background: oklch(34% 0.06 85 / 0.36); color: oklch(92% 0.05 88); border-color: oklch(65% 0.08 85 / 0.24); }
+.chart-head-chip.risk-moderate .dot { background: oklch(84% 0.09 86); }
+.chart-head-chip.risk-high { background: oklch(35% 0.08 28 / 0.4); color: oklch(92% 0.05 28); border-color: oklch(65% 0.12 28 / 0.28); }
+.chart-head-chip.risk-high .dot { background: oklch(82% 0.14 28); }
+.chart-head-chip.next { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.84); border-color: rgba(255,255,255,0.09); }
 .chart-ai-badge {
   display: flex; align-items: center; gap: 5px; padding: 4px 10px;
   border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
-  background: oklch(55% 0.08 200 / 0.15); color: oklch(72% 0.08 200);
-  border: 1px solid oklch(55% 0.08 200 / 0.3);
+  background: oklch(55% 0.08 200 / 0.14); color: oklch(82% 0.03 200);
+  border: 1px solid oklch(55% 0.08 200 / 0.24);
 }
 .chart-ai-dot { width: 5px; height: 5px; border-radius: 50%; background: oklch(72% 0.08 200); animation: blink 2s infinite; }
+.chart-head-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.chart-head-btn {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.88);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s, border-color 0.15s;
+}
+.chart-head-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.18); }
+.chart-head-btn.primary { background: linear-gradient(135deg, oklch(53% 0.11 176), oklch(43% 0.09 170)); color: white; border-color: rgba(255,255,255,0.02); }
+.chart-head-btn.primary:hover { background: linear-gradient(135deg, oklch(56% 0.11 176), oklch(45% 0.09 170)); }
 .chart-close {
-  margin-left: auto; width: 32px; height: 32px; border-radius: 8px; border: none;
+  width: 36px; height: 36px; border-radius: 10px; border: none;
   background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.55);
   cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
   transition: background 0.15s, color 0.15s; flex-shrink: 0;
@@ -3959,48 +4105,380 @@ textarea.basic-input {
 
 /* Patient banner */
 .chart-pt-banner {
-  background: oklch(15% 0.02 240);
-  padding: 10px 20px;
-  display: flex; align-items: center; gap: 20px;
-  flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-  flex-wrap: wrap;
+  background: rgba(255,255,255,0.74);
+  backdrop-filter: blur(10px);
+  padding: 14px 26px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(20,30,40,0.06);
 }
-.chart-banner-item { display: flex; flex-direction: column; gap: 1px; }
-.chart-banner-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
-.chart-banner-val { font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.75); }
-.chart-banner-val.alert { color: oklch(72% 0.16 25); }
-.chart-banner-val.ok { color: oklch(72% 0.1 200); }
-.chart-banner-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.07); flex-shrink: 0; }
+.chart-banner-item {
+  display: flex; flex-direction: column; gap: 3px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(20,30,40,0.05);
+  border-radius: 16px;
+  padding: 12px 13px;
+}
+.chart-banner-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-4); }
+.chart-banner-val { font-size: 13px; font-weight: 600; color: var(--ink); }
+.chart-banner-val.alert { color: oklch(50% 0.16 25); }
+.chart-banner-val.ok { color: var(--teal-deep); }
 
 /* Body layout */
-.chart-body { display: flex; flex: 1; overflow: hidden; }
+.chart-body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
 
 /* Left nav */
 .chart-nav {
-  width: 170px; flex-shrink: 0;
-  background: oklch(17% 0.018 240);
+  width: 214px; flex-shrink: 0;
+  background: linear-gradient(180deg, oklch(18% 0.02 220), oklch(15% 0.018 220));
   border-right: 1px solid rgba(255,255,255,0.05);
   display: flex; flex-direction: column;
-  overflow-y: auto; padding: 8px 0;
+  overflow-y: auto; padding: 18px 0;
 }
-.chart-nav-section { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.2); padding: 10px 14px 4px; }
+.chart-nav-section { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.24); padding: 12px 18px 6px; }
 .chart-nav-item {
   display: flex; align-items: center; gap: 9px;
-  padding: 8px 14px; cursor: pointer;
-  font-size: 12.5px; color: rgba(255,255,255,0.45);
-  transition: background 0.15s, color 0.15s; border: none; background: none;
+  padding: 10px 18px; cursor: pointer;
+  font-size: 12.5px; color: rgba(255,255,255,0.48);
+  transition: background 0.15s, color 0.15s, transform 0.15s; border: none; background: none;
   width: 100%; text-align: left; font-family: inherit;
 }
 .chart-nav-item:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.7); }
-.chart-nav-item.active { background: oklch(55% 0.14 250 / 0.15); color: oklch(78% 0.1 250); border-right: 2px solid oklch(60% 0.14 250); }
+.chart-nav-item.active {
+  background: linear-gradient(90deg, rgba(86, 173, 158, 0.22), rgba(86, 173, 158, 0.06));
+  color: white;
+  border-right: 2px solid oklch(58% 0.1 176);
+  transform: translateX(1px);
+}
 .chart-nav-icon { font-size: 13px; flex-shrink: 0; opacity: 0.7; }
 .chart-nav-item.active .chart-nav-icon { opacity: 1; }
-.chart-nav-badge { margin-left: auto; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; background: oklch(55% 0.14 250 / 0.2); color: oklch(72% 0.1 250); }
+.chart-nav-badge { margin-left: auto; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
 
 /* Main content */
-.chart-main { flex: 1; overflow-y: auto; background: var(--bg); padding: 20px 24px; }
+.chart-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+.chart-main { overflow-y: auto; background: transparent; padding: 28px 28px 32px; min-width: 0; }
 .chart-main::-webkit-scrollbar { width: 5px; }
 .chart-main::-webkit-scrollbar-thumb { background: var(--hair-strong); border-radius: 3px; }
+.chart-sidebar {
+  overflow-y: auto;
+  border-left: 1px solid rgba(20,30,40,0.06);
+  background: rgba(255,255,255,0.58);
+  padding: 24px 22px 28px;
+}
+
+.chart-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.chart-overview-main,
+.chart-overview-side { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.chart-card {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(20,30,40,0.06);
+  border-radius: 22px;
+  padding: 18px 18px 20px;
+  box-shadow: 0 10px 30px rgba(20,30,40,0.04);
+}
+.chart-card.hero {
+  background:
+    radial-gradient(circle at top right, oklch(97% 0.04 174), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.9));
+}
+.chart-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-4);
+  margin-bottom: 12px;
+}
+.chart-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.chart-card-kicker {
+  font-size: 12px;
+  color: var(--teal-deep);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.chart-summary-bullets { display: flex; flex-direction: column; gap: 10px; }
+.chart-summary-bullet {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.chart-summary-bullet::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--sage));
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+.chart-watch-line {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hair);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.chart-watch-line strong { color: var(--ink); }
+.chart-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.chart-metric-card {
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(20,30,40,0.06);
+  border-radius: 18px;
+  padding: 14px;
+}
+.chart-metric-label { font-size: 10px; font-weight: 700; color: var(--ink-4); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.chart-metric-value { font-size: 28px; line-height: 1; font-weight: 300; color: var(--ink); letter-spacing: -0.03em; }
+.chart-metric-sub { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+.chart-trend-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.chart-trend-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 700;
+}
+.chart-trend-pill.improving { background: var(--teal-soft); color: var(--teal-deep); }
+.chart-trend-pill.stable { background: var(--bg-tint); color: var(--ink-3); }
+.chart-trend-pill.needs-attention { background: oklch(96% 0.04 80); color: oklch(50% 0.12 70); }
+.chart-sparkline { display: flex; align-items: flex-end; gap: 4px; height: 28px; }
+.chart-sparkline span { width: 7px; border-radius: 999px; background: linear-gradient(180deg, oklch(70% 0.05 176), oklch(48% 0.1 176)); }
+.chart-topic-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.chart-topic-chip {
+  display: inline-flex; align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+  border: 1px solid rgba(20,30,40,0.06);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+.chart-topic-chip.active {
+  background: var(--teal-soft);
+  color: var(--teal-deep);
+  border-color: oklch(86% 0.03 176);
+}
+.chart-surface-list { display: flex; flex-direction: column; gap: 10px; }
+.chart-feed-item {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.chart-feed-item:last-child { border-bottom: none; padding-bottom: 0; }
+.chart-feed-date { font-size: 12px; color: var(--ink-4); font-weight: 600; }
+.chart-feed-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.chart-feed-sub { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+.chart-feed-status {
+  display: inline-flex; align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--ink-3);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.chart-note-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chart-note-section {
+  background: var(--bg-tint);
+  border: 1px solid rgba(20,30,40,0.04);
+  border-radius: 16px;
+  padding: 14px;
+}
+.chart-note-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+.chart-note-section-body {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.chart-dual-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+  gap: 18px;
+}
+.chart-detail-panel {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(20,30,40,0.06);
+  border-radius: 22px;
+  padding: 18px;
+}
+.chart-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.chart-filter-pill {
+  border: 1px solid var(--hair);
+  background: rgba(255,255,255,0.82);
+  color: var(--ink-3);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.chart-filter-pill.active { background: var(--teal-soft); border-color: oklch(86% 0.03 176); color: var(--teal-deep); }
+.chart-timeline-event {
+  display: grid;
+  grid-template-columns: 86px 12px minmax(0, 1fr);
+  gap: 14px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.chart-timeline-date { font-size: 12px; color: var(--ink-4); font-weight: 600; padding-top: 2px; }
+.chart-timeline-marker {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.chart-timeline-marker::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: -16px;
+  width: 2px;
+  background: var(--hair);
+}
+.chart-timeline-event:last-child .chart-timeline-marker::before { display: none; }
+.chart-timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px var(--teal-soft);
+  margin-top: 4px;
+}
+.chart-timeline-card {
+  border: 1px solid transparent;
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: transparent;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+.chart-timeline-event.active .chart-timeline-card,
+.chart-timeline-event:hover .chart-timeline-card {
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(20,30,40,0.06);
+  transform: translateY(-1px);
+}
+.chart-timeline-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-3);
+  background: var(--bg-tint);
+  margin-bottom: 8px;
+}
+.chart-data-pairs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+.chart-pair-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-4); margin-bottom: 4px; }
+.chart-pair-val { font-size: 13px; color: var(--ink-2); }
+.chart-goal-list, .chart-bullet-list { display: flex; flex-direction: column; gap: 10px; }
+.chart-goal-card {
+  background: rgba(255,255,255,0.86);
+  border: 1px solid rgba(20,30,40,0.06);
+  border-radius: 18px;
+  padding: 14px;
+}
+.chart-goal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.chart-goal-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.chart-goal-status { font-size: 10px; font-weight: 700; border-radius: 999px; padding: 5px 8px; }
+.chart-goal-status.improving { background: var(--teal-soft); color: var(--teal-deep); }
+.chart-goal-status.partial { background: oklch(96% 0.04 80); color: oklch(50% 0.12 70); }
+.chart-goal-status.ongoing { background: var(--bg-tint); color: var(--ink-3); }
+.chart-doc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.chart-doc-row:last-child { border-bottom: none; }
+.chart-doc-meta { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+.chart-doc-chip { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-4); }
+.chart-sidebar-card {
+  background: rgba(255,255,255,0.86);
+  border: 1px solid rgba(20,30,40,0.06);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.chart-sidebar-card:last-child { margin-bottom: 0; }
+.chart-memory-item,
+.chart-alert-item,
+.chart-quick-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.chart-memory-item:last-child,
+.chart-alert-item:last-child,
+.chart-quick-row:last-child { border-bottom: none; padding-bottom: 0; }
+.chart-memory-item:first-child,
+.chart-alert-item:first-child,
+.chart-quick-row:first-child { padding-top: 0; }
+.chart-memory-dot,
+.chart-alert-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.chart-memory-dot { background: var(--teal); }
+.chart-alert-dot { background: oklch(74% 0.11 84); }
+.chart-sidebar-note { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.chart-alert-title { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.chart-alert-sub { font-size: 12px; color: var(--ink-3); }
+.chart-quick-row { justify-content: space-between; gap: 12px; }
+.chart-quick-label { font-size: 12px; color: var(--ink-3); }
+.chart-quick-value { font-size: 12px; color: var(--ink); font-weight: 600; text-align: right; }
+.chart-empty-note {
+  border: 1px dashed var(--hair-strong);
+  background: rgba(255,255,255,0.6);
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
 
 /* Section headers */
 .chart-sec-title {
@@ -4143,6 +4621,59 @@ textarea.basic-input {
 .chart-lab-flag.N { background: var(--sage-soft); color: var(--sage); border: 1px solid oklch(86% 0.04 200); }
 .chart-lab-date { flex: 1; font-size: 11px; color: var(--ink-4); }
 
+@media (max-width: 1220px) {
+  .chart-panel { height: 96vh; }
+  .chart-pt-banner { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .chart-workspace { grid-template-columns: minmax(0, 1fr) 310px; }
+  .chart-overview-grid,
+  .chart-dual-grid { grid-template-columns: 1fr; }
+  .chart-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 940px) {
+  .chart-overlay { padding: 8px; }
+  .chart-panel {
+    width: 100%;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+  }
+  .chart-header {
+    grid-template-columns: 1fr;
+    padding: 20px 18px 16px;
+  }
+  .chart-head-actions { align-items: stretch; }
+  .chart-head-chips,
+  .chart-head-buttons { justify-content: flex-start; }
+  .chart-pt-banner { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px 16px; }
+  .chart-body { flex-direction: column; }
+  .chart-nav {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 12px;
+    gap: 8px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .chart-nav-section { display: none; }
+  .chart-nav-item {
+    width: auto;
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.04);
+  }
+  .chart-nav-item.active {
+    border-right: none;
+    transform: none;
+    background: rgba(86, 173, 158, 0.22);
+  }
+  .chart-workspace { grid-template-columns: 1fr; }
+  .chart-sidebar { border-left: none; border-top: 1px solid rgba(20,30,40,0.06); }
+}
+
 /* ── Unified page navigation bar ────────────────────────────────────────── */
 .page-nav {
   display: flex;
@@ -4212,7 +4743,7 @@ const I = {
 };
 
 /* ── API client ──────────────────────────────────────────────────────────── */
-const API = 'http://localhost:8025/api';
+const API = '/api';
 const GOOGLE_IDENTITY_CLIENT_ID = window.ALANBEHRMAN_GOOGLE_CLIENT_ID || '';
 const MOCK_PATIENT_AVATARS = {
   female: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
@@ -4516,7 +5047,7 @@ const ALAN_FORMS = {
   insuranceAuth: { id:'insurance-authorization', step:'Step Four', title:'Insurance Authorization', url:'https://form.jotform.com/221713875383057', type:'jotform' },
   relationalIntake: { id:'relational-intake', step:'Step Four', title:'Relational Therapy Initial Intake Form', url:'https://form.jotform.com/221715084103041', type:'jotform' },
   releaseInfo: { id:'release-information', step:'Step Four', title:'Consent & Authorization to Release Information', url:'https://form.jotform.com/221714881659061', type:'jotform' },
-  surpriseBilling: { id:'surprise-billing', step:'Step Four', title:'Surprise Billing Policy', url:'https://form.jotform.com/221706363497057', type:'jotform' },
+  surpriseBilling: { id:'surprise-billing', step:'Step Four', title:'Billing Policy', url:'https://form.jotform.com/221706363497057', type:'jotform' },
   coachingConsent: { id:'coaching-consent', step:'Step Four', title:'Coaching Informed Consent', url:'https://form.jotform.com/221714008041037', type:'jotform' },
 };
 
@@ -4629,7 +5160,13 @@ function buildDynamicFormPacket({ selectedAppointment, needsData, basicInfo, pat
 }
 
 /* ── Shared Topbar ───────────────────────────────────────────────────────── */
-function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView, showPatientIdentity = true }) {
+const CLINIC_USERS = {
+  marisa: { name: 'Marisa Sharpe', role: 'Front Desk Coordinator', photo: 'assets/marisa-sharpe-profile.jpeg', initials: 'MS' },
+  alan:   { name: 'Alan Behrman',  role: 'Practice Owner',          photo: null,                                initials: 'AB' },
+};
+
+function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView, showPatientIdentity = true, clinicUser = 'marisa' }) {
+  const cu = CLINIC_USERS[clinicUser] || CLINIC_USERS.marisa;
   return (
     <header className="topbar">
       <div className="brandlock">
@@ -4667,8 +5204,11 @@ function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView, showPat
         <span className="patient-chip">
           {viewMode === 'clinic' ? (
             <>
-              <img className="profile-photo" src="assets/marisa-sharpe-profile.jpeg" alt="Marisa Sharpe" />
-              Marisa Sharpe
+              {cu.photo
+                ? <img className="profile-photo" src={cu.photo} alt={cu.name} />
+                : <span className="profile-photo" style={{display:'flex',alignItems:'center',justifyContent:'center',background:'var(--teal-soft)',color:'var(--teal-deep)',fontWeight:700,fontSize:11}}>{cu.initials}</span>
+              }
+              {cu.name}
             </>
           ) : (
             <>
@@ -8843,6 +9383,7 @@ function AIIntakePage({ onBack, onHome, intakeCtx, patient = PATIENT }) {
 
 const APPT_TYPES = [
   { value: 'therapy_consultation', label: 'Therapy Consultation' },
+  { value: 'psychiatry_consultation',   label: 'Psychiatry Consultation' },
   { value: 'primary_care',             label: 'Primary Care Visit' },
   { value: 'annual_physical',          label: 'Annual Physical' },
   { value: 'pre_employment',           label: 'Pre-Employment Physical' },
@@ -9456,157 +9997,383 @@ function PageNav({ onBack, onHome, backLabel, homeLabel, crumb }) {
 }
 
 /* ── Clinical Chart Overlay ──────────────────────────────────────────────── */
-function genChartData(patient) {
-  // Deterministic mock data seeded from patient name
-  const seed = patient.full_name.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
-  const rnd = (n) => seed % n;
-  const genderM = (patient.gender || '').toLowerCase().startsWith('m');
-  const apptType = patient.next_appointment_type || 'primary_care';
-  const isImmigration = apptType === 'therapy_consultation';
+function genChartData(patient, tebraNotes) {
+  return genTherapyChartData(patient, tebraNotes || []);
+}
 
-  const allProblems = [
-    { name:'Hypothyroidism', icd:'E03.9', onset:'2019-03', status:'Active', severity:'Mild' },
-    { name:'Hypertension', icd:'I10', onset:'2021-07', status:'Active', severity:'Moderate' },
-    { name:'Type 2 Diabetes Mellitus', icd:'E11.9', onset:'2020-01', status:'Active', severity:'Moderate' },
-    { name:'Hyperlipidemia', icd:'E78.5', onset:'2022-03', status:'Active', severity:'Mild' },
-    { name:'Anxiety disorder', icd:'F41.1', onset:'2018-09', status:'Active', severity:'Mild' },
-    { name:'Allergic rhinitis', icd:'J30.9', onset:'2015-05', status:'Active', severity:'Mild' },
-    { name:'GERD', icd:'K21.0', onset:'2017-11', status:'Active', severity:'Mild' },
-    { name:'Vitamin D deficiency', icd:'E55.9', onset:'2023-01', status:'Active', severity:'Mild' },
-    { name:'Acute URI', icd:'J06.9', onset:'2024-11', status:'Resolved', severity:'Mild' },
-    { name:'Asthma', icd:'J45.20', onset:'2010-04', status:'Active', severity:'Moderate' },
-    { name:'Pre-diabetes', icd:'R73.09', onset:'2022-08', status:'Active', severity:'Mild' },
-    { name:'Obesity, BMI 31.2', icd:'E66.09', onset:'2021-02', status:'Active', severity:'Mild' },
+function compactDateTime(d) {
+  if (!d) return '—';
+  const date = new Date(d);
+  return date.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) + ' · ' + date.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+}
+
+function compactDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+function relativeBucket(d) {
+  const ms = Date.now() - new Date(d).getTime();
+  const day = 24 * 3600 * 1000;
+  if (ms < day) return 'Today';
+  if (ms < 8 * day) return 'Last Week';
+  if (ms < 15 * day) return '2 Weeks Ago';
+  if (ms < 32 * day) return 'This Month';
+  return 'Earlier';
+}
+
+function noteExcerpt(note) {
+  const chunks = [note.assessment, note.subjective, note.plan, note.objective, note.chief_complaint].filter(Boolean);
+  return chunks.join(' ').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeCategory(val) {
+  if (val === 'all') return 'all';
+  return val;
+}
+
+function genTherapyChartData(patient, tebraNotes) {
+  const seed = patient.full_name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const rnd = (n, offset = 0) => (seed + offset) % n;
+  const preferredName = patient.first_name || patient.full_name.split(' ')[0];
+  const assignedProvider = patient.provider_name || ['Jane Smith, LCSW', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'][rnd(3, 11)];
+  const noteList = [...(tebraNotes || [])].sort((a, b) => new Date(b.encounter_date) - new Date(a.encounter_date));
+  const diagnosisFromNotes = [];
+  noteList.forEach(note => {
+    (note.diagnosis_codes || []).forEach(dx => {
+      if (!diagnosisFromNotes.some(existing => existing.code === dx.code)) {
+        diagnosisFromNotes.push({ code: dx.code, description: dx.description });
+      }
+    });
+  });
+  const fallbackDx = [
+    { code:'F41.1', description:'Generalized Anxiety Disorder' },
+    { code:'F33.0', description:'Major Depressive Disorder, Recurrent, Mild' },
+    { code:'F43.23', description:'Adjustment Disorder with Anxiety and Depressed Mood' },
+    { code:'F41.0', description:'Panic Disorder' },
+    { code:'F90.0', description:'ADHD, Predominantly Inattentive Type' },
   ];
-  const problems = allProblems.filter((_, i) => (seed + i * 7) % 5 !== 0).slice(0, 4 + rnd(3));
+  const diagnoses = (diagnosisFromNotes.length ? diagnosisFromNotes : fallbackDx.slice(rnd(2, 4), rnd(2, 4) + 2)).slice(0, 3);
 
-  const allMeds = [
-    { name:'Levothyroxine', dose:'75 mcg', freq:'Daily', route:'Oral', prescriber:'Dr. Vemuluri', since:'2019-03' },
-    { name:'Lisinopril', dose:'10 mg', freq:'Daily', route:'Oral', prescriber:'Mitchell', since:'2021-07' },
-    { name:'Metformin', dose:'500 mg', freq:'BID', route:'Oral', prescriber:'Postanowicz', since:'2020-02' },
-    { name:'Atorvastatin', dose:'20 mg', freq:'Nightly', route:'Oral', prescriber:'Dr. Vemuluri', since:'2022-04' },
-    { name:'Sertraline', dose:'50 mg', freq:'Daily', route:'Oral', prescriber:'Mitchell', since:'2018-10' },
-    { name:'Vitamin D3', dose:'2000 IU', freq:'Daily', route:'Oral', prescriber:'Self', since:'2023-01' },
-    { name:'Cetirizine', dose:'10 mg', freq:'PRN', route:'Oral', prescriber:'Postanowicz', since:'2015-05' },
-    { name:'Omeprazole', dose:'20 mg', freq:'Daily', route:'Oral', prescriber:'Dr. Vemuluri', since:'2017-12' },
-    { name:'Albuterol inhaler', dose:'90 mcg', freq:'PRN', route:'Inhaled', prescriber:'Postanowicz', since:'2010-04' },
-    { name:'Metoprolol succinate', dose:'25 mg', freq:'Daily', route:'Oral', prescriber:'Mitchell', since:'2022-01' },
-  ];
-  const meds = allMeds.filter((_, i) => (seed + i * 3) % 4 !== 0).slice(0, 3 + rnd(3));
-
-  const allAllergies = [
-    { substance:'Penicillin', reaction:'Rash, urticaria', severity:'Moderate', verified:'Yes' },
-    { substance:'Sulfa drugs', reaction:'Anaphylaxis', severity:'Severe', verified:'Yes' },
-    { substance:'Latex', reaction:'Contact dermatitis', severity:'Mild', verified:'No' },
-    { substance:'Ibuprofen', reaction:'GI upset, hives', severity:'Mild', verified:'No' },
-    { substance:'Shellfish', reaction:'Hives', severity:'Moderate', verified:'Yes' },
-    { substance:'Codeine', reaction:'Nausea, vomiting', severity:'Mild', verified:'No' },
-    { substance:'Aspirin', reaction:'Bronchospasm', severity:'Moderate', verified:'Yes' },
+  const meds = [
+    { name:'Sertraline', dose:'50 mg', schedule:'Daily' },
+    { name:'Hydroxyzine', dose:'25 mg', schedule:'PRN anxiety' },
+    { name:'Melatonin', dose:'3 mg', schedule:'PRN sleep' },
+    { name:'Escitalopram', dose:'10 mg', schedule:'Daily' },
+    { name:'Bupropion XL', dose:'150 mg', schedule:'Daily' },
+  ].filter((_, i) => (seed + i * 5) % 4 !== 0).slice(0, 2 + rnd(2, 17));
+  const allergiesPool = [
     { substance:'NKDA', reaction:'—', severity:'none', verified:'—' },
+    { substance:'Penicillin', reaction:'Rash', severity:'Moderate', verified:'Yes' },
+    { substance:'Shellfish', reaction:'Hives', severity:'Mild', verified:'Yes' },
+    { substance:'Latex', reaction:'Contact dermatitis', severity:'Mild', verified:'No' },
   ];
-  const allergyIdx = rnd(allAllergies.length);
-  const allergies = allergyIdx === 7 ? [allAllergies[7]] : allAllergies.filter((_, i) => (seed + i*5) % 3 !== 0).slice(0,2+rnd(2));
+  const allergies = rnd(4, 9) === 0 ? [allergiesPool[0]] : allergiesPool.slice(1, 2 + rnd(2, 23));
 
-  const bpSys = 118 + rnd(24); const bpDia = 72 + rnd(18);
-  const hr = 64 + rnd(22); const bmi = 22.4 + (seed % 120) / 10;
-  const temp = (98.0 + rnd(12) / 10).toFixed(1); const spo2 = 96 + rnd(4);
-  const vitals = {
-    bp: `${bpSys}/${bpDia}`, bpFlag: bpSys > 130 ? 'elevated' : 'normal',
-    hr: hr, hrFlag: hr > 90 ? 'elevated' : 'normal',
-    bmi: bmi.toFixed(1), bmiFlag: bmi > 30 ? 'elevated' : 'normal',
-    temp: temp, tempFlag: parseFloat(temp) > 99.4 ? 'elevated' : 'normal',
-    spo2: spo2, spo2Flag: spo2 < 95 ? 'low' : 'normal',
-    weight: (130 + rnd(80)) + ' lbs', rr: 14 + rnd(6),
+  const topicPool = ['Work stress', 'Sleep', 'Relationship strain', 'Panic attacks', 'Medication adherence', 'Family conflict', 'Boundary setting', 'Perfectionism', 'Trauma triggers', 'Burnout'];
+  const topics = topicPool.filter((_, i) => (seed + i * 3) % 4 !== 0).slice(0, 4);
+
+  const phqCurrent = 6 + rnd(6, 3);
+  const phqPrevious = phqCurrent + 2 + rnd(3, 5);
+  const phqBaseline = phqPrevious + 3 + rnd(5, 7);
+  const gadCurrent = 5 + rnd(6, 13);
+  const gadPrevious = gadCurrent + 2 + rnd(3, 19);
+  const gadBaseline = gadPrevious + 3 + rnd(4, 29);
+  const attendanceMissed = rnd(3, 31);
+  const noShowRisk = attendanceMissed === 0 ? 'Stable' : attendanceMissed === 1 ? 'Watch' : 'Needs outreach';
+  const treatmentPlanDays = 8 + rnd(18, 37);
+  const noteDrafts = rnd(2, 41);
+  const unsignedNotes = noteDrafts === 0 ? 0 : 1;
+
+  const measures = [
+    {
+      id:'phq9',
+      label:'PHQ-9',
+      baseline: phqBaseline,
+      previous: phqPrevious,
+      current: phqCurrent,
+      unit:'score',
+      trend: phqCurrent < phqPrevious ? 'Improving' : phqCurrent > phqPrevious ? 'Worsening' : 'Stable',
+      interpretation: phqCurrent < 10 ? 'Depressive symptoms are moving into the mild range.' : 'Depressive symptoms remain clinically significant.',
+      spark:[phqBaseline, phqPrevious, phqCurrent],
+    },
+    {
+      id:'gad7',
+      label:'GAD-7',
+      baseline: gadBaseline,
+      previous: gadPrevious,
+      current: gadCurrent,
+      unit:'score',
+      trend: gadCurrent < gadPrevious ? 'Improving' : gadCurrent > gadPrevious ? 'Worsening' : 'Stable',
+      interpretation: gadCurrent < 10 ? 'Anxiety symptoms are trending down with recent CBT work.' : 'Anxiety remains elevated and should stay on the session agenda.',
+      spark:[gadBaseline, gadPrevious, gadCurrent],
+    },
+  ];
+
+  const latestExcerpt = noteExcerpt(noteList[0] || {}).toLowerCase();
+  const risk = latestExcerpt.includes('si') || latestExcerpt.includes('suic') ? 'High' : (phqCurrent >= 14 || gadCurrent >= 14 ? 'Moderate' : 'Low');
+  const riskClass = risk === 'High' ? 'risk-high' : risk === 'Moderate' ? 'risk-moderate' : 'risk-low';
+  const sessionSummary = [
+    `${measures[0].label} and ${measures[1].label} are ${measures[0].trend === 'Improving' && measures[1].trend === 'Improving' ? 'both improving' : 'mixed but clinically useful'} over the last month.`,
+    `${topics[0]} remains the most consistent trigger in recent documentation.`,
+    attendanceMissed > 0 ? `Attendance shows ${attendanceMissed} missed visit${attendanceMissed > 1 ? 's' : ''} in the recent cycle.` : 'Attendance has been consistent with no missed visits recently.',
+    risk === 'Low' ? 'No acute safety concerns are documented in the most recent charted sessions.' : risk === 'Moderate' ? 'Maintain active check-in on safety and symptom intensity at session start.' : 'Open the visit with a direct safety assessment before moving into broader therapy work.',
+  ];
+  const watchFor = topics.includes('Trauma triggers')
+    ? 'Patient can disengage if trauma content is pushed before they initiate it.'
+    : topics.includes('Perfectionism')
+      ? 'Patient may present as "doing fine" while still carrying high internal stress.'
+      : 'Patient often opens up more after the first ten minutes once rapport is re-established.';
+
+  const aiMemoryPool = [
+    'Responds well to CBT framing and concrete homework.',
+    'Frequently returns to work deadlines when describing distress.',
+    'Medication adherence slips when sleep becomes irregular.',
+    'Prefers collaborative agenda-setting at the beginning of session.',
+    'Avoids discussing family dynamics until trust is re-established.',
+    'Tends to minimize progress unless it is reflected back explicitly.',
+  ];
+  const aiMemory = aiMemoryPool.filter((_, i) => (seed + i * 2) % 5 !== 0).slice(0, 4);
+
+  const alerts = [
+    { title:`Treatment plan expires in ${treatmentPlanDays} days`, subtitle:'Review goals before the next follow-up.', severity: treatmentPlanDays <= 10 ? 'high' : 'medium' },
+    { title: measures[0].current <= 9 ? 'Medication refill due soon' : 'Outcome scores should be reviewed in session', subtitle: measures[0].current <= 9 ? 'Last refill activity suggests 1-2 weeks remaining.' : 'Use next visit to confirm whether current interventions still fit.', severity:'medium' },
+    { title: unsignedNotes > 0 ? `${unsignedNotes} unsigned note draft` : 'No unsigned notes', subtitle: unsignedNotes > 0 ? 'Complete documentation before the next billing cycle.' : 'Documentation is current through the last signed session.', severity: unsignedNotes > 0 ? 'medium' : 'low' },
+  ];
+
+  const latestNote = noteList[0] || null;
+  const nextVisitLabel = patient.next_appointment_date ? fmtDate(patient.next_appointment_date) : 'No upcoming appointment';
+  const treatmentPlan = {
+    lastUpdated: compactDate(new Date(Date.now() - (12 + rnd(18, 43)) * 24 * 3600 * 1000)),
+    expiresInDays: treatmentPlanDays,
+    goals: [
+      { title:`Reduce intensity of ${topics[0].toLowerCase()}`, status:'improving', summary:'Patient is using grounding and reframing more consistently between sessions.' },
+      { title:'Improve sleep consistency and evening routine', status:'partial', summary:'Some progress, but irregular bedtime and late-night rumination continue.' },
+      { title:'Build coping plan for stress spikes before next month', status:'ongoing', summary:'Homework is in place, but generalization outside session is still developing.' },
+    ],
+    interventions: ['CBT', 'Coping-skill rehearsal', 'Homework review', 'Psychoeducation', 'Behavioral activation'].slice(0, 3 + rnd(2, 51)),
+    barriers: ['Work deadlines accelerate avoidance.', 'Sleep disruption amplifies emotional reactivity.'],
+    reviewDate: compactDate(new Date(Date.now() + treatmentPlanDays * 24 * 3600 * 1000)),
   };
 
-  const labs = [
-    { name:'HbA1c', val: (5.6 + (seed%14)/10).toFixed(1) + '%', range:'< 5.7%', flag: seed%3===0?'H':'N', date:'Mar 2026' },
-    { name:'TSH', val: (1.8 + (seed%28)/10).toFixed(2) + ' mIU/L', range:'0.4–4.0', flag: seed%7===0?'H':'N', date:'Mar 2026' },
-    { name:'LDL Cholesterol', val: (88 + rnd(60)) + ' mg/dL', range:'< 100', flag: rnd(2)===0?'H':'N', date:'Feb 2026' },
-    { name:'HDL Cholesterol', val: (45 + rnd(25)) + ' mg/dL', range:'> 40', flag: rnd(3)===0?'L':'N', date:'Feb 2026' },
-    { name:'Fasting Glucose', val: (88 + rnd(40)) + ' mg/dL', range:'70–99', flag: rnd(4)===0?'H':'N', date:'Mar 2026' },
-    { name:'Creatinine', val: (0.78 + rnd(4)/10).toFixed(2) + ' mg/dL', range:'0.6–1.2', flag:'N', date:'Mar 2026' },
-    { name:'ALT', val: (22 + rnd(28)) + ' U/L', range:'7–56', flag:'N', date:'Jan 2026' },
-    { name:'CBC — WBC', val: (5.8 + rnd(30)/10).toFixed(1) + ' K/µL', range:'4.5–11.0', flag:'N', date:'Mar 2026' },
+  const documents = [
+    { title:'Treatment Plan', category:'Plan', source:'Elevia / Therapy Notes', updated:treatmentPlan.lastUpdated, status:treatmentPlan.expiresInDays <= 14 ? 'Review soon' : 'Current' },
+    { title:'HIPAA & Consent Packet', category:'Consent', source:'Intake packet', updated: compactDate(patient.created_at || new Date()), status:'Signed' },
+    { title:'Insurance Card', category:'Insurance', source:'Uploaded by patient', updated: compactDate(new Date(Date.now() - (24 + rnd(20, 61)) * 24 * 3600 * 1000)), status:'On file' },
+    { title:'Outcome Measure Summary', category:'Measures', source:'Auto-generated', updated: compactDate(new Date()), status:'Ready' },
   ];
 
-  const VISIT_TYPES = ['Primary Care Follow-up', 'Therapy Consultation', 'Annual Physical', 'Urgent Care Visit', 'Pre-Placement Physical', 'Telehealth — Medication Review', 'Lab Follow-up', 'Preventive Care'];
-  const PROVIDERS = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
-  const SUMMARIES = [
-    'Patient reports stable symptoms. BP within acceptable range. Medication refills provided.',
-    'Immigration medical exam completed. All required vaccinations documented. Chest X-ray reviewed.',
-    'Annual wellness visit. Labs reviewed. Counseled on diet and exercise. Referral placed.',
-    'Patient presents with acute respiratory symptoms. Started on short-course antibiotic therapy.',
-    'Pre-placement physical for occupational health clearance. EKG normal. Cleared for duty.',
-    'Telehealth — reviewed recent lab results. Adjusted Levothyroxine dose to 88 mcg.',
-    'Lab results reviewed. TSH within therapeutic range. Continue current dose.',
-    'Preventive care. Updated vaccination record. Flu and COVID boosters administered.',
+  const fallbackSourceNotes = [
+    {
+      id:`fallback-${patient.id}-1`,
+      note_type:'Progress Note',
+      encounter_date:new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(),
+      rendering_provider_name:assignedProvider,
+      encounter_status:'Rendered',
+      tebra_chart_number:`CH-${String(seed).slice(-6)}`,
+      tebra_case_id:`CASE-${String(seed + 109).slice(-5)}`,
+      tebra_encounter_id:`ENC-${String(seed + 420).slice(-6)}`,
+      place_of_service_code:'11',
+      service_location:'Alan Behrman & Associates',
+      chief_complaint:'Anxiety and stress management follow-up',
+      subjective:'Patient reports anxiety has eased slightly with more consistent use of breathing exercises. Sleep remains inconsistent, especially before work deadlines.',
+      objective:'Alert, oriented x3, engaged, affect constricted at session start but more open as visit progressed. No SI/HI reported.',
+      assessment:'Continued improvement overall. Work pressure remains the dominant trigger and contributes to anticipatory anxiety and sleep disruption.',
+      plan:'Continue CBT and thought journal. Review sleep routine next session and reinforce behavioral experiments around work stress.',
+      diagnosis_codes: diagnoses.map((dx, index) => ({ pointer:String.fromCharCode(65 + index), code:dx.code, description:dx.description })),
+      procedure_codes:[{ code:'90837', description:'Psychotherapy, 60 min', units:1, modifiers:[] }],
+      signed_by:assignedProvider,
+    },
+    {
+      id:`fallback-${patient.id}-2`,
+      note_type:'Intake Note',
+      encounter_date:new Date(Date.now() - 28 * 24 * 3600 * 1000).toISOString(),
+      rendering_provider_name:assignedProvider,
+      encounter_status:'Approved for Billing',
+      tebra_chart_number:`CH-${String(seed).slice(-6)}`,
+      tebra_case_id:`CASE-${String(seed + 109).slice(-5)}`,
+      tebra_encounter_id:`ENC-${String(seed + 360).slice(-6)}`,
+      place_of_service_code:'11',
+      service_location:'Alan Behrman & Associates',
+      chief_complaint:'Initial therapy assessment for anxiety, depressed mood, and stress overload.',
+      subjective:'Patient endorsed persistent worry, emotional exhaustion, and difficulty winding down at night. Motivation for treatment is high.',
+      objective:'Cooperative, thoughtful, fully oriented. Tearful when describing overwhelm. No acute safety concerns.',
+      assessment:'Presentation is consistent with anxiety and mild depressive symptoms exacerbated by external stressors.',
+      plan:'Begin weekly therapy with CBT focus, introduce symptom tracking, and establish a functional treatment plan.',
+      diagnosis_codes: diagnoses.map((dx, index) => ({ pointer:String.fromCharCode(65 + index), code:dx.code, description:dx.description })),
+      procedure_codes:[{ code:'90791', description:'Psychiatric diagnostic evaluation', units:1, modifiers:[] }],
+      signed_by:assignedProvider,
+    },
   ];
-  const visits = Array.from({length: 5 + rnd(4)}, (_, i) => {
-    const daysAgo = 30 + i * (40 + (seed * (i+1) % 30));
-    const d = new Date(); d.setDate(d.getDate() - daysAgo);
-    const month = d.toLocaleDateString('en-US', { month:'short' });
-    const day = d.getDate(); const year = d.getFullYear();
-    return {
-      dateStr: `${month} ${day}, ${year}`,
-      year,
-      type: VISIT_TYPES[(seed + i * 3) % VISIT_TYPES.length],
-      provider: PROVIDERS[(seed + i) % PROVIDERS.length],
-      summary: SUMMARIES[(seed + i * 7) % SUMMARIES.length],
-      tags: ['Completed', i===0?'Most Recent':'', i<2?'Notes Available':''].filter(Boolean),
-    };
-  });
+  const sourceNotes = noteList.length ? noteList : fallbackSourceNotes;
 
-  const immunizations = isImmigration ? [
-    { vaccine:'MMR', date:'Documented', series:'Complete', source:'Records on file' },
-    { vaccine:'Varicella', date:'Documented', series:'Complete', source:'Records on file' },
-    { vaccine:'Hepatitis B', date:'Documented', series:'Complete (3-dose)', source:'Records on file' },
-    { vaccine:'Tdap', date:'Jun 2021', series:'Complete', source:'Administered' },
-    { vaccine:'Influenza', date:'Oct 2025', series:'Annual', source:'Administered' },
-    { vaccine:'COVID-19', date:'Sep 2024', series:'Updated booster', source:'Records on file' },
-    { vaccine:'Meningococcal', date:'Pending', series:'Recommended', source:'Pending' },
-  ] : [
-    { vaccine:'Influenza', date:'Oct 2025', series:'Annual', source:'Administered' },
-    { vaccine:'COVID-19', date:'Sep 2024', series:'Booster', source:'Records on file' },
-    { vaccine:'Tdap', date:'Jun 2021', series:'Complete', source:'Administered' },
-    { vaccine:'Hepatitis B', date:'Documented', series:'Complete', source:'Records on file' },
-  ];
+  const timeline = [
+    ...sourceNotes.map(note => ({
+      id:`note-${note.id}`,
+      category:'notes',
+      title:note.note_type,
+      subtitle:`${note.rendering_provider_name} · ${note.encounter_status}`,
+      date:note.encounter_date,
+      dateLabel:compactDate(note.encounter_date),
+      status:'Signed',
+      tags:(note.diagnosis_codes || []).map(dx => dx.description).slice(0, 2),
+      detailTitle:note.note_type,
+      detailBody:noteExcerpt(note) || 'No preview available.',
+      detailSections:[
+        ['Subjective', note.subjective],
+        ['Assessment', note.assessment],
+        ['Plan', note.plan],
+      ].filter(([, text]) => text),
+    })),
+    {
+      id:`measure-${patient.id}-phq9`,
+      category:'measures',
+      title:`${measures[0].label} completed`,
+      subtitle:`Current score ${measures[0].current} · ${measures[0].trend}`,
+      date:new Date(Date.now() - (13 + rnd(5, 73)) * 24 * 3600 * 1000).toISOString(),
+      dateLabel:`${measures[0].label} ${measures[0].current}`,
+      status:'Improving',
+      tags:['Mood'],
+      detailTitle:'Outcome measure update',
+      detailBody:`${measures[0].label} moved from ${measures[0].baseline} at baseline to ${measures[0].current} currently.`,
+      detailSections:[['Interpretation', measures[0].interpretation]],
+    },
+    {
+      id:`measure-${patient.id}-gad7`,
+      category:'measures',
+      title:`${measures[1].label} completed`,
+      subtitle:`Current score ${measures[1].current} · ${measures[1].trend}`,
+      date:new Date(Date.now() - (13 + rnd(4, 79)) * 24 * 3600 * 1000).toISOString(),
+      dateLabel:`${measures[1].label} ${measures[1].current}`,
+      status:'Improving',
+      tags:['Anxiety'],
+      detailTitle:'Outcome measure update',
+      detailBody:`${measures[1].label} moved from ${measures[1].baseline} at baseline to ${measures[1].current} currently.`,
+      detailSections:[['Interpretation', measures[1].interpretation]],
+    },
+    {
+      id:`plan-${patient.id}`,
+      category:'plans',
+      title:'Treatment plan updated',
+      subtitle:`Goals refreshed · next review ${treatmentPlan.reviewDate}`,
+      date:new Date(Date.now() - (19 + rnd(6, 83)) * 24 * 3600 * 1000).toISOString(),
+      dateLabel:treatmentPlan.lastUpdated,
+      status:'Current',
+      tags:['Plan'],
+      detailTitle:'Treatment plan milestone',
+      detailBody:'Goals and interventions were aligned to recent symptom drivers and session themes.',
+      detailSections:[['Focus', treatmentPlan.interventions.join(', ')]],
+    },
+    {
+      id:`document-${patient.id}`,
+      category:'documents',
+      title:'Outcome summary packet generated',
+      subtitle:'Measures and latest note excerpts prepared for review',
+      date:new Date(Date.now() - (2 + rnd(3, 89)) * 24 * 3600 * 1000).toISOString(),
+      dateLabel:compactDate(new Date(Date.now() - (2 + rnd(3, 89)) * 24 * 3600 * 1000)),
+      status:'Ready',
+      tags:['Packet'],
+      detailTitle:'Generated chart packet',
+      detailBody:'Elevia prepared a pre-session packet containing trend lines, note highlights, and care reminders.',
+      detailSections:[['Included', 'Outcome trends, note excerpts, active goals, and upcoming tasks.']],
+    },
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  return { problems, meds, allergies, vitals, labs, visits, immunizations, dob: patient.dob, name: patient.full_name };
+  const latestSignedNote = sourceNotes[0];
+  const notePreview = latestSignedNote ? {
+    type: latestSignedNote.note_type,
+    byline: `${latestSignedNote.rendering_provider_name} · ${compactDateTime(latestSignedNote.encounter_date)}`,
+    assessment: latestSignedNote.assessment || latestSignedNote.subjective || 'No assessment documented.',
+    plan: latestSignedNote.plan || latestSignedNote.objective || 'No plan documented.',
+  } : null;
+
+  return {
+    preferredName,
+    assignedProvider,
+    diagnoses,
+    meds,
+    allergies,
+    topics,
+    measures,
+    risk,
+    riskClass,
+    sessionSummary,
+    watchFor,
+    aiMemory,
+    alerts,
+    treatmentPlan,
+    documents,
+    sourceNotes,
+    latestSignedNote,
+    notePreview,
+    nextVisitLabel,
+    appointmentType: apptTypeLabel(patient.next_appointment_type || 'therapy_consultation'),
+    quickFacts: [
+      ['Insurance', 'Blue Cross PPO'],
+      ['Primary diagnosis', diagnoses[0] ? diagnoses[0].description : 'On file'],
+      ['Therapist', assignedProvider],
+      ['Current meds', meds.length ? `${meds.length} active` : 'None documented'],
+      ['Allergies', allergies[0]?.substance === 'NKDA' ? 'NKDA' : allergies.map(a => a.substance).join(', ')],
+      ['Attendance', noShowRisk],
+      ['Upcoming appointment', nextVisitLabel],
+    ],
+    visitContext: [
+      ['Visit type', apptTypeLabel(patient.next_appointment_type || 'therapy_consultation')],
+      ['Next appointment', nextVisitLabel],
+      ['Pending forms', `${Math.max((patient.next_forms_total || 0) - (patient.next_forms_completed || 0), 0)} remaining`],
+      ['Last documented note', latestSignedNote ? compactDate(latestSignedNote.encounter_date) : 'No synced note yet'],
+    ],
+    timeline,
+    lastUpdatedLabel: latestSignedNote ? compactDateTime(latestSignedNote.encounter_date) : compactDateTime(new Date()),
+    noteStats: {
+      total: sourceNotes.length,
+      synced: noteList.length,
+      unsigned: unsignedNotes,
+      measuresDue: measures.some(m => m.current >= 10) ? 1 : 0,
+    },
+  };
 }
 
 const CHART_NAV = [
-  { id:'summary',    icon:'⬡', label:'Chart Summary' },
-  { id:'problems',   icon:'⚕', label:'Problems',  section:'CLINICAL' },
-  { id:'meds',       icon:'💊', label:'Medications' },
-  { id:'allergies',  icon:'⚠', label:'Allergies' },
-  { id:'vitals',     icon:'📈', label:'Vitals' },
-  { id:'labs',       icon:'🧪', label:'Lab Results' },
-  { id:'visits',     icon:'📅', label:'Visit History', section:'ENCOUNTERS' },
-  { id:'immunization',icon:'💉',label:'Immunizations' },
-  { id:'notes',      icon:'📝', label:'Clinical Notes', section:'DOCUMENTATION' },
+  { id:'overview', icon:'◌', label:'Overview' },
+  { id:'timeline', icon:'⟶', label:'Timeline', section:'WORKSPACE' },
+  { id:'notes', icon:'📝', label:'Notes' },
+  { id:'treatment', icon:'◎', label:'Treatment Plan' },
+  { id:'outcomes', icon:'↘', label:'Outcome Measures' },
+  { id:'documents', icon:'▣', label:'Documents', section:'ARTIFACTS' },
+  { id:'source', icon:'⌁', label:'Source EMR' },
 ];
 
 function ClinicalChartOverlay({ patient, onClose }) {
   const [loading, setLoading] = React.useState(true);
   const [loadStep, setLoadStep] = React.useState(0);
   const [loadBars, setLoadBars] = React.useState([0,0,0,0]);
-  const [tab, setTab] = React.useState('summary');
+  const [tab, setTab] = React.useState('overview');
   const [chartData, setChartData] = React.useState(null);
   const [noteType, setNoteType] = React.useState('Progress Note');
   const [noteText, setNoteText] = React.useState('');
   const [savedNotes, setSavedNotes] = React.useState([]);
   const [noteSaved, setNoteSaved] = React.useState(false);
+  const [tebraNotes, setTebraNotes] = React.useState([]);
+  const [topicFilter, setTopicFilter] = React.useState('All');
+  const [timelineFilter, setTimelineFilter] = React.useState('all');
+  const [activeTimelineId, setActiveTimelineId] = React.useState(null);
+
+  React.useEffect(() => {
+    apiGet(`/patients/${patient.id}/notes`)
+      .then(d => setTebraNotes(d || []))
+      .catch(() => setTebraNotes([]));
+  }, [patient.id]);
 
   const LOAD_STEPS = [
-    'Connecting to AlanBehrman client records…',
-    'Pulling patient record & problem list…',
-    'Loading medications, labs & vitals…',
-    'Generating AI chart summary…',
+    'Connecting to Therapy Notes and AlanBehrman client records…',
+    'Pulling therapy notes, diagnoses, and scheduling context…',
+    'Building symptom trends, treatment plan, and document state…',
+    'Generating patient workspace summary…',
   ];
 
   React.useEffect(() => {
-    const data = genChartData(patient);
+    const data = genChartData(patient, []);
     const timers = [
       setTimeout(() => { setLoadStep(1); setLoadBars(b => { const n=[...b]; n[0]=100; return n; }); }, 400),
       setTimeout(() => { setLoadStep(2); setLoadBars(b => { const n=[...b]; n[1]=100; return n; }); }, 1100),
@@ -9615,7 +10382,11 @@ function ClinicalChartOverlay({ patient, onClose }) {
       setTimeout(() => { setChartData(data); setLoading(false); }, 3200),
     ];
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [patient.id]);
+
+  React.useEffect(() => {
+    if (!loading) setChartData(genChartData(patient, tebraNotes));
+  }, [loading, patient, tebraNotes]);
 
   React.useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -9627,227 +10398,196 @@ function ClinicalChartOverlay({ patient, onClose }) {
   const age = dob ? Math.floor((Date.now() - dob) / (365.25 * 24 * 3600 * 1000)) : null;
   const dobStr = dob ? dob.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
   const mrn = 'MRN-' + (patient.id || 'UNKNOWN').toString().slice(-6).toUpperCase().replace(/-/g,'').slice(0,8);
-  const providers = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
-  const assignedProvider = providers[(patient.full_name.charCodeAt(0) + patient.full_name.length) % 3];
+  const assignedProvider = chartData?.assignedProvider || patient.provider_name || 'Assigned therapist';
+  const preferredName = chartData?.preferredName || patient.first_name || patient.full_name.split(' ')[0];
+  const filteredTimeline = React.useMemo(() => {
+    if (!chartData) return [];
+    return chartData.timeline.filter(item => {
+      const categoryMatch = timelineFilter === 'all' ? true : item.category === normalizeCategory(timelineFilter);
+      const topicMatch = topicFilter === 'All' ? true : (item.tags || []).includes(topicFilter) || item.title.includes(topicFilter) || item.subtitle.includes(topicFilter);
+      return categoryMatch && topicMatch;
+    });
+  }, [chartData, timelineFilter, topicFilter]);
+
+  React.useEffect(() => {
+    if (!filteredTimeline.length) return;
+    if (!activeTimelineId || !filteredTimeline.some(item => item.id === activeTimelineId)) {
+      setActiveTimelineId(filteredTimeline[0].id);
+    }
+  }, [filteredTimeline, activeTimelineId]);
+
+  const activeTimeline = filteredTimeline.find(item => item.id === activeTimelineId) || filteredTimeline[0] || null;
 
   const renderSection = () => {
     if (!chartData) return null;
-    const { problems, meds, allergies, vitals, labs, visits, immunizations } = chartData;
+    const trendClass = (value) => value === 'Improving' ? 'improving' : value === 'Stable' ? 'stable' : 'needs-attention';
 
-    if (tab === 'summary') return (
-      <div>
-        <div style={{background:'linear-gradient(135deg, var(--teal-soft), var(--sage-soft))',border:'1px solid var(--hair)',borderRadius:'var(--radius)',padding:'14px 16px',marginBottom:16,display:'flex',alignItems:'flex-start',gap:12}}>
-          <div style={{fontSize:22,flexShrink:0}}>🤖</div>
-          <div>
-            <div style={{fontSize:12,fontWeight:700,color:'var(--teal-deep)',marginBottom:4,textTransform:'uppercase',letterSpacing:'0.05em'}}>AI Chart Summary — Generated by Elevia · Sourced from AlanBehrman client records</div>
-            <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.65}}>
-              <strong>{patient.full_name}</strong>{age ? `, ${age}yo` : ''}{patient.gender ? ` ${patient.gender}` : ''}, presents with {problems.slice(0,2).map(p=>p.name).join(' and ')}. Currently on {meds.length} active medications. {allergies[0]?.substance !== 'NKDA' ? `Known allergy to ${allergies[0]?.substance}.` : 'No known drug allergies.'} Last seen {visits[0]?.dateStr} for {visits[0]?.type}. Vitals at last visit: BP {vitals.bp} mmHg, BMI {vitals.bmi}. {parseInt(vitals.bmi) > 29 ? 'BMI elevated.' : ''} Labs from March 2026 reviewed — {labs.filter(l=>l.flag==='H').length > 0 ? `${labs.filter(l=>l.flag==='H').map(l=>l.name).join(', ')} flagged above reference range.` : 'all within reference range.'}
-            </div>
-          </div>
-        </div>
-        <div className="chart-summary-grid">
-          <div className="chart-summary-card">
-            <div className="chart-summary-card-title">Active Problems</div>
-            {problems.filter(p=>p.status==='Active').slice(0,5).map(p => (
-              <div key={p.icd} className="chart-summary-item"><div className="chart-summary-dot"/>{p.name}</div>
-            ))}
-          </div>
-          <div className="chart-summary-card">
-            <div className="chart-summary-card-title">Current Medications</div>
-            {meds.slice(0,5).map(m => (
-              <div key={m.name} className="chart-summary-item"><div className="chart-summary-dot"/>{m.name} {m.dose}</div>
-            ))}
-          </div>
-          <div className="chart-summary-card">
-            <div className="chart-summary-card-title">Allergies</div>
-            {allergies.map(a => (
-              <div key={a.substance} className="chart-summary-item">
-                <div style={{width:5,height:5,borderRadius:'50%',background: a.severity==='Severe'?'oklch(48% 0.18 25)':a.severity==='Moderate'?'oklch(55% 0.12 70)':'var(--sage)',flexShrink:0}}/>
-                {a.substance}{a.substance!=='NKDA'?' — '+a.reaction.split(',')[0]:''}
+    if (tab === 'overview') return (
+      <>
+        <div className="chart-overview-grid">
+          <div className="chart-overview-main">
+            <section className="chart-card hero">
+              <div className="chart-card-title-row">
+                <div>
+                  <div className="chart-card-title">Today&apos;s Clinical Picture</div>
+                  <div className="chart-card-kicker">AI-generated pre-session brief from synced notes, outcomes, and chart context</div>
+                </div>
+                <span className="chart-sec-badge ai">Updated {chartData.lastUpdatedLabel}</span>
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="chart-sec-title">Recent Vitals <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <div className="chart-vitals-grid">
-          {[
-            { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag },
-            { label:'Heart Rate', val:vitals.hr, unit:'bpm', trend: vitals.hrFlag },
-            { label:'BMI', val:vitals.bmi, unit:'kg/m²', trend: vitals.bmiFlag },
-            { label:'Temperature', val:vitals.temp, unit:'°F', trend: vitals.tempFlag },
-            { label:'SpO₂', val:vitals.spo2+'%', unit:'', trend: vitals.spo2Flag },
-            { label:'Resp. Rate', val:vitals.rr, unit:'breaths/min', trend:'normal' },
-          ].map(v => (
-            <div key={v.label} className="chart-vital-card">
-              <div className="chart-vital-label">{v.label}</div>
-              <div className="chart-vital-val">{v.val}</div>
-              {v.unit && <div className="chart-vital-unit">{v.unit}</div>}
-              <div className={`chart-vital-trend ${v.trend}`}>{v.trend==='normal'?'✓ Normal':v.trend==='elevated'?'↑ Elevated':'↓ Low'}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-
-    if (tab === 'problems') return (
-      <div>
-        <div className="chart-sec-title">Problem List <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <table className="chart-table">
-          <thead><tr><th>Problem</th><th>ICD-10</th><th>Onset</th><th>Status</th><th>Severity</th></tr></thead>
-          <tbody>
-            {problems.map(p => (
-              <tr key={p.icd}>
-                <td style={{fontWeight:500}}>{p.name}</td>
-                <td style={{fontFamily:'monospace',fontSize:12}}>{p.icd}</td>
-                <td>{p.onset}</td>
-                <td><span className={`ct-status-${p.status.toLowerCase()}`}>{p.status}</span></td>
-                <td style={{color:'var(--ink-3)'}}>{p.severity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-
-    if (tab === 'meds') return (
-      <div>
-        <div className="chart-sec-title">Medication List <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <table className="chart-table">
-          <thead><tr><th>Medication</th><th>Dose</th><th>Frequency</th><th>Route</th><th>Prescriber</th><th>Since</th></tr></thead>
-          <tbody>
-            {meds.map(m => (
-              <tr key={m.name}>
-                <td style={{fontWeight:600}}>{m.name}</td>
-                <td>{m.dose}</td>
-                <td><span className="ct-status-active">{m.freq}</span></td>
-                <td style={{color:'var(--ink-3)'}}>{m.route}</td>
-                <td style={{color:'var(--ink-3)'}}>{m.prescriber}</td>
-                <td style={{color:'var(--ink-4)'}}>{m.since}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-
-    if (tab === 'allergies') return (
-      <div>
-        <div className="chart-sec-title">Allergy &amp; Adverse Reactions <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <div style={{marginBottom:16}}>
-          {allergies.map(a => (
-            <span key={a.substance} className={`chart-allergy-tag ${a.severity.toLowerCase()}`}>
-              {a.severity==='Severe'?'🚨':a.severity==='Moderate'?'⚠️':'ℹ️'} {a.substance}
-            </span>
-          ))}
-        </div>
-        <table className="chart-table">
-          <thead><tr><th>Substance</th><th>Reaction</th><th>Severity</th><th>Verified</th></tr></thead>
-          <tbody>
-            {allergies.map(a => (
-              <tr key={a.substance}>
-                <td style={{fontWeight:600}}>{a.substance}</td>
-                <td style={{color:'var(--ink-2)'}}>{a.reaction}</td>
-                <td><span className={a.severity==='Severe'?'ct-status-alert':a.severity==='Moderate'?'ct-status-pending':'ct-status-resolved'}>{a.severity}</span></td>
-                <td style={{color:'var(--ink-3)'}}>{a.verified}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-
-    if (tab === 'vitals') return (
-      <div>
-        <div className="chart-sec-title">Vitals — Last Recorded <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <div className="chart-vitals-grid" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
-          {[
-            { label:'Blood Pressure', val:vitals.bp, unit:'mmHg', trend: vitals.bpFlag, note: parseInt(vitals.bp)>130?'Stage 1 hypertension range':'' },
-            { label:'Heart Rate', val:vitals.hr, unit:'bpm', trend: vitals.hrFlag },
-            { label:'Body Temperature', val:vitals.temp, unit:'°F', trend: vitals.tempFlag },
-            { label:'SpO₂ (Pulse Ox)', val:vitals.spo2+'%', unit:'', trend: vitals.spo2Flag },
-            { label:'BMI', val:vitals.bmi, unit:'kg/m²', trend: vitals.bmiFlag, note: parseFloat(vitals.bmi)>30?'Obesity class I':parseFloat(vitals.bmi)>25?'Overweight':'' },
-            { label:'Weight', val:vitals.weight, unit:'', trend:'normal' },
-            { label:'Resp. Rate', val:vitals.rr, unit:'breaths/min', trend:'normal' },
-            { label:'Last Recorded', val:visits[0]?.dateStr||'—', unit:'', trend:'normal' },
-          ].map(v => (
-            <div key={v.label} className="chart-vital-card">
-              <div className="chart-vital-label">{v.label}</div>
-              <div className="chart-vital-val" style={{fontSize:v.val?.length>6?16:22}}>{v.val}</div>
-              {v.unit && <div className="chart-vital-unit">{v.unit}</div>}
-              <div className={`chart-vital-trend ${v.trend}`}>{v.trend==='normal'?'✓ Normal':v.trend==='elevated'?'↑ Elevated':'↓ Low'}</div>
-              {v.note && <div style={{fontSize:10,color:'oklch(55% 0.12 70)',marginTop:2}}>{v.note}</div>}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-
-    if (tab === 'labs') return (
-      <div>
-        <div className="chart-sec-title">Laboratory Results <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <div style={{background:'var(--surface)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',overflow:'hidden',marginBottom:16}}>
-          <div style={{display:'flex',padding:'7px 12px',background:'var(--bg-tint)',borderBottom:'1px solid var(--hair)',fontSize:10.5,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:'var(--ink-4)',gap:0}}>
-            <span style={{flex:2}}>Test Name</span><span style={{flex:1}}>Result</span><span style={{flex:1.5}}>Reference Range</span><span style={{flex:0.5}}>Flag</span><span style={{flex:1}}>Date</span>
-          </div>
-          {labs.map(l => (
-            <div key={l.name} className="chart-lab-row">
-              <div className="chart-lab-name">{l.name}</div>
-              <div className={`chart-lab-val ${l.flag==='H'?'high':l.flag==='L'?'low':'normal'}`}>{l.val}</div>
-              <div className="chart-lab-range">{l.range}</div>
-              <div><span className={`chart-lab-flag ${l.flag}`}>{l.flag}</span></div>
-              <div className="chart-lab-date">{l.date}</div>
-            </div>
-          ))}
-        </div>
-        {labs.filter(l=>l.flag!=='N').length > 0 && (
-          <div style={{background:'oklch(96% 0.04 80)',border:'1px solid oklch(88% 0.08 80)',borderRadius:'var(--radius)',padding:'10px 14px',fontSize:12,color:'oklch(50% 0.12 70)'}}>
-            ⚠ {labs.filter(l=>l.flag!=='N').length} value{labs.filter(l=>l.flag!=='N').length>1?'s':''} outside reference range: {labs.filter(l=>l.flag!=='N').map(l=>l.name).join(', ')}
-          </div>
-        )}
-      </div>
-    );
-
-    if (tab === 'visits') return (
-      <div>
-        <div className="chart-sec-title">Visit History <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <div className="chart-timeline">
-          {visits.map((v,i) => (
-            <div key={i} className="chart-visit">
-              <div className="chart-visit-date">
-                <div className="chart-visit-date-main">{v.dateStr.split(',')[0]}</div>
-                <div className="chart-visit-date-sub">{v.dateStr.split(', ')[1]}</div>
+              <div className="chart-summary-bullets">
+                {chartData.sessionSummary.map((item, idx) => (
+                  <div key={idx} className="chart-summary-bullet">{item}</div>
+                ))}
               </div>
-              <div className="chart-visit-dot" style={{background:i===0?'var(--teal)':'var(--hair-strong)',boxShadow:i===0?'0 0 0 3px var(--teal-soft)':'none'}}/>
-              <div className="chart-visit-body">
-                <div className="chart-visit-type">{v.type}</div>
-                <div className="chart-visit-provider">{v.provider}</div>
-                <div className="chart-visit-summary">{v.summary}</div>
-                <div className="chart-visit-tags">
-                  {v.tags.map(t => <span key={t} className="chart-visit-tag">{t}</span>)}
+              <div className="chart-watch-line"><strong>Watch for today:</strong> {chartData.watchFor}</div>
+            </section>
+
+            <section className="chart-card">
+              <div className="chart-card-title">Clinical Trends</div>
+              <div className="chart-metric-grid">
+                {chartData.measures.map(measure => (
+                  <div key={measure.id} className="chart-metric-card">
+                    <div className="chart-metric-label">{measure.label}</div>
+                    <div className="chart-metric-value">{measure.current}</div>
+                    <div className="chart-metric-sub">{measure.baseline} → {measure.previous} → {measure.current}</div>
+                    <div className="chart-trend-row">
+                      <span className={`chart-trend-pill ${trendClass(measure.trend)}`}>{measure.trend}</span>
+                      <div className="chart-sparkline">
+                        {measure.spark.map((point, idx) => <span key={idx} style={{height: `${Math.max(8, point * 2)}px`}} />)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div className="chart-metric-card">
+                  <div className="chart-metric-label">Attendance</div>
+                  <div className="chart-metric-value">{Math.max((patient.appointment_count || 5) - chartData.noteStats.unsigned, 1)}</div>
+                  <div className="chart-metric-sub">Recent sessions on file</div>
+                  <div className="chart-trend-row">
+                    <span className={`chart-trend-pill ${chartData.quickFacts.find(([label]) => label === 'Attendance')?.[1] === 'Needs outreach' ? 'needs-attention' : 'stable'}`}>{chartData.quickFacts.find(([label]) => label === 'Attendance')?.[1]}</span>
+                  </div>
+                </div>
+                <div className="chart-metric-card">
+                  <div className="chart-metric-label">Treatment Plan</div>
+                  <div className="chart-metric-value">{chartData.treatmentPlan.expiresInDays}</div>
+                  <div className="chart-metric-sub">Days until review</div>
+                  <div className="chart-trend-row">
+                    <span className={`chart-trend-pill ${chartData.treatmentPlan.expiresInDays <= 14 ? 'needs-attention' : 'stable'}`}>{chartData.treatmentPlan.expiresInDays <= 14 ? 'Due soon' : 'Current'}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            </section>
+
+            <section className="chart-card">
+              <div className="chart-card-title-row">
+                <div className="chart-card-title">Topics This Month</div>
+                {topicFilter !== 'All' && <button className="chart-filter-pill active" onClick={() => setTopicFilter('All')}>Clear filter</button>}
+              </div>
+              <div className="chart-topic-wrap">
+                <button className={`chart-topic-chip${topicFilter === 'All' ? ' active' : ''}`} onClick={() => setTopicFilter('All')}>All themes</button>
+                {chartData.topics.map(topic => (
+                  <button key={topic} className={`chart-topic-chip${topicFilter === topic ? ' active' : ''}`} onClick={() => setTopicFilter(topic)}>{topic}</button>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          <div className="chart-overview-side">
+            <section className="chart-card">
+              <div className="chart-card-title">Recent Timeline</div>
+              <div className="chart-surface-list">
+                {filteredTimeline.slice(0, 5).map(item => (
+                  <div key={item.id} className="chart-feed-item">
+                    <div className="chart-feed-date">{item.dateLabel}</div>
+                    <div>
+                      <div className="chart-feed-title">{item.title}</div>
+                      <div className="chart-feed-sub">{item.subtitle}</div>
+                    </div>
+                    <div className="chart-feed-status">{item.status}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="chart-card">
+              <div className="chart-card-title">Latest Signed Note</div>
+              {chartData.notePreview ? (
+                <div className="chart-note-preview">
+                  <div style={{fontSize:14,fontWeight:600,color:'var(--ink)'}}>{chartData.notePreview.type}</div>
+                  <div style={{fontSize:12,color:'var(--ink-3)'}}>{chartData.notePreview.byline}</div>
+                  <div className="chart-note-section">
+                    <div className="chart-note-section-label">Assessment</div>
+                    <div className="chart-note-section-body">{chartData.notePreview.assessment}</div>
+                  </div>
+                  <div className="chart-note-section">
+                    <div className="chart-note-section-label">Plan</div>
+                    <div className="chart-note-section-body">{chartData.notePreview.plan}</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="chart-empty-note">No synced note preview is available yet for this patient.</div>
+              )}
+            </section>
+          </div>
         </div>
-      </div>
+      </>
     );
 
-    if (tab === 'immunization') return (
-      <div>
-        <div className="chart-sec-title">Immunization Record <span className="chart-sec-badge tebra">AlanBehrman client records</span></div>
-        <table className="chart-table">
-          <thead><tr><th>Vaccine</th><th>Date / Status</th><th>Series</th><th>Source</th></tr></thead>
-          <tbody>
-            {immunizations.map(imm => (
-              <tr key={imm.vaccine}>
-                <td style={{fontWeight:600}}>{imm.vaccine}</td>
-                <td>{imm.date}</td>
-                <td><span className={imm.series==='Pending'||imm.series==='Recommended'?'ct-status-pending':'ct-status-active'}>{imm.series}</span></td>
-                <td style={{color:'var(--ink-3)'}}>{imm.source}</td>
-              </tr>
+    if (tab === 'timeline') return (
+      <div className="chart-dual-grid">
+        <section className="chart-card">
+          <div className="chart-card-title">Timeline</div>
+          <div className="chart-filter-row">
+            {[
+              ['all','All'],
+              ['notes','Notes'],
+              ['measures','Measures'],
+              ['plans','Plans'],
+              ['documents','Documents'],
+            ].map(([value, label]) => (
+              <button key={value} className={`chart-filter-pill${timelineFilter === value ? ' active' : ''}`} onClick={() => setTimelineFilter(value)}>{label}</button>
             ))}
-          </tbody>
-        </table>
+          </div>
+          <div>
+            {filteredTimeline.map(item => (
+              <div key={item.id} className={`chart-timeline-event${activeTimeline?.id === item.id ? ' active' : ''}`} onClick={() => setActiveTimelineId(item.id)}>
+                <div className="chart-timeline-date">
+                  <div>{relativeBucket(item.date)}</div>
+                  <div style={{marginTop:4,color:'var(--ink-4)'}}>{item.dateLabel}</div>
+                </div>
+                <div className="chart-timeline-marker">
+                  <div className="chart-timeline-dot" />
+                </div>
+                <div className="chart-timeline-card">
+                  <div className="chart-timeline-tag">{item.category}</div>
+                  <div className="chart-feed-title">{item.title}</div>
+                  <div className="chart-feed-sub">{item.subtitle}</div>
+                  {!!item.tags?.length && <div className="chart-topic-wrap" style={{marginTop:8}}>{item.tags.map(tag => <span key={tag} className="chart-topic-chip" style={{padding:'5px 9px'}}>{tag}</span>)}</div>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <aside className="chart-detail-panel">
+          {activeTimeline ? (
+            <>
+              <div className="chart-card-title">Detail</div>
+              <div style={{fontSize:20,fontWeight:600,color:'var(--ink)',marginBottom:6}}>{activeTimeline.detailTitle}</div>
+              <div style={{fontSize:12,color:'var(--ink-4)',marginBottom:14}}>{activeTimeline.dateLabel}</div>
+              <div style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.65,marginBottom:16}}>{activeTimeline.detailBody}</div>
+              <div className="chart-bullet-list">
+                {(activeTimeline.detailSections || []).map(([label, text]) => (
+                  <div key={label} className="chart-note-section">
+                    <div className="chart-note-section-label">{label}</div>
+                    <div className="chart-note-section-body">{text}</div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="chart-empty-note">No timeline events match the current filter.</div>
+          )}
+        </aside>
       </div>
     );
 
@@ -9855,11 +10595,10 @@ function ClinicalChartOverlay({ patient, onClose }) {
       <div>
         <div className="chart-sec-title">Clinical Notes <span className="chart-sec-badge ai">AI-Assisted</span></div>
 
-        {/* New note composer */}
         <div style={{background:'var(--surface)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',padding:'16px',marginBottom:20}}>
-          <div style={{fontSize:12,fontWeight:700,color:'var(--ink-3)',marginBottom:10,textTransform:'uppercase',letterSpacing:'0.06em'}}>Add Clinical Note</div>
+          <div style={{fontSize:12,fontWeight:700,color:'var(--ink-3)',marginBottom:10,textTransform:'uppercase',letterSpacing:'0.06em'}}>Start Note</div>
           <div className="chart-notes-toolbar">
-            {['Progress Note','SOAP Note','Referral','Order Note','Telephone Note'].map(t => (
+            {['Progress Note','SOAP Note','Treatment Plan Update','Telephone Note'].map(t => (
               <button key={t} className={`chart-note-type-btn${noteType===t?' active':''}`} onClick={() => setNoteType(t)}>{t}</button>
             ))}
           </div>
@@ -9868,7 +10607,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
           </div>
           {noteType === 'SOAP Note' ? (
             <textarea className="chart-notes-area"
-              placeholder={"S: Patient reports…\nO: Vitals: BP…\nA: Assessment…\nP: Plan…"}
+              placeholder={"S: Patient reports...\nO: Engaged, oriented, no acute safety concerns...\nA: Anxiety improving but work remains primary trigger...\nP: Continue CBT, review sleep routine, follow up next week."}
               value={noteText} onChange={e => setNoteText(e.target.value)}
               style={{minHeight:200}} />
           ) : (
@@ -9883,15 +10622,14 @@ function ClinicalChartOverlay({ patient, onClose }) {
               setNoteText(''); setNoteSaved(true);
               setTimeout(() => setNoteSaved(false), 2500);
             }}>Save Note</button>
-            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to AlanBehrman client records</span>}
+            {noteSaved && <span style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ Note saved to Therapy Notes workflow</span>}
             <span style={{fontSize:11,color:'var(--ink-4)',marginLeft:'auto'}}>Signed as: {assignedProvider}</span>
           </div>
         </div>
 
-        {/* Existing notes */}
         {savedNotes.length > 0 && (
           <div style={{marginBottom:16}}>
-            <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Session Notes</div>
+            <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Drafts from this workspace</div>
             {savedNotes.map((n, i) => (
               <div key={i} className="chart-saved-note">
                 <div className="chart-saved-note-header">
@@ -9906,77 +10644,297 @@ function ClinicalChartOverlay({ patient, onClose }) {
           </div>
         )}
 
-        {/* Mock historical notes */}
-        <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Prior Notes — From AlanBehrman client records</div>
-        {[
-          { type:'Progress Note', author: assignedProvider, date:'Apr 8, 2026 · 10:30 AM', text:`${patient.full_name} seen today for follow-up. Patient reports feeling well. BP ${chartData.vitals.bp} mmHg — slight improvement since last visit. Medications reviewed and continued without changes. Counseled on low-sodium diet. Return to clinic in 3 months or sooner PRN.` },
-          { type:'SOAP Note', author:'Meredith Mitchell, PMHNP-BC', date:'Feb 12, 2026 · 2:15 PM', text:`S: Patient c/o mild fatigue and occasional headaches. No chest pain or shortness of breath.\nO: BP 136/88, HR 74, Wt stable. Labs reviewed — LDL slightly elevated.\nA: Hypertension, controlled. Hyperlipidemia.\nP: Continue current antihypertensive. Increase atorvastatin to 40 mg. Dietary counseling provided. F/U in 6 weeks.` },
-          { type:'Telephone Note', author:'Dr. Ramakanth Vemuluri, MD', date:'Jan 5, 2026 · 11:45 AM', text:`Patient called to report mild GI upset since starting metformin. Advised to take with food. Patient agrees to continue and monitor. No medication changes at this time.` },
-        ].map((n, i) => (
-          <div key={i} className="chart-saved-note">
-            <div className="chart-saved-note-header">
-              <span className="chart-saved-note-type">{n.type}</span>
-              <span>{n.author}</span>
-              <span>·</span>
-              <span>{n.date}</span>
+        {chartData.sourceNotes.length > 0 && (
+          <div style={{marginBottom:16}}>
+            <div style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>
+              Latest readable notes {tebraNotes.length > 0 && <span className="chart-sec-badge tebra" style={{marginLeft:6}}>Synced from Therapy Notes</span>}
             </div>
-            <div className="chart-saved-note-body">{n.text}</div>
+            {chartData.sourceNotes.map(n => (
+              <div key={n.id} className="chart-saved-note">
+                <div className="chart-saved-note-header">
+                  <span className="chart-saved-note-type">{n.note_type}</span>
+                  <span>{n.rendering_provider_name}</span>
+                  <span>·</span>
+                  <span>{compactDateTime(n.encounter_date)}</span>
+                </div>
+                <div className="chart-note-section" style={{marginBottom:10}}>
+                  <div className="chart-note-section-label">AI Summary of this note</div>
+                  <div className="chart-note-section-body">{noteExcerpt(n) || 'No summary available.'}</div>
+                </div>
+                <div className="chart-saved-note-body">
+                  {n.assessment && <div><strong>Assessment:</strong> {n.assessment}</div>}
+                  {n.plan && <div style={{marginTop:8}}><strong>Plan:</strong> {n.plan}</div>}
+                  {!n.assessment && n.subjective && <div><strong>Subjective:</strong> {n.subjective}</div>}
+                </div>
+                {!!n.diagnosis_codes?.length && (
+                  <div style={{display:'flex',flexWrap:'wrap',gap:'4px 8px',fontSize:11,color:'var(--ink-4)',marginTop:10}}>
+                    {n.diagnosis_codes.map(d => <span key={d.pointer}>Dx {d.code} — {d.description}</span>)}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+
+    if (tab === 'treatment') return (
+      <div className="chart-dual-grid">
+        <section className="chart-card">
+          <div className="chart-card-title-row">
+            <div>
+              <div className="chart-card-title">Treatment Plan</div>
+              <div className="chart-card-kicker">Last updated {chartData.treatmentPlan.lastUpdated}</div>
+            </div>
+            <span className={`chart-trend-pill ${chartData.treatmentPlan.expiresInDays <= 14 ? 'needs-attention' : 'stable'}`}>Expires in {chartData.treatmentPlan.expiresInDays} days</span>
+          </div>
+          <div className="chart-goal-list">
+            {chartData.treatmentPlan.goals.map(goal => (
+              <div key={goal.title} className="chart-goal-card">
+                <div className="chart-goal-head">
+                  <div className="chart-goal-title">{goal.title}</div>
+                  <span className={`chart-goal-status ${goal.status}`}>{goal.status === 'partial' ? 'Partial progress' : goal.status === 'ongoing' ? 'Ongoing' : 'Improving'}</span>
+                </div>
+                <div className="chart-sidebar-note">{goal.summary}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <aside className="chart-detail-panel">
+          <div className="chart-card-title">Interventions & barriers</div>
+          <div className="chart-note-section" style={{marginBottom:12}}>
+            <div className="chart-note-section-label">Interventions</div>
+            <div className="chart-topic-wrap">
+              {chartData.treatmentPlan.interventions.map(item => <span key={item} className="chart-topic-chip">{item}</span>)}
+            </div>
+          </div>
+          <div className="chart-note-section" style={{marginBottom:12}}>
+            <div className="chart-note-section-label">Barriers</div>
+            <div className="chart-bullet-list">
+              {chartData.treatmentPlan.barriers.map(item => <div key={item} className="chart-sidebar-note">{item}</div>)}
+            </div>
+          </div>
+          <div className="chart-note-section">
+            <div className="chart-note-section-label">Next review</div>
+            <div className="chart-note-section-body">{chartData.treatmentPlan.reviewDate}</div>
+          </div>
+        </aside>
+      </div>
+    );
+
+    if (tab === 'outcomes') return (
+      <div className="chart-overview-main">
+        <section className="chart-card">
+          <div className="chart-card-title">Outcome Measures</div>
+          <div className="chart-metric-grid" style={{gridTemplateColumns:'repeat(2, minmax(0, 1fr))'}}>
+            {chartData.measures.map(measure => (
+              <div key={measure.id} className="chart-metric-card">
+                <div className="chart-metric-label">{measure.label}</div>
+                <div className="chart-metric-value">{measure.current}</div>
+                <div className="chart-metric-sub">Baseline {measure.baseline} · Previous {measure.previous}</div>
+                <div className="chart-trend-row">
+                  <span className={`chart-trend-pill ${trendClass(measure.trend)}`}>{measure.trend}</span>
+                  <div className="chart-sparkline">{measure.spark.map((point, idx) => <span key={idx} style={{height:`${Math.max(8, point * 2)}px`}} />)}</div>
+                </div>
+                <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.55,marginTop:12}}>{measure.interpretation}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="chart-card">
+          <div className="chart-card-title">Clinical interpretation</div>
+          <div className="chart-summary-bullets">
+            <div className="chart-summary-bullet">Symptoms are moving in a positive direction overall, with both mood and anxiety measures trending downward.</div>
+            <div className="chart-summary-bullet">The biggest remaining friction points are sleep consistency and stress generalization outside session.</div>
+            <div className="chart-summary-bullet">Outcome scores should be displayed alongside the next progress note to reinforce the longitudinal story.</div>
+          </div>
+        </section>
+      </div>
+    );
+
+    if (tab === 'documents') return (
+      <div className="chart-overview-main">
+        <section className="chart-card">
+          <div className="chart-card-title">Documents</div>
+          {chartData.documents.map(doc => (
+            <div key={doc.title} className="chart-doc-row">
+              <div>
+                <div className="chart-feed-title">{doc.title}</div>
+                <div className="chart-doc-meta">{doc.category} · {doc.source} · Updated {doc.updated}</div>
+              </div>
+              <div style={{display:'flex',alignItems:'center'}}>
+                <span className="chart-feed-status">{doc.status}</span>
+              </div>
+            </div>
+          ))}
+        </section>
+        <section className="chart-card">
+          <div className="chart-card-title">Administrative state</div>
+          <div className="chart-data-pairs">
+            <div><div className="chart-pair-label">Pending forms</div><div className="chart-pair-val">{Math.max((patient.next_forms_total || 0) - (patient.next_forms_completed || 0), 0)} remaining</div></div>
+            <div><div className="chart-pair-label">Completed forms</div><div className="chart-pair-val">{patient.next_forms_completed || 0} of {patient.next_forms_total || 0}</div></div>
+            <div><div className="chart-pair-label">Latest document source</div><div className="chart-pair-val">Intake packet / Therapy Notes</div></div>
+            <div><div className="chart-pair-label">Consent status</div><div className="chart-pair-val">On file</div></div>
+          </div>
+        </section>
+      </div>
+    );
+
+    if (tab === 'source') return (
+      <div>
+        <div className="chart-sec-title">Source EMR Notes <span className="chart-sec-badge tebra">Therapy Notes sync</span></div>
+        {chartData.sourceNotes.map(n => (
+          <div key={n.id} className="chart-saved-note">
+            <div className="chart-saved-note-header">
+              <span className="chart-saved-note-type">{n.note_type}</span>
+              <span>{n.rendering_provider_name}</span>
+              <span>·</span>
+              <span>{compactDateTime(n.encounter_date)}</span>
+            </div>
+            <div style={{display:'flex',flexWrap:'wrap',gap:'4px 14px',fontSize:11,color:'var(--ink-4)',margin:'6px 0 10px'}}>
+              {n.tebra_encounter_id && <span>Encounter {n.tebra_encounter_id}</span>}
+              {n.tebra_chart_number && <span>Chart {n.tebra_chart_number}</span>}
+              {n.tebra_case_id && <span>Case {n.tebra_case_id}</span>}
+              {n.rendering_provider_npi && <span>NPI {n.rendering_provider_npi}</span>}
+              {n.place_of_service_code && <span>POS {n.place_of_service_code}</span>}
+              {n.service_location && <span>{n.service_location}</span>}
+              <span>{n.encounter_status}</span>
+            </div>
+            <div className="chart-saved-note-body">
+              {n.chief_complaint && <div><strong>Chief Complaint:</strong> {n.chief_complaint}</div>}
+              {n.subjective && <div style={{marginTop:6}}><strong>Subjective:</strong> {n.subjective}</div>}
+              {n.objective && <div style={{marginTop:6}}><strong>Objective:</strong> {n.objective}</div>}
+              {n.assessment && <div style={{marginTop:6}}><strong>Assessment:</strong> {n.assessment}</div>}
+              {n.plan && <div style={{marginTop:6}}><strong>Plan:</strong> {n.plan}</div>}
+            </div>
+            {!!n.diagnosis_codes?.length && (
+              <div style={{display:'flex',flexWrap:'wrap',gap:'4px 14px',fontSize:11,color:'var(--ink-4)',marginTop:10}}>
+                {n.diagnosis_codes.map(d => <span key={d.pointer}>Dx {d.pointer}: {d.code} — {d.description}</span>)}
+              </div>
+            )}
+            {!!n.procedure_codes?.length && (
+              <div style={{display:'flex',flexWrap:'wrap',gap:'4px 14px',fontSize:11,color:'var(--ink-4)',marginTop:4}}>
+                {n.procedure_codes.map(p => <span key={p.code}>CPT {p.code} x{p.units} — {p.description}{p.modifiers.length ? ' (mod ' + p.modifiers.join(',') + ')' : ''}</span>)}
+              </div>
+            )}
+            {n.signed_by && <div style={{fontSize:11,color:'var(--ink-4)',marginTop:8}}>Signed by {n.signed_by}</div>}
           </div>
         ))}
       </div>
     );
+
     return null;
+  };
+
+  const renderSidebar = () => {
+    if (!chartData) return null;
+    return (
+      <>
+        <div className="chart-sidebar-card">
+          <div className="chart-card-title">AI Memory</div>
+          {chartData.aiMemory.map(item => (
+            <div key={item} className="chart-memory-item">
+              <div className="chart-memory-dot" />
+              <div className="chart-sidebar-note">{item}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="chart-sidebar-card">
+          <div className="chart-card-title">Clinical Alerts</div>
+          {chartData.alerts.map(alert => (
+            <div key={alert.title} className="chart-alert-item">
+              <div className="chart-alert-dot" />
+              <div>
+                <div className="chart-alert-title">{alert.title}</div>
+                <div className="chart-alert-sub">{alert.subtitle}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="chart-sidebar-card">
+          <div className="chart-card-title">Quick Facts</div>
+          {chartData.quickFacts.map(([label, value]) => (
+            <div key={label} className="chart-quick-row">
+              <div className="chart-quick-label">{label}</div>
+              <div className="chart-quick-value">{value}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="chart-sidebar-card">
+          <div className="chart-card-title">Visit Context</div>
+          {chartData.visitContext.map(([label, value]) => (
+            <div key={label} className="chart-quick-row">
+              <div className="chart-quick-label">{label}</div>
+              <div className="chart-quick-value">{value}</div>
+            </div>
+          ))}
+        </div>
+      </>
+    );
   };
 
   return (
     <div className="chart-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="chart-panel">
-        {/* Header */}
         <div className="chart-header">
-          <div>
+          <div className="chart-head-main">
             <div className="chart-mrn">{mrn}</div>
-            <div className="chart-pt-name">{patient.full_name}</div>
+            <div className="chart-pt-name-row">
+              <div className="chart-pt-name">{patient.full_name}</div>
+              {preferredName && preferredName !== patient.full_name && <span className="chart-head-chip next">Preferred: {preferredName}</span>}
+            </div>
+            <div className="chart-pt-meta">
+              <span><strong>DOB</strong> {dobStr}{age ? ` · ${age}` : ''}</span>
+              {patient.gender && <span><strong>Gender</strong> {patient.gender}</span>}
+              <span><strong>Therapist</strong> {assignedProvider}</span>
+            </div>
+            {!!chartData?.diagnoses?.length && (
+              <div className="chart-pt-dx">
+                {chartData.diagnoses.map(dx => (
+                  <span key={dx.code} className="chart-dx-chip"><code>{dx.code}</code>{dx.description}</span>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="chart-divider"/>
-          <div>
-            <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>DOB</div>
-            <div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{dobStr}{age ? ` · ${age}yo` : ''}</div>
+          <div className="chart-head-actions">
+            <div style={{display:'flex',gap:10,alignItems:'center'}}>
+              <div className="chart-head-chips">
+                {chartData && <span className={`chart-head-chip ${chartData.riskClass}`}><span className="dot" />{chartData.risk} Risk</span>}
+                {chartData && <span className="chart-head-chip next">Next: {chartData.nextVisitLabel}</span>}
+                <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI Workspace</div>
+              </div>
+              <button className="chart-close" onClick={onClose}>✕</button>
+            </div>
+            <div className="chart-head-buttons">
+              <button className="chart-head-btn primary" onClick={() => setTab('notes')}>Start Note</button>
+              <button className="chart-head-btn" onClick={() => setTab('timeline')}>Review Timeline</button>
+              <button className="chart-head-btn" onClick={() => setTab('treatment')}>Treatment Plan</button>
+              <button className="chart-head-btn" onClick={() => setTab('source')}>Open Source EMR</button>
+            </div>
           </div>
-          {patient.gender && <><div className="chart-divider"/><div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Gender</div><div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{patient.gender}</div></div></>}
-          <div className="chart-divider"/>
-          <div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Provider</div><div style={{fontSize:12.5,color:'rgba(255,255,255,0.7)',fontWeight:500}}>{assignedProvider}</div></div>
-          <div className="chart-divider"/>
-          <div className="chart-encounter-badge">{apptTypeLabel(patient.next_appointment_type || 'primary_care')}</div>
-          <div className="chart-ai-badge"><div className="chart-ai-dot"/>Elevia AI · AlanBehrman client records</div>
-          <button className="chart-close" onClick={onClose}>✕</button>
         </div>
 
-        {/* Patient banner */}
         {!loading && chartData && (
           <div className="chart-pt-banner">
             <div className="chart-banner-item"><div className="chart-banner-label">Phone</div><div className="chart-banner-val">{patient.phone || '—'}</div></div>
-            <div className="chart-banner-sep"/>
             <div className="chart-banner-item"><div className="chart-banner-label">Email</div><div className="chart-banner-val">{patient.email || '—'}</div></div>
-            <div className="chart-banner-sep"/>
-            <div className="chart-banner-item"><div className="chart-banner-label">Active Problems</div><div className="chart-banner-val">{chartData.problems.filter(p=>p.status==='Active').length}</div></div>
-            <div className="chart-banner-sep"/>
-            <div className="chart-banner-item"><div className="chart-banner-label">Medications</div><div className="chart-banner-val">{chartData.meds.length}</div></div>
-            <div className="chart-banner-sep"/>
+            <div className="chart-banner-item"><div className="chart-banner-label">Primary Dx</div><div className="chart-banner-val">{chartData.diagnoses[0]?.code || '—'}</div></div>
+            <div className="chart-banner-item"><div className="chart-banner-label">Current Meds</div><div className="chart-banner-val">{chartData.meds.length}</div></div>
             <div className="chart-banner-item"><div className="chart-banner-label">Allergies</div><div className={`chart-banner-val${chartData.allergies[0]?.severity==='Severe'?' alert':chartData.allergies[0]?.substance==='NKDA'?' ok':''}`}>{chartData.allergies[0]?.substance==='NKDA'?'NKDA':chartData.allergies.map(a=>a.substance).join(', ')}</div></div>
-            <div className="chart-banner-sep"/>
-            <div className="chart-banner-item"><div className="chart-banner-label">Last Visit</div><div className="chart-banner-val">{chartData.visits[0]?.dateStr}</div></div>
-            <div className="chart-banner-sep"/>
-            <div className="chart-banner-item"><div className="chart-banner-label">Total Visits</div><div className="chart-banner-val">{patient.appointment_count || chartData.visits.length}</div></div>
+            <div className="chart-banner-item"><div className="chart-banner-label">Latest Note</div><div className="chart-banner-val">{chartData.latestSignedNote ? compactDate(chartData.latestSignedNote.encounter_date) : 'Pending sync'}</div></div>
+            <div className="chart-banner-item"><div className="chart-banner-label">Visits on File</div><div className="chart-banner-val">{patient.appointment_count || chartData.noteStats.total}</div></div>
           </div>
         )}
 
-        {/* Body */}
         <div className="chart-body">
           {loading ? (
             <div className="chart-loading" style={{width:'100%'}}>
               <div className="chart-loading-orb">🏥</div>
-              <div className="chart-loading-title">Loading clinical chart…</div>
-              <div className="chart-loading-sub">Pulling data from AlanBehrman client records · AI processing</div>
+              <div className="chart-loading-title">Loading patient workspace…</div>
+              <div className="chart-loading-sub">Pulling therapy records and preparing a pre-session view</div>
               <div className="chart-loading-steps">
                 {LOAD_STEPS.map((s, i) => (
                   <div key={i} className={`chart-load-row${loadStep>i?' done':loadStep===i?' active':''}`}>
@@ -9990,25 +10948,114 @@ function ClinicalChartOverlay({ patient, onClose }) {
           ) : (
             <>
               <nav className="chart-nav">
-                {CHART_NAV.map((item, i) => (
+                {CHART_NAV.map((item) => (
                   <React.Fragment key={item.id}>
                     {item.section && <div className="chart-nav-section">{item.section}</div>}
                     <button className={`chart-nav-item${tab===item.id?' active':''}`} onClick={() => setTab(item.id)}>
                       <span className="chart-nav-icon">{item.icon}</span>
                       {item.label}
-                      {item.id==='labs' && chartData.labs.filter(l=>l.flag!=='N').length>0 && (
-                        <span className="chart-nav-badge">{chartData.labs.filter(l=>l.flag!=='N').length}</span>
+                      {item.id==='outcomes' && chartData.noteStats.measuresDue > 0 && (
+                        <span className="chart-nav-badge">{chartData.noteStats.measuresDue}</span>
                       )}
                     </button>
                   </React.Fragment>
                 ))}
               </nav>
-              <main className="chart-main">
-                {renderSection()}
-              </main>
+              <div className="chart-workspace">
+                <main className="chart-main">
+                  {renderSection()}
+                </main>
+                <aside className="chart-sidebar">
+                  {renderSidebar()}
+                </aside>
+              </div>
             </>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Patient Forms Detail Overlay ──────────────────────────────────────────
+   Clinic-side read of a patient's intake packet for their next appointment:
+   which forms are done, in progress, or not started — with a reminder
+   action when anything is outstanding. */
+function PatientFormsOverlay({ patient, appointmentId, onClose }) {
+  const [forms, setForms] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    apiGet(`/appointments/${appointmentId}/forms`)
+      .then(d => setForms(d || []))
+      .catch(() => setForms([]))
+      .finally(() => setLoading(false));
+  }, [appointmentId]);
+
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  const statusLabel = { not_started: 'Not started', in_progress: 'In progress', completed: 'Completed' };
+  const completed = forms.filter(f => f.status === 'completed').length;
+  const pending = forms.length - completed;
+
+  const reminderAppt = {
+    id: appointmentId,
+    patient_name: patient.full_name,
+    patient_email: patient.email,
+    patient_phone: patient.phone,
+    forms_total: forms.length,
+    forms_completed: completed,
+  };
+
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(20,30,40,0.45)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
+      onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={{background:'var(--surface)',borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-lg)',maxWidth:560,width:'100%',maxHeight:'85vh',display:'flex',flexDirection:'column',fontFamily:'inherit'}}>
+        <div style={{padding:'20px 24px',borderBottom:'1px solid var(--hair)',display:'flex',alignItems:'flex-start',justifyContent:'space-between'}}>
+          <div>
+            <div style={{fontFamily:"'Instrument Serif',serif",fontSize:20,color:'var(--ink)',letterSpacing:'-0.01em'}}>Intake forms — {patient.full_name}</div>
+            <div style={{fontSize:12.5,color:'var(--ink-3)',marginTop:3}}>
+              {loading ? 'Loading…' : `${completed}/${forms.length} completed${pending > 0 ? ` · ${pending} pending` : ''}`}
+            </div>
+          </div>
+          <button onClick={onClose} style={{background:'none',border:'none',fontSize:18,color:'var(--ink-3)',cursor:'pointer',padding:4,lineHeight:1}}>✕</button>
+        </div>
+        <div style={{padding:'16px 24px',overflowY:'auto',flex:1}}>
+          {loading ? (
+            <div className="empty-state"><div className="empty-state-icon">↻</div>Loading forms…</div>
+          ) : forms.length === 0 ? (
+            <div className="empty-state"><div className="empty-state-icon">📄</div>No forms on file for this appointment.</div>
+          ) : (
+            forms.slice().sort((a,b) => a.sort_order - b.sort_order).map(f => {
+              const status = f.status || 'not_started';
+              return (
+                <div key={f.id} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--hair)'}}>
+                  <div className={`fv-status-dot ${status}`} style={{flexShrink:0}} />
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:13.5,fontWeight:600,color:'var(--ink)',display:'flex',alignItems:'center',gap:8}}>
+                      {f.title}
+                      {f.is_required && <span className="pill-req">Required</span>}
+                    </div>
+                    {f.description && <div style={{fontSize:12,color:'var(--ink-4)',marginTop:2}}>{f.description}</div>}
+                  </div>
+                  <div style={{fontSize:12,fontWeight:600,color: status==='completed' ? 'var(--sage)' : status==='in_progress' ? 'var(--amber)' : 'var(--ink-4)',whiteSpace:'nowrap'}}>
+                    {statusLabel[status]}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+        {!loading && pending > 0 && (
+          <div style={{padding:'14px 24px',borderTop:'1px solid var(--hair)',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <span style={{fontSize:12,color:'var(--ink-3)'}}>{pending} form{pending !== 1 ? 's' : ''} still outstanding</span>
+            <ReminderButton appt={reminderAppt} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -10021,6 +11068,7 @@ function PatientsListView({ onBack, onHome }) {
   const [searchQ, setSearchQ]   = React.useState('');
   const [debouncedQ, setDebouncedQ] = React.useState('');
   const [chartPatient, setChartPatient] = React.useState(null);
+  const [formsPatient, setFormsPatient] = React.useState(null);
   const searchTimer = React.useRef(null);
 
   React.useEffect(() => {
@@ -10055,6 +11103,7 @@ function PatientsListView({ onBack, onHome }) {
             'Gender':             p.gender || '',
             'Email':              p.email || '',
             'Phone':              p.phone || '',
+            'Provider':           p.provider_name || '',
             'Total Visits':       p.appointment_count,
             'Last Appointment':   p.last_appointment_date ? fmtDateShort(p.last_appointment_date) : '',
             'Next Appointment':   p.next_appointment_date ? fmtDate(p.next_appointment_date) : '',
@@ -10082,12 +11131,13 @@ function PatientsListView({ onBack, onHome }) {
                 <th>Patient</th>
                 <th>DOB</th>
                 <th>Contact</th>
+                <th>Provider</th>
                 <th>Last Visit</th>
                 <th>Visits</th>
                 <th>Next Appointment</th>
                 <th>Pending Forms</th>
                 <th>Reminder</th>
-                <th>Clinical Chart</th>
+                <th>Workspace</th>
               </tr>
             </thead>
             <tbody>
@@ -10121,6 +11171,7 @@ function PatientsListView({ onBack, onHome }) {
                       {p.phone && <div style={{fontSize:12,color:'var(--ink-3)'}}>{p.phone}</div>}
                       {!p.email && !p.phone && <span style={{color:'var(--ink-4)',fontSize:12}}>—</span>}
                     </td>
+                    <td style={{color:'var(--ink-2)',fontSize:13}}>{p.provider_name || '—'}</td>
                     <td style={{color:'var(--ink-2)',fontSize:13}}>{p.last_appointment_date ? fmtDateShort(p.last_appointment_date) : '—'}</td>
                     <td>
                       <span style={{fontWeight:600,color:'var(--ink)'}}>{p.appointment_count}</span>
@@ -10138,13 +11189,21 @@ function PatientsListView({ onBack, onHome }) {
                     </td>
                     <td>
                       {nextAppt ? (
-                        <div className="forms-progress">
-                          <div className="fp-text">{p.next_forms_completed}/{p.next_forms_total} done</div>
-                          <div className="fp-bar"><div className="fp-fill" style={{width:`${pct}%`}} /></div>
-                          {pending > 0 && (
-                            <div style={{fontSize:11,color:'oklch(50% 0.12 50)',marginTop:1}}>{pending} remaining</div>
-                          )}
-                        </div>
+                        <button
+                          onClick={() => setFormsPatient(p)}
+                          style={{background:'none',border:'none',padding:0,cursor:'pointer',textAlign:'left',fontFamily:'inherit',display:'block',width:'100%'}}
+                        title="View form details"
+                        >
+                          <div className="forms-progress">
+                            <div className="fp-text" style={{textDecoration:'underline',textDecorationColor:'var(--hair-strong)',textUnderlineOffset:2}}>{p.next_forms_completed}/{p.next_forms_total} done</div>
+                            <div className="fp-bar"><div className="fp-fill" style={{width:`${pct}%`}} /></div>
+                            {pending > 0 ? (
+                              <div style={{fontSize:11,color:'oklch(50% 0.12 50)',marginTop:1}}>{pending} remaining</div>
+                            ) : (
+                              <div style={{fontSize:11,color:'var(--sage)',marginTop:1}}>All done ✓</div>
+                            )}
+                          </div>
+                        </button>
                       ) : <span style={{color:'var(--ink-4)',fontSize:12}}>—</span>}
                     </td>
                     <td>
@@ -10167,7 +11226,7 @@ function PatientsListView({ onBack, onHome }) {
                         onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--teal)';e.currentTarget.style.color='var(--teal-deep)';e.currentTarget.style.background='var(--teal-soft)';}}
                         onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--hair)';e.currentTarget.style.color='var(--ink-2)';e.currentTarget.style.background='var(--surface)';}}
                       >
-                        🏥 View Chart
+                        ◌ Open Workspace
                       </button>
                     </td>
                   </tr>
@@ -10179,6 +11238,13 @@ function PatientsListView({ onBack, onHome }) {
       )}
       {chartPatient && (
         <ClinicalChartOverlay patient={chartPatient} onClose={() => setChartPatient(null)} />
+      )}
+      {formsPatient && (
+        <PatientFormsOverlay
+          patient={formsPatient}
+          appointmentId={formsPatient.next_appointment_id}
+          onClose={() => setFormsPatient(null)}
+        />
       )}
     </div>
   );
@@ -10192,6 +11258,7 @@ const SCHED_PROVIDERS = [
 ];
 const SCHED_APPT_COLORS = {
   therapy_consultation: { bg:'oklch(97% 0.04 55)', border:'oklch(60% 0.15 55)', text:'oklch(28% 0.12 55)', label:'Immigration Exam' },
+  psychiatry_consultation:  { bg:'oklch(96% 0.04 300)',border:'oklch(58% 0.14 300)',text:'oklch(28% 0.12 300)',label:'Psychiatry Consultation' },
   primary_care:             { bg:'var(--teal-soft)',   border:'var(--teal)',         text:'var(--teal-deep)',   label:'Primary Care'    },
   pre_placement:            { bg:'var(--sage-soft)',   border:'var(--sage)',         text:'oklch(33% 0.09 200)',label:'Pre-Placement'   },
   annual_physical:          { bg:'oklch(96% 0.04 285)',border:'oklch(58% 0.14 285)',text:'oklch(28% 0.12 285)',label:'Physical'        },
@@ -11066,9 +12133,10 @@ function InsValidate({ patient, onBack, onHome }) {
 }
 
 /* Clinic dashboard */
-function ClinicDashboard({ onNavigate }) {
+function ClinicDashboard({ onNavigate, clinicUser = 'marisa' }) {
   const [apptCount, setApptCount] = React.useState(null);
   const [ptCount,   setPtCount]   = React.useState(null);
+  const firstName = (CLINIC_USERS[clinicUser] || CLINIC_USERS.marisa).name.split(' ')[0];
 
   React.useEffect(() => {
     apiGet('/appointments/upcoming').then(d => setApptCount(d.length)).catch(() => {});
@@ -11079,7 +12147,7 @@ function ClinicDashboard({ onNavigate }) {
     <div className="clinic-inner">
       <div style={{marginBottom:6}}>
         <div style={{fontSize:12,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.07em',color:'var(--ink-4)',marginBottom:8}}>Clinic Portal</div>
-        <div className="clinic-section-title">Good morning, Marisa.</div>
+        <div className="clinic-section-title">Good morning, {firstName}.</div>
         <div className="clinic-section-sub">Manage appointments, patients, and intake workflows from here.</div>
       </div>
 
@@ -11120,21 +12188,315 @@ function ClinicDashboard({ onNavigate }) {
           <div className="ct-sub">Submit prior authorizations and validate patient insurance coverage with AI-assisted workflows powered by AlanBehrman client records.</div>
           <div className="ct-cta">Get started <span>→</span></div>
         </div>
+
+        {clinicUser === 'alan' && (
+          <div className="clinic-tile" onClick={() => onNavigate('business_reports')}>
+            <div className="ct-icon">📊</div>
+            <div className="ct-title">Business Reports</div>
+            <div className="ct-sub">Revenue, utilization, and practice performance reporting.</div>
+            <div className="ct-cta">Open <span>→</span></div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function ClinicPortal() {
+/* Placeholder — Business Reports (owner-only) */
+function rptFmtMoney(n) {
+  return '$' + Math.round(n || 0).toLocaleString('en-US');
+}
+function rptFmtPct(n) {
+  return Math.round((n || 0) * 100) + '%';
+}
+function rptProviderColor(name) {
+  const n = (name || '').toLowerCase();
+  if (n.includes('vemuluri'))    return 'var(--rpt-provider-1)';
+  if (n.includes('mitchell'))    return 'var(--rpt-provider-2)';
+  if (n.includes('postanowicz')) return 'var(--rpt-provider-3)';
+  return 'var(--ink-4)';
+}
+function rptShortProvider(name) {
+  return (name || '').split(',')[0].replace(/^Dr\.\s*/, '');
+}
+
+function RptKpiTile({ label, value, sub }) {
+  return (
+    <div className="rpt-kpi-tile">
+      <div className="rpt-kpi-label">{label}</div>
+      <div className="rpt-kpi-value">{value}</div>
+      {sub && <div className="rpt-kpi-sub">{sub}</div>}
+    </div>
+  );
+}
+
+/* Business Reports — Practice Overview / Provider Scorecard / Retention
+   Funnel / Revenue Cycle. Owner-only (Alan Behrman). Backed by synthetic
+   appointments + billing_records data — an MVP mock, not live billing. */
+function BusinessReportsView({ onBack, onHome }) {
+  const [data, setData]   = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [showTable, setShowTable] = React.useState(false);
+
+  React.useEffect(() => {
+    apiGet('/reports/dashboard')
+      .then(setData)
+      .catch(() => setData(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="clinic-inner">
+        <PageNav onBack={onBack} onHome={onHome} crumb="Business Reports" />
+        <div className="empty-state"><div className="empty-state-icon">↻</div>Loading business reports…</div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="clinic-inner">
+        <PageNav onBack={onBack} onHome={onHome} crumb="Business Reports" />
+        <div className="empty-state"><div className="empty-state-icon">📊</div>Reports are unavailable right now.</div>
+      </div>
+    );
+  }
+
+  const { overview, providers, retention_funnel, revenue_cycle } = data;
+  const maxProviderRevenue = Math.max(1, ...providers.map(p => p.revenue_collected));
+  const maxFunnel = Math.max(1, ...retention_funnel.map(f => f.count));
+  const funnelColors = ['var(--rpt-ordinal-1)','var(--rpt-ordinal-2)','var(--rpt-ordinal-3)','var(--rpt-ordinal-4)','var(--rpt-ordinal-5)','var(--rpt-ordinal-5)'];
+  const arBuckets = [
+    { key: '0_30',    label: '0–30 days',  color: 'var(--rpt-status-good)' },
+    { key: '31_60',   label: '31–60 days', color: 'var(--rpt-status-warning)' },
+    { key: '61_90',   label: '61–90 days', color: 'var(--rpt-status-serious)' },
+    { key: '90_plus', label: '90+ days',   color: 'var(--rpt-status-critical)' },
+  ];
+  const maxAr = Math.max(1, ...arBuckets.map(b => revenue_cycle.ar_aging[b.key]));
+
+  return (
+    <div className="clinic-inner">
+      <PageNav onBack={onBack} onHome={onHome} crumb="Business Reports" />
+      <div className="rpt-mock-badge">🧪 Synthetic data · MVP preview</div>
+      <div className="clinic-section-title">Business reports</div>
+      <div className="clinic-section-sub">Provider volume, patient retention, and revenue cycle — computed from scheduling and billing data only (no clinical notes).</div>
+
+      {/* ── Practice Overview ──────────────────────────────────────────── */}
+      <div className="rpt-section">
+        <div className="rpt-section-head">
+          <div>
+            <div className="rpt-section-title">Practice overview</div>
+            <div className="rpt-section-sub">Alan's weekly command center.</div>
+          </div>
+        </div>
+        <div className="rpt-kpi-grid">
+          <RptKpiTile label="Completed Visits" value={overview.completed_visits} />
+          <RptKpiTile label="Scheduled · Next 4 Wks" value={overview.scheduled_next_4_weeks} />
+          <RptKpiTile label="New Patients" value={overview.new_patients} sub="last 30 days" />
+          <RptKpiTile label="Active Patients" value={overview.active_patients} />
+          <RptKpiTile label="Revenue Collected" value={rptFmtMoney(overview.revenue_collected)} />
+          <RptKpiTile label="Revenue / Visit" value={rptFmtMoney(overview.revenue_per_visit)} />
+          <RptKpiTile label="No-Show Rate" value={rptFmtPct(overview.no_show_rate)} />
+          <RptKpiTile label="Provider Utilization" value={rptFmtPct(overview.provider_utilization)} />
+          <RptKpiTile label="2nd-Visit Retention" value={rptFmtPct(overview.second_visit_retention)} />
+          <RptKpiTile label="4th-Visit Retention" value={rptFmtPct(overview.fourth_visit_retention)} />
+          <RptKpiTile label="A/R Outstanding" value={rptFmtMoney(overview.ar_total)} />
+        </div>
+      </div>
+
+      {/* ── Provider Scorecard ─────────────────────────────────────────── */}
+      <div className="rpt-section">
+        <div className="rpt-section-head">
+          <div>
+            <div className="rpt-section-title">Provider scorecard</div>
+            <div className="rpt-section-sub">Revenue collected by provider — see the table for full volume, retention, and leakage detail.</div>
+          </div>
+          <button className="ct-link-btn" onClick={() => setShowTable(s => !s)}
+            style={{border:'1px solid var(--hair)',background:'var(--surface)',borderRadius:20,padding:'5px 12px',fontSize:12,cursor:'pointer',fontFamily:'inherit',color:'var(--ink-3)'}}>
+            {showTable ? 'Hide table' : 'Show full table'}
+          </button>
+        </div>
+
+        <div className="rpt-legend">
+          {providers.map(p => (
+            <div key={p.provider_name} className="rpt-legend-item">
+              <span className="rpt-legend-swatch" style={{background: rptProviderColor(p.provider_name)}} />
+              {rptShortProvider(p.provider_name)}
+            </div>
+          ))}
+        </div>
+
+        <div className="rpt-bar-chart">
+          {providers.map(p => (
+            <div key={p.provider_name} className="rpt-bar-row">
+              <div className="rpt-bar-label">{rptShortProvider(p.provider_name)}</div>
+              <div className="rpt-bar-track">
+                <div className="rpt-bar-fill" style={{width: `${(p.revenue_collected / maxProviderRevenue) * 100}%`, background: rptProviderColor(p.provider_name)}} />
+              </div>
+              <div className="rpt-bar-value">{rptFmtMoney(p.revenue_collected)}</div>
+            </div>
+          ))}
+        </div>
+
+        {showTable && (
+          <div style={{overflowX:'auto',marginTop:16}}>
+            <table className="rpt-table">
+              <thead>
+                <tr>
+                  <th>Provider</th>
+                  <th>Completed</th>
+                  <th>Scheduled</th>
+                  <th>New Intakes</th>
+                  <th>Active Caseload</th>
+                  <th>Revenue</th>
+                  <th>Rev / Visit</th>
+                  <th>Utilization</th>
+                  <th>No-Show</th>
+                  <th>Cancellation</th>
+                  <th>Unbilled</th>
+                </tr>
+              </thead>
+              <tbody>
+                {providers.map(p => (
+                  <tr key={p.provider_name}>
+                    <td><span className="rpt-legend-swatch" style={{background: rptProviderColor(p.provider_name), display:'inline-block', marginRight:8, verticalAlign:'middle'}} />{p.provider_name}</td>
+                    <td className="rpt-num">{p.completed_visits}</td>
+                    <td className="rpt-num">{p.scheduled_visits}</td>
+                    <td className="rpt-num">{p.new_intakes}</td>
+                    <td className="rpt-num">{p.active_caseload}</td>
+                    <td className="rpt-num">{rptFmtMoney(p.revenue_collected)}</td>
+                    <td className="rpt-num">{rptFmtMoney(p.revenue_per_visit)}</td>
+                    <td className="rpt-num">{rptFmtPct(p.utilization)}</td>
+                    <td className="rpt-num">{rptFmtPct(p.no_show_rate)}</td>
+                    <td className="rpt-num">{rptFmtPct(p.cancellation_rate)}</td>
+                    <td className="rpt-num">{p.unbilled_encounters}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* ── Retention Funnel ───────────────────────────────────────────── */}
+      <div className="rpt-section">
+        <div className="rpt-section-head">
+          <div>
+            <div className="rpt-section-title">Patient retention funnel</div>
+            <div className="rpt-section-sub">Intake → ongoing care, across all providers.</div>
+          </div>
+        </div>
+        <div className="rpt-funnel">
+          {retention_funnel.map((stage, i) => {
+            const pctOfFirst = retention_funnel[0].count > 0 ? stage.count / retention_funnel[0].count : 0;
+            return (
+              <div key={stage.stage} className="rpt-funnel-row">
+                <div className="rpt-funnel-label">{stage.stage}</div>
+                <div className="rpt-funnel-track">
+                  <div className="rpt-funnel-fill" style={{width: `${(stage.count / maxFunnel) * 100}%`, background: funnelColors[i]}} />
+                </div>
+                <div className="rpt-funnel-meta">{stage.count} pts · {rptFmtPct(pctOfFirst)}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Revenue Cycle ──────────────────────────────────────────────── */}
+      <div className="rpt-section">
+        <div className="rpt-section-head">
+          <div>
+            <div className="rpt-section-title">Revenue cycle</div>
+            <div className="rpt-section-sub">What the practice billed, collected, and lost.</div>
+          </div>
+        </div>
+        <div className="rpt-kpi-grid" style={{marginBottom:20}}>
+          <RptKpiTile label="Gross Charges" value={rptFmtMoney(revenue_cycle.gross_charges)} />
+          <RptKpiTile label="Adjustments" value={rptFmtMoney(revenue_cycle.adjustments)} />
+          <RptKpiTile label="Net Revenue" value={rptFmtMoney(revenue_cycle.net_revenue)} />
+          <RptKpiTile label="Payments Collected" value={rptFmtMoney(revenue_cycle.payments_collected)} />
+          <RptKpiTile label="Collection Rate" value={rptFmtPct(revenue_cycle.collection_rate)} />
+          <RptKpiTile label="Denial Rate" value={rptFmtPct(revenue_cycle.denial_rate)} />
+          <RptKpiTile label="Unbilled Encounters" value={revenue_cycle.unbilled_encounters} />
+          <RptKpiTile label="Revenue Leakage (est.)" value={rptFmtMoney(revenue_cycle.revenue_leakage_estimate)} sub="no-shows + unbilled + denials" />
+        </div>
+
+        <div className="rpt-section-sub" style={{marginBottom:10,fontWeight:600,color:'var(--ink-3)'}}>A/R aging (outstanding patient balances)</div>
+        {arBuckets.map(b => {
+          const val = revenue_cycle.ar_aging[b.key];
+          return (
+            <div key={b.key} className="rpt-status-row">
+              <span className="rpt-status-dot" style={{background: b.color}} />
+              <span className="rpt-status-label">{b.label}</span>
+              <div className="rpt-status-track">
+                <div className="rpt-status-fill" style={{width: `${(val / maxAr) * 100}%`, background: b.color}} />
+              </div>
+              <span className="rpt-status-value">{rptFmtMoney(val)}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ClinicPortal({ clinicUser = 'marisa' }) {
   const [view, setView] = React.useState('dashboard');
   const goHome = () => setView('dashboard');
 
-  if (view === 'new_appt')     return <CreateAppointmentView onBack={goHome} onHome={goHome} onCreated={() => {}} />;
-  if (view === 'appointments') return <AppointmentsListView  onBack={goHome} onHome={goHome} />;
-  if (view === 'patients')     return <PatientsListView      onBack={goHome} onHome={goHome} />;
-  if (view === 'schedules')    return <SchedulesView          onBack={goHome} onHome={goHome} />;
-  if (view === 'insurance')    return <InsuranceAuthView      onBack={goHome} onHome={goHome} />;
-  return <ClinicDashboard onNavigate={setView} />;
+  if (view === 'new_appt')         return <CreateAppointmentView onBack={goHome} onHome={goHome} onCreated={() => {}} />;
+  if (view === 'appointments')     return <AppointmentsListView  onBack={goHome} onHome={goHome} />;
+  if (view === 'patients')         return <PatientsListView      onBack={goHome} onHome={goHome} />;
+  if (view === 'schedules')        return <SchedulesView          onBack={goHome} onHome={goHome} />;
+  if (view === 'insurance')        return <InsuranceAuthView      onBack={goHome} onHome={goHome} />;
+  if (view === 'business_reports') return <BusinessReportsView    onBack={goHome} onHome={goHome} />;
+  return <ClinicDashboard onNavigate={setView} clinicUser={clinicUser} />;
+}
+
+/* ── Clinic user quick-select prompt ────────────────────────────────────────
+   Shown each time Clinic View is entered. No credentials — just picking who's
+   at the desk. Marisa Sharpe is the default (pre-highlighted); dismissing the
+   prompt (backdrop/Escape) also defaults to Marisa. */
+function ClinicUserPrompt({ onSelect }) {
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onSelect('marisa'); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onSelect]);
+
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(20,30,40,0.45)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
+      onClick={e => e.target === e.currentTarget && onSelect('marisa')}>
+      <div style={{background:'var(--surface)',borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-lg)',padding:'28px 30px',maxWidth:420,width:'100%',fontFamily:'inherit'}}>
+        <div style={{fontFamily:"'Instrument Serif',serif",fontSize:20,color:'var(--ink)',marginBottom:4,letterSpacing:'-0.01em'}}>Who's using Clinic View?</div>
+        <div style={{fontSize:12.5,color:'var(--ink-3)',marginBottom:20}}>Select a user to continue — no login required.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          {Object.entries(CLINIC_USERS).map(([id, u]) => (
+            <button key={id} onClick={() => onSelect(id)}
+              style={{
+                display:'flex',alignItems:'center',gap:12,padding:'12px 14px',
+                border: id === 'marisa' ? '1.5px solid var(--teal)' : '1px solid var(--hair)',
+                background: id === 'marisa' ? 'var(--teal-soft)' : 'var(--bg-tint)',
+                borderRadius:'var(--radius)',cursor:'pointer',fontFamily:'inherit',textAlign:'left',width:'100%',
+              }}>
+              {u.photo
+                ? <img src={u.photo} alt={u.name} style={{width:36,height:36,borderRadius:'50%',objectFit:'cover',flexShrink:0}} />
+                : <span style={{width:36,height:36,borderRadius:'50%',background:'var(--teal-soft)',color:'var(--teal-deep)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0}}>{u.initials}</span>
+              }
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:600,color:'var(--ink)',display:'flex',alignItems:'center',gap:8}}>
+                  {u.name}
+                  {id === 'marisa' && <span style={{fontSize:10,fontWeight:700,color:'var(--teal-deep)',textTransform:'uppercase',letterSpacing:'0.05em'}}>Default</span>}
+                </div>
+                <div style={{fontSize:12,color:'var(--ink-3)'}}>{u.role}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ── App ─────────────────────────────────────────────────────────────────── */
@@ -11145,6 +12507,8 @@ function App() {
   const [ctxLoading, setCtxLoading] = React.useState(false);
   const [privacyAcknowledged, setPrivacyAcknowledged] = React.useState(false);
   const [resolvedPatientInfo, setResolvedPatientInfo] = React.useState(null);
+  const [clinicUser, setClinicUser] = React.useState('marisa');
+  const [showClinicUserPrompt, setShowClinicUserPrompt] = React.useState(false);
 
   // On mount: check for ?t=<token>; if present, load patient context and stay in patient view
   React.useEffect(() => {
@@ -11212,12 +12576,20 @@ function App() {
       <Topbar
         patient={displayPatient}
         viewMode={viewMode}
+        clinicUser={clinicUser}
         showPatientIdentity={viewMode !== 'patient' || !!resolvedPatientInfo}
-        onToggleView={v => { setViewMode(v); if(v==='patient') setPage('welcome'); }}
+        onToggleView={v => {
+          setViewMode(v);
+          if (v === 'patient') setPage('welcome');
+          if (v === 'clinic') setShowClinicUserPrompt(true);
+        }}
       />
+      {showClinicUserPrompt && (
+        <ClinicUserPrompt onSelect={u => { setClinicUser(u); setShowClinicUserPrompt(false); }} />
+      )}
       {viewMode === 'clinic' ? (
         <div className="clinic-portal">
-          <ClinicPortal />
+          <ClinicPortal clinicUser={clinicUser} />
         </div>
       ) : (
         <>

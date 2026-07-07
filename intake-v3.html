@@ -703,7 +703,7 @@ function buildPacket(patient, selectedProvider) {
     { id: 'provider-consent', step: 'Step Three', title: selectedProvider?.consent || 'Provider Informed Consent', reason: `Selected provider: ${selectedProvider?.name || 'provider to be assigned'}`, kind: 'provider' },
     { id: 'cancellation', step: 'Step Three', title: 'Cancellation Policy', reason: 'Required for appointment confirmation.', kind: 'cancellation' },
     { id: 'client-info', step: 'Step Two', title: 'Client Information', reason: 'Standard client profile information.', kind: 'client' },
-    { id: 'surprise-billing', step: 'Step Four', title: 'Surprise Billing Policy', reason: 'Billing disclosure included for applicable services.', kind: 'billing' },
+    { id: 'surprise-billing', step: 'Step Four', title: 'Billing Policy', reason: 'Billing disclosure included for applicable services.', kind: 'billing' },
   ];
   if (patient.insuranceMode !== 'none') {
     forms.push({ id: 'insurance-authorization', step: 'Step Four', title: 'Insurance Authorization', reason: 'Added because insurance details were provided.', kind: 'insurance' });
