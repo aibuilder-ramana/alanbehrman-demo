@@ -198,3 +198,30 @@ class IntakeSession(Base):
     started_at     = Column(DateTime(timezone=True), default=_now)
     completed_at   = Column(DateTime(timezone=True))
     messages       = Column(JSONB, nullable=False, default=list)
+
+
+class UiFeedback(Base):
+    """Thumbs up/down + optional note on a tagged UI screen or block.
+
+    `id` is generated client-side so a vote and its later note are the same row
+    (the browser PUTs twice: once on click, again if a note is added).
+    """
+    __tablename__ = "ui_feedback"
+
+    id            = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    section_id    = Column(String(120), nullable=False)   # e.g. "cl.reports.revenue_cycle"
+    section_label = Column(String(255))
+    screen        = Column(String(120))                   # section_id minus its last segment
+    verdict       = Column(String(10), nullable=False)    # up | down
+    note          = Column(Text)
+
+    clinic_user   = Column(String(50))
+    view_mode     = Column(String(20))                    # patient | clinic
+    url           = Column(Text)
+    app_version   = Column(String(60))
+    user_agent    = Column(Text)
+
+    created_at    = Column(DateTime(timezone=True), default=_now)
+    updated_at    = Column(DateTime(timezone=True), default=_now, onupdate=_now)
+
+    __table_args__ = (Index("idx_feedback_section", "section_id"),)

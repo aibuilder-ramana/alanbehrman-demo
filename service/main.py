@@ -12,12 +12,12 @@ sys.path.insert(0, _ROOT)
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from service.database import engine
 from service import models
-from service.routes import patients, appointments, forms, reports
+from service.routes import patients, appointments, forms, reports, feedback
 
 # Create all tables on first run
 models.Base.metadata.create_all(bind=engine)
@@ -42,19 +42,39 @@ app.include_router(patients.router,     prefix="/api/patients",     tags=["patie
 app.include_router(appointments.router, prefix="/api",               tags=["appointments"])
 app.include_router(forms.router,        prefix="/api",               tags=["forms"])
 app.include_router(reports.router,      prefix="/api",               tags=["reports"])
+app.include_router(feedback.router,     prefix="/api",               tags=["feedback"])
 
-# Serve the frontend
+@app.get("/api/version", include_in_schema=False)
+def app_version():
+    sha = os.getenv("RAILWAY_GIT_COMMIT_SHA", "")
+    return {"version": sha[:7] if sha else "dev"}
+
+# Short alias for the feedback review page
+@app.get("/feedback", include_in_schema=False)
+def serve_feedback_view():
+    return RedirectResponse("/api/feedback/view")
+
+# Serve the frontend. The app is a single hand-edited HTML file with no build
+# step or content hash, so browsers must revalidate or they keep serving a
+# stale copy after a deploy.
+_NO_CACHE = {"Cache-Control": "no-cache, must-revalidate"}
+
+
+def _page(name: str) -> FileResponse:
+    return FileResponse(os.path.join(_ROOT, name), headers=_NO_CACHE)
+
+
 @app.get("/", include_in_schema=False)
 def serve_index():
-    return FileResponse(os.path.join(_ROOT, "index.html"))
+    return _page("index.html")
 
 @app.get("/intake-v2", include_in_schema=False)
 def serve_intake_v2():
-    return FileResponse(os.path.join(_ROOT, "intake-v2.html"))
+    return _page("intake-v2.html")
 
 @app.get("/intake-v3", include_in_schema=False)
 def serve_intake_v3():
-    return FileResponse(os.path.join(_ROOT, "intake-v3.html"))
+    return _page("intake-v3.html")
 
 # Static asset directories
 for _name, _rel in [("assets", "assets"), ("resources", "resources"), ("data", "data")]:

@@ -4710,6 +4710,59 @@ textarea.basic-input {
   align-items: center;
   gap: 8px;
 }
+
+/* ── UI feedback widget ──────────────────────────────────────────────────── */
+.fb {
+  display: inline-flex; align-items: center; gap: 2px;
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 999px; padding: 2px; font-family: inherit;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+.fb-tag    { position: absolute; top: 8px; right: 8px; z-index: 50; }
+.fb-inline { position: relative; flex-shrink: 0; align-self: center; }
+.fb-inline .fb-pop { top: calc(100% + 6px); right: 0; }
+.fb-screen { position: fixed; right: 18px; bottom: 74px; z-index: 8000;
+             box-shadow: 0 3px 14px rgba(0,0,0,0.18); padding: 3px 4px 3px 10px; }
+.fb-label { font-size: 11px; font-weight: 600; color: var(--ink-3);
+            letter-spacing: 0.02em; margin-right: 3px; user-select: none; }
+.fb-b {
+  border: 0; background: transparent; cursor: pointer; font-size: 13px;
+  line-height: 1; padding: 4px 6px; border-radius: 999px; opacity: 0.8;
+  transition: opacity 0.12s, background 0.12s;
+}
+.fb-b:hover      { opacity: 1; background: rgba(0,0,0,0.05); }
+.fb-b.on         { opacity: 1; }
+.fb-b.up.on      { background: rgba(46,160,110,0.18); }
+.fb-b.down.on    { background: rgba(214,90,74,0.18); }
+.fb-ok { font-size: 11px; color: var(--teal-deep); font-weight: 700; padding: 0 5px; }
+.fb-pop {
+  position: absolute; z-index: 8001; width: 252px; padding: 9px;
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 10px; box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+}
+.fb-tag .fb-pop    { top: calc(100% + 6px); right: 0; }
+.fb-screen .fb-pop { bottom: calc(100% + 6px); right: 0; }
+.fb-pop textarea {
+  width: 100%; box-sizing: border-box; min-height: 62px; resize: vertical;
+  border: 1px solid var(--hair); border-radius: 7px; padding: 6px 7px;
+  font-family: inherit; font-size: 12.5px; line-height: 1.45;
+  color: var(--ink); background: var(--bg-tint); outline: none;
+}
+.fb-pop textarea:focus { border-color: var(--teal); }
+.fb-sec {
+  font-size: 10px; color: var(--ink-4); margin-bottom: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all;
+}
+.fb-row { display: flex; gap: 6px; justify-content: flex-end; align-items: center; margin-top: 6px; }
+.fb-save {
+  border: 0; background: var(--teal); color: #fff; border-radius: 6px;
+  padding: 4px 11px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.fb-skip {
+  border: 0; background: transparent; color: var(--ink-3);
+  font-size: 12px; cursor: pointer; font-family: inherit; padding: 4px 6px;
+}
+@media print { .fb { display: none; } }
 </style>
 </head>
 <body>
@@ -4823,6 +4876,143 @@ async function apiPatch(path, body) {
 async function apiPut(path, body) {
   return fetch(API + path, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
     .catch(console.warn);
+}
+
+/* ── UI feedback ───────────────────────────────────────────────────────────
+   <FbScreen id label /> tags a whole screen (fixed, bottom-right).
+   <FbTag    id label /> tags a block (absolute, top-right of its parent).
+   Thumbs save on click; a note box opens next to it for optional detail.
+   Every click is mirrored to localStorage first, so nothing is lost if the
+   service is mid-deploy — the queue flushes on next load. */
+const FB_KEY   = 'elevia_fb_v1';
+const FB_QUEUE = 'elevia_fb_pending_v1';
+const FB_CTX   = { clinicUser: 'marisa', viewMode: 'patient', version: 'dev' };
+
+function fbUuid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+function fbRead(key, empty) {
+  try { return JSON.parse(localStorage.getItem(key)) || empty; } catch (e) { return empty; }
+}
+function fbWrite(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+}
+function fbSend(rowId, payload) {
+  fetch(`${API}/feedback/${rowId}`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+  }).then(r => { if (!r.ok) throw new Error(r.status); })
+    .catch(() => {
+      const q = fbRead(FB_QUEUE, []).filter(e => e.rowId !== rowId);
+      fbWrite(FB_QUEUE, q.concat([{ rowId, payload }]));
+    });
+}
+function fbFlush() {
+  const q = fbRead(FB_QUEUE, []);
+  if (!q.length) return;
+  fbWrite(FB_QUEUE, []);
+  q.forEach(e => fbSend(e.rowId, e.payload));
+}
+fetch(`${API}/version`).then(r => r.json()).then(d => { FB_CTX.version = d.version; }).catch(() => {});
+fbFlush();
+
+function FbWidget({ id, label, className, innerRef }) {
+  const [vote,  setVote]  = React.useState(() => fbRead(FB_KEY, {})[id] || null);
+  const [open,  setOpen]  = React.useState(false);
+  const [draft, setDraft] = React.useState('');
+  const [flash, setFlash] = React.useState(false);
+  const rootRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const away = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', away);
+    return () => document.removeEventListener('mousedown', away);
+  }, [open]);
+
+  const persist = (next) => {
+    const all = fbRead(FB_KEY, {});
+    if (next) all[id] = next; else delete all[id];
+    fbWrite(FB_KEY, all);
+    setVote(next);
+  };
+
+  const payload = (verdict, note) => ({
+    section_id: id, section_label: label || null, verdict, note: note || null,
+    clinic_user: FB_CTX.clinicUser, view_mode: FB_CTX.viewMode,
+    url: window.location.href, app_version: FB_CTX.version, user_agent: navigator.userAgent,
+  });
+
+  const click = (verdict) => {
+    if (vote && vote.verdict === verdict) {          // clicking the same thumb clears the vote
+      fetch(`${API}/feedback/${vote.rowId}`, { method: 'DELETE' }).catch(() => {});
+      persist(null);
+      setOpen(false);
+      return;
+    }
+    const rowId = (vote && vote.rowId) || fbUuid();
+    const note  = (vote && vote.note) || '';
+    persist({ rowId, verdict, note });
+    fbSend(rowId, payload(verdict, note));
+    setDraft(note);
+    setOpen(true);
+  };
+
+  const save = () => {
+    const note = draft.trim();
+    persist({ ...vote, note });
+    fbSend(vote.rowId, payload(vote.verdict, note));
+    setOpen(false);
+    setFlash(true);
+    setTimeout(() => setFlash(false), 1400);
+  };
+
+  return (
+    <div className={`fb ${className}`} ref={el => { rootRef.current = el; if (innerRef) innerRef.current = el; }}
+      onClick={e => e.stopPropagation()}>
+      {className === 'fb-screen' && <span className="fb-label">Feedback</span>}
+      <button className={`fb-b up${vote && vote.verdict === 'up' ? ' on' : ''}`}
+        title={`Works well — ${id}`} onClick={() => click('up')}>👍</button>
+      <button className={`fb-b down${vote && vote.verdict === 'down' ? ' on' : ''}`}
+        title={`Needs work — ${id}`} onClick={() => click('down')}>👎</button>
+      {flash && <span className="fb-ok">✓</span>}
+      {open && (
+        <div className="fb-pop">
+          <div className="fb-sec">{label ? `${label} · ` : ''}{id}</div>
+          <textarea autoFocus value={draft}
+            placeholder="What worked, or what didn't? (optional)"
+            onChange={e => setDraft(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Escape') setOpen(false);
+              if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) save();
+            }} />
+          <div className="fb-row">
+            <button className="fb-skip" onClick={() => setOpen(false)}>Skip</button>
+            <button className="fb-save" onClick={save}>Save</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FbScreen({ id, label }) {
+  return <FbWidget id={id} label={label} className="fb-screen" />;
+}
+
+/* inline: sits in normal flow — use where the block's top-right corner is
+   already taken (close buttons, header actions). */
+function FbTag({ id, label, inline }) {
+  const ref = React.useRef(null);
+  React.useLayoutEffect(() => {
+    if (inline) return;
+    const p = ref.current && ref.current.parentElement;
+    if (p && getComputedStyle(p).position === 'static') p.style.position = 'relative';
+  }, [inline]);
+  return <FbWidget innerRef={ref} id={id} label={label} className={inline ? 'fb-inline' : 'fb-tag'} />;
 }
 
 const CREDIT_CARD_TYPES = ['Amex', 'Discover', 'Mastercard', 'Visa'];
@@ -5219,6 +5409,7 @@ function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView, showPat
             </>
           )}
         </span>
+        <FbTag inline id="g.topbar" label="Top bar" />
       </div>
     </header>
   );
@@ -5228,6 +5419,7 @@ function Topbar({ patient = PATIENT, viewMode = 'patient', onToggleView, showPat
 function Footer() {
   return (
     <footer className="footer">
+      <FbTag inline id="g.footer" label="Footer" />
       <div>
         <span>© AlanBehrman</span>
         <span className="sep">·</span>
@@ -8841,6 +9033,7 @@ function FormViewer({ form, onClose, onComplete, intakeCtx }) {
             <div className="fv-header-title">{form.title}</div>
             <div className="fv-header-sub">{form.description}</div>
           </div>
+          <FbTag inline id={`pt.form.${id}`} label={`Form · ${form.title}`} />
           <button className="fv-close" onClick={onClose}>✕</button>
         </div>
         <div className="fv-status-bar">
@@ -9711,6 +9904,7 @@ function NotifyDialog({ patientName, patientEmail, patientPhone, intakeUrl, onCl
       onClick={onClose}>
       <div style={{background:'var(--surface)',borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-lg)',padding:'36px 40px',maxWidth:440,width:'90%',fontFamily:'inherit'}}
         onClick={e => e.stopPropagation()}>
+        <FbTag id="cl.appointments.notify_dialog" label="Intake link sent dialog" />
         <div style={{width:48,height:48,borderRadius:'50%',background:'var(--teal-soft)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,marginBottom:20}}>📨</div>
         <div style={{fontFamily:"'Instrument Serif',serif",fontSize:22,color:'var(--ink)',marginBottom:6,letterSpacing:'-0.01em'}}>Intake link sent</div>
         <div style={{fontSize:13.5,color:'var(--ink-3)',marginBottom:20,lineHeight:1.5}}>
@@ -9764,6 +9958,7 @@ function ReminderDialog({ appt, onClose }) {
       onClick={onClose}>
       <div style={{background:'var(--surface)',borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-lg)',padding:'36px 40px',maxWidth:420,width:'90%',fontFamily:'inherit'}}
         onClick={e => e.stopPropagation()}>
+        <FbTag id="cl.appointments.reminder_dialog" label="Reminder sent dialog" />
         <div style={{width:48,height:48,borderRadius:'50%',background:'var(--teal-soft)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,marginBottom:20}}>✓</div>
         <div style={{fontFamily:"'Instrument Serif',serif",fontSize:22,color:'var(--ink)',marginBottom:6,letterSpacing:'-0.01em'}}>Reminder sent</div>
         <div style={{fontSize:13.5,color:'var(--ink-3)',marginBottom:24,lineHeight:1.5}}>
@@ -10963,6 +11158,8 @@ function ClinicalChartOverlay({ patient, onClose }) {
               </nav>
               <div className="chart-workspace">
                 <main className="chart-main">
+                  <FbTag id={`cl.chart.${tab}`}
+                    label={`Clinical chart · ${(CHART_NAV.find(n => n.id === tab) || {}).label || tab}`} />
                   {renderSection()}
                 </main>
                 <aside className="chart-sidebar">
@@ -11018,6 +11215,7 @@ function PatientFormsOverlay({ patient, appointmentId, onClose }) {
         <div style={{padding:'20px 24px',borderBottom:'1px solid var(--hair)',display:'flex',alignItems:'flex-start',justifyContent:'space-between'}}>
           <div>
             <div style={{fontFamily:"'Instrument Serif',serif",fontSize:20,color:'var(--ink)',letterSpacing:'-0.01em'}}>Intake forms — {patient.full_name}</div>
+            <FbTag inline id="cl.patient_forms" label="Intake forms overlay" />
             <div style={{fontSize:12.5,color:'var(--ink-3)',marginTop:3}}>
               {loading ? 'Loading…' : `${completed}/${forms.length} completed${pending > 0 ? ` · ${pending} pending` : ''}`}
             </div>
@@ -11841,6 +12039,7 @@ function InsPreAuth({ patient, onBack, onHome }) {
           <span className="pn-sep">/</span>
           <button className="pn-btn pn-home" onClick={onHome}>⌂ Dashboard</button>
         </div>
+        <div style={{marginLeft:'auto'}}><FbTag inline id="cl.insurance.preauth" label="Insurance · Prior authorization" /></div>
         <span className="pn-sep" style={{marginLeft:6}}>/</span>
         <span style={{fontSize:13,fontWeight:600,color:'var(--ink-2)'}}>Pre-Authorization</span>
         <span style={{fontSize:13,color:'var(--ink-4)'}}>·</span>
@@ -12063,6 +12262,7 @@ function InsValidate({ patient, onBack, onHome }) {
           <span className="pn-sep">/</span>
           <button className="pn-btn pn-home" onClick={onHome}>⌂ Dashboard</button>
         </div>
+        <div style={{marginLeft:'auto'}}><FbTag inline id="cl.insurance.validate" label="Insurance · Validate coverage" /></div>
         <span className="pn-sep" style={{marginLeft:6}}>/</span>
         <span style={{fontSize:13,fontWeight:600,color:'var(--ink-2)'}}>Insurance Validation</span>
         <span style={{fontSize:13,color:'var(--ink-4)'}}>·</span>
@@ -12284,6 +12484,7 @@ function BusinessReportsView({ onBack, onHome }) {
 
       {/* ── Practice Overview ──────────────────────────────────────────── */}
       <div className="rpt-section">
+        <FbTag id="cl.reports.practice_overview" label="Practice overview" />
         <div className="rpt-section-head">
           <div>
             <div className="rpt-section-title">Practice overview</div>
@@ -12307,6 +12508,7 @@ function BusinessReportsView({ onBack, onHome }) {
 
       {/* ── Provider Scorecard ─────────────────────────────────────────── */}
       <div className="rpt-section">
+        <FbTag id="cl.reports.provider_scorecard" label="Provider scorecard" />
         <div className="rpt-section-head">
           <div>
             <div className="rpt-section-title">Provider scorecard</div>
@@ -12381,6 +12583,7 @@ function BusinessReportsView({ onBack, onHome }) {
 
       {/* ── Retention Funnel ───────────────────────────────────────────── */}
       <div className="rpt-section">
+        <FbTag id="cl.reports.retention_funnel" label="Patient retention funnel" />
         <div className="rpt-section-head">
           <div>
             <div className="rpt-section-title">Patient retention funnel</div>
@@ -12405,6 +12608,7 @@ function BusinessReportsView({ onBack, onHome }) {
 
       {/* ── Revenue Cycle ──────────────────────────────────────────────── */}
       <div className="rpt-section">
+        <FbTag id="cl.reports.revenue_cycle" label="Revenue cycle" />
         <div className="rpt-section-head">
           <div>
             <div className="rpt-section-title">Revenue cycle</div>
@@ -12441,17 +12645,35 @@ function BusinessReportsView({ onBack, onHome }) {
   );
 }
 
+const CLINIC_VIEW_LABELS = {
+  dashboard:        'Clinic dashboard',
+  new_appt:         'Client intake / new appointment',
+  appointments:     'Upcoming appointments',
+  patients:         'Patient registry',
+  schedules:        'Schedules',
+  insurance:        'Insurance authorization',
+  business_reports: 'Business reports',
+};
+
 function ClinicPortal({ clinicUser = 'marisa' }) {
   const [view, setView] = React.useState('dashboard');
   const goHome = () => setView('dashboard');
 
-  if (view === 'new_appt')         return <CreateAppointmentView onBack={goHome} onHome={goHome} onCreated={() => {}} />;
-  if (view === 'appointments')     return <AppointmentsListView  onBack={goHome} onHome={goHome} />;
-  if (view === 'patients')         return <PatientsListView      onBack={goHome} onHome={goHome} />;
-  if (view === 'schedules')        return <SchedulesView          onBack={goHome} onHome={goHome} />;
-  if (view === 'insurance')        return <InsuranceAuthView      onBack={goHome} onHome={goHome} />;
-  if (view === 'business_reports') return <BusinessReportsView    onBack={goHome} onHome={goHome} />;
-  return <ClinicDashboard onNavigate={setView} clinicUser={clinicUser} />;
+  let body;
+  if      (view === 'new_appt')         body = <CreateAppointmentView onBack={goHome} onHome={goHome} onCreated={() => {}} />;
+  else if (view === 'appointments')     body = <AppointmentsListView  onBack={goHome} onHome={goHome} />;
+  else if (view === 'patients')         body = <PatientsListView      onBack={goHome} onHome={goHome} />;
+  else if (view === 'schedules')        body = <SchedulesView         onBack={goHome} onHome={goHome} />;
+  else if (view === 'insurance')        body = <InsuranceAuthView     onBack={goHome} onHome={goHome} />;
+  else if (view === 'business_reports') body = <BusinessReportsView   onBack={goHome} onHome={goHome} />;
+  else                                  body = <ClinicDashboard onNavigate={setView} clinicUser={clinicUser} />;
+
+  return (
+    <>
+      {body}
+      <FbScreen id={`cl.${view}`} label={CLINIC_VIEW_LABELS[view] || view} />
+    </>
+  );
 }
 
 /* ── Clinic user quick-select prompt ────────────────────────────────────────
@@ -12469,6 +12691,7 @@ function ClinicUserPrompt({ onSelect }) {
     <div style={{position:'fixed',inset:0,background:'rgba(20,30,40,0.45)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
       onClick={e => e.target === e.currentTarget && onSelect('marisa')}>
       <div style={{background:'var(--surface)',borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-lg)',padding:'28px 30px',maxWidth:420,width:'100%',fontFamily:'inherit'}}>
+        <FbTag id="cl.user_prompt" label="Clinic user select" />
         <div style={{fontFamily:"'Instrument Serif',serif",fontSize:20,color:'var(--ink)',marginBottom:4,letterSpacing:'-0.01em'}}>Who's using Clinic View?</div>
         <div style={{fontSize:12.5,color:'var(--ink-3)',marginBottom:20}}>Select a user to continue — no login required.</div>
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
@@ -12560,6 +12783,9 @@ function App() {
     }
   }, [intakeCtx]);
 
+  FB_CTX.clinicUser = clinicUser;
+  FB_CTX.viewMode   = viewMode;
+
   if (ctxLoading) {
     return (
       <div className="app" style={{height:'100vh',display:'grid',placeItems:'center'}}>
@@ -12605,6 +12831,7 @@ function App() {
           )}
           {page === 'docs'    && <DocListPage patient={displayPatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} onSwitchToAI={() => setPage('ai')} />}
           {page === 'ai'      && <AIIntakePage patient={displayPatient} intakeCtx={intakeCtx} onBack={() => setPage('welcome')} onHome={() => setPage('welcome')} />}
+          <FbScreen id={`pt.${page}`} label={{welcome:'Patient welcome',docs:'Document checklist',ai:'AI intake'}[page] || page} />
         </>
       )}
       <Footer />
