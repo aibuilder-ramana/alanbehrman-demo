@@ -42,6 +42,14 @@ class FeedbackIn(BaseModel):
     user_agent: Optional[str] = None
 
 
+def _screen_of(section_id: str) -> str:
+    """Group blocks under their screen: cl.business_reports.revenue_cycle →
+    cl.business_reports. A bare screen id (cl.dashboard) is its own screen —
+    trimming it would collapse everything to a useless "cl"."""
+    parts = section_id.split(".")
+    return ".".join(parts[:-1]) if len(parts) > 2 else section_id
+
+
 def _row_dict(r: models.UiFeedback) -> dict:
     return {
         "id": str(r.id),
@@ -78,7 +86,7 @@ def upsert_feedback(feedback_id: uuid.UUID, data: FeedbackIn, db: Session = Depe
 
     row.section_id = data.section_id
     row.section_label = data.section_label
-    row.screen = data.section_id.rsplit(".", 1)[0] if "." in data.section_id else data.section_id
+    row.screen = _screen_of(data.section_id)
     row.verdict = verdict
     row.note = note
     row.clinic_user = data.clinic_user
