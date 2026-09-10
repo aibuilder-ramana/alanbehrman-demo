@@ -4720,7 +4720,6 @@ textarea.basic-input {
 }
 .fb-tag    { position: absolute; top: 8px; right: 8px; z-index: 50; }
 .fb-inline { position: relative; flex-shrink: 0; align-self: center; }
-.fb-inline .fb-pop { top: calc(100% + 6px); right: 0; }
 .fb-screen { position: fixed; right: 18px; bottom: 74px; z-index: 8000;
              box-shadow: 0 3px 14px rgba(0,0,0,0.18); padding: 3px 4px 3px 10px; }
 .fb-label { font-size: 11px; font-weight: 600; color: var(--ink-3);
@@ -4736,12 +4735,11 @@ textarea.basic-input {
 .fb-b.down.on    { background: rgba(214,90,74,0.18); }
 .fb-ok { font-size: 11px; color: var(--teal-deep); font-weight: 700; padding: 0 5px; }
 .fb-pop {
-  position: absolute; z-index: 8001; width: 252px; padding: 9px;
+  position: fixed; z-index: 8001; padding: 9px;
+  width: 252px; max-width: calc(100vw - 16px);
   background: var(--surface); border: 1px solid var(--hair);
   border-radius: 10px; box-shadow: 0 6px 22px rgba(0,0,0,0.18);
 }
-.fb-tag .fb-pop    { top: calc(100% + 6px); right: 0; }
-.fb-screen .fb-pop { bottom: calc(100% + 6px); right: 0; }
 .fb-pop textarea {
   width: 100%; box-sizing: border-box; min-height: 62px; resize: vertical;
   border: 1px solid var(--hair); border-radius: 7px; padding: 6px 7px;
@@ -4925,12 +4923,48 @@ function FbWidget({ id, label, className, innerRef }) {
   const [draft, setDraft] = React.useState('');
   const [flash, setFlash] = React.useState(false);
   const rootRef = React.useRef(null);
+  const popRef  = React.useRef(null);
 
   React.useEffect(() => {
     if (!open) return;
     const away = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false); };
     document.addEventListener('mousedown', away);
     return () => document.removeEventListener('mousedown', away);
+  }, [open]);
+
+  // Keep the note box on screen. Widgets sit in every corner — the footer one
+  // is bottom-left, the screen pill bottom-right — so a fixed anchor clips off
+  // the edge. Prefer right-aligned + below, flip when it doesn't fit, clamp
+  // as a last resort on narrow viewports.
+  React.useLayoutEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const pop = popRef.current, root = rootRef.current;
+      if (!pop || !root) return;
+      const r = root.getBoundingClientRect();
+      const pw = pop.offsetWidth, ph = pop.offsetHeight;
+      const M = 8;
+
+      let left = r.right - pw;
+      if (left < M) left = r.left;
+      left = Math.max(M, Math.min(left, window.innerWidth - pw - M));
+
+      let top = r.bottom + 6;
+      if (top + ph > window.innerHeight - M) {
+        const above = r.top - ph - 6;
+        top = above >= M ? above : Math.max(M, window.innerHeight - ph - M);
+      }
+
+      pop.style.left = `${left}px`;
+      pop.style.top  = `${top}px`;
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
   }, [open]);
 
   const persist = (next) => {
@@ -4980,7 +5014,7 @@ function FbWidget({ id, label, className, innerRef }) {
         title={`Needs work — ${id}`} onClick={() => click('down')}>👎</button>
       {flash && <span className="fb-ok">✓</span>}
       {open && (
-        <div className="fb-pop">
+        <div className="fb-pop" ref={popRef}>
           <div className="fb-sec">{label ? `${label} · ` : ''}{id}</div>
           <textarea autoFocus value={draft}
             placeholder="What worked, or what didn't? (optional)"
