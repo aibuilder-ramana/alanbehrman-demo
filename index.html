@@ -159,6 +159,12 @@ button { font-family: inherit; }
 }
 
 /* ── Footer ─────────────────────────────────────────────────────────────── */
+.foot-help { color: var(--ink-3); }
+.foot-help a { color: var(--ink-2, var(--ink)); text-decoration: none; font-weight: 600; }
+.foot-help a:hover { text-decoration: underline; }
+.powered-by a { color: inherit; text-decoration: none; }
+.powered-by a:hover { text-decoration: underline; }
+
 .footer {
   padding: 18px 40px;
   border-top: 1px solid var(--hair);
@@ -3477,7 +3483,12 @@ textarea.basic-input {
   border-radius: 20px; padding: 4px 11px; margin-bottom: 14px;
 }
 .rpt-section { margin-top: 34px; }
-.rpt-section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.rpt-section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 14px; gap: 12px;
+  /* clear the absolutely-positioned feedback tag in the section's top-right */
+  padding-right: 76px;
+}
 .rpt-section-title { font-family: 'Instrument Serif', serif; font-size: 19px; color: var(--ink); letter-spacing: -0.01em; }
 .rpt-section-sub { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
 
@@ -3488,10 +3499,15 @@ textarea.basic-input {
 .rpt-kpi-tile {
   background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
   padding: 14px 16px;
+  display: flex; flex-direction: column;
 }
 .rpt-kpi-label {
   font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
   color: var(--ink-4); margin-bottom: 6px;
+  /* reserve exactly two lines so a label that wraps doesn't drop its number
+     below the numbers in neighbouring tiles */
+  line-height: 1.35;
+  min-height: 2.7em;
 }
 .rpt-kpi-value {
   font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
@@ -3505,6 +3521,32 @@ textarea.basic-input {
 .rpt-bar-track { position: relative; height: 14px; background: var(--bg-tint); border-radius: 4px; overflow: hidden; }
 .rpt-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; transition: width 0.4s; }
 .rpt-bar-value { font-size: 12.5px; color: var(--ink-2); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+
+.reg-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
+.reg-select {
+  font-family: inherit; font-size: 12.5px; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 8px; padding: 6px 10px; cursor: pointer;
+}
+.reg-chip {
+  font-family: inherit; font-size: 12.5px; color: var(--ink-3);
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 20px; padding: 6px 12px; cursor: pointer;
+}
+.reg-chip:hover { color: var(--ink); }
+.reg-chip.active { background: var(--teal-soft); color: var(--teal-deep); border-color: var(--teal); font-weight: 600; }
+.reg-chip.clear { color: var(--ink-4); border-style: dashed; }
+.reg-prov-name { font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.reg-prov-role { font-size: 11px; color: var(--ink-4); }
+
+.rpt-scope { display: inline-flex; border: 1px solid var(--hair); border-radius: 20px; overflow: hidden; }
+.rpt-scope-btn {
+  border: 0; background: var(--surface); color: var(--ink-3);
+  font-family: inherit; font-size: 12px; padding: 5px 12px; cursor: pointer;
+}
+.rpt-scope-btn + .rpt-scope-btn { border-left: 1px solid var(--hair); }
+.rpt-scope-btn:hover { color: var(--ink); }
+.rpt-scope-btn.active { background: var(--teal-soft); color: var(--teal-deep); font-weight: 600; }
 
 .rpt-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0 18px; }
 .rpt-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); }
@@ -5457,15 +5499,19 @@ function Footer() {
       <div>
         <span>© AlanBehrman</span>
         <span className="sep">·</span>
-        <a href="#">Privacy</a>
-        <span className="sep">·</span>
         <span>Secure patient intake</span>
+        <span className="sep">·</span>
+        <span className="foot-help">
+          Need help? <a href="tel:+17703617864">ATL 770.361.7864</a>
+          <span className="sep">·</span>
+          <a href="tel:+15044145467">NOLA 504.414.5467</a>
+        </span>
       </div>
       <div className="powered-by">
         <span>Intake experience by</span>
         <img src="assets/elevia-logo.png" alt="Elevia" />
         <strong>Elevia</strong>
-        <span style={{color:'var(--ink-4)',fontSize:11}}>· elevia.health</span>
+        <span style={{color:'var(--ink-4)',fontSize:11}}>· <a href="https://elevia.health" target="_blank" rel="noopener noreferrer">elevia.health</a></span>
       </div>
     </footer>
   );
@@ -10308,7 +10354,11 @@ function genTherapyChartData(patient, tebraNotes) {
   const gadCurrent = 5 + rnd(6, 13);
   const gadPrevious = gadCurrent + 2 + rnd(3, 19);
   const gadBaseline = gadPrevious + 3 + rnd(4, 29);
-  const attendanceMissed = rnd(3, 31);
+  /* Visits actually on file. The generated narrative below must not claim
+     more history than this, or the chart contradicts its own banner. */
+  const visitsOnFile = patient.appointment_count || noteList.length || 0;
+  const hasHistory   = visitsOnFile >= 3 && noteList.length >= 2;
+  const attendanceMissed = Math.min(rnd(3, 31), Math.max(0, visitsOnFile - 1));
   const noShowRisk = attendanceMissed === 0 ? 'Stable' : attendanceMissed === 1 ? 'Watch' : 'Needs outreach';
   const treatmentPlanDays = 8 + rnd(18, 37);
   const noteDrafts = rnd(2, 41);
@@ -10342,12 +10392,31 @@ function genTherapyChartData(patient, tebraNotes) {
   const latestExcerpt = noteExcerpt(noteList[0] || {}).toLowerCase();
   const risk = latestExcerpt.includes('si') || latestExcerpt.includes('suic') ? 'High' : (phqCurrent >= 14 || gadCurrent >= 14 ? 'Moderate' : 'Low');
   const riskClass = risk === 'High' ? 'risk-high' : risk === 'Moderate' ? 'risk-moderate' : 'risk-low';
-  const sessionSummary = [
-    `${measures[0].label} and ${measures[1].label} are ${measures[0].trend === 'Improving' && measures[1].trend === 'Improving' ? 'both improving' : 'mixed but clinically useful'} over the last month.`,
-    `${topics[0]} remains the most consistent trigger in recent documentation.`,
-    attendanceMissed > 0 ? `Attendance shows ${attendanceMissed} missed visit${attendanceMissed > 1 ? 's' : ''} in the recent cycle.` : 'Attendance has been consistent with no missed visits recently.',
-    risk === 'Low' ? 'No acute safety concerns are documented in the most recent charted sessions.' : risk === 'Moderate' ? 'Maintain active check-in on safety and symptom intensity at session start.' : 'Open the visit with a direct safety assessment before moving into broader therapy work.',
-  ];
+  const safetyLine = risk === 'Low'
+    ? 'No acute safety concerns are documented in the most recent charted sessions.'
+    : risk === 'Moderate'
+      ? 'Maintain active check-in on safety and symptom intensity at session start.'
+      : 'Open the visit with a direct safety assessment before moving into broader therapy work.';
+
+  /* With one or two visits there is no trend to report. Saying so is more
+     useful than inventing a month of history the record does not contain. */
+  const sessionSummary = hasHistory
+    ? [
+        `${measures[0].label} and ${measures[1].label} are ${measures[0].trend === 'Improving' && measures[1].trend === 'Improving' ? 'both improving' : 'mixed but clinically useful'} over the last month.`,
+        `${topics[0]} remains the most consistent trigger in recent documentation.`,
+        attendanceMissed > 0 ? `Attendance shows ${attendanceMissed} missed visit${attendanceMissed > 1 ? 's' : ''} in the recent cycle.` : 'Attendance has been consistent with no missed visits recently.',
+        safetyLine,
+      ]
+    : [
+        visitsOnFile <= 1
+          ? 'First visit on file — no prior history to compare against yet.'
+          : `Only ${visitsOnFile} visits on file — too little history for a reliable trend.`,
+        noteList.length
+          ? `${topics[0]} is the presenting theme in the documentation so far.`
+          : 'No clinical notes have synced for this patient yet.',
+        'Baseline outcome measures should be captured at this visit.',
+        safetyLine,
+      ];
   const watchFor = topics.includes('Trauma triggers')
     ? 'Patient can disengage if trauma content is pushed before they initiate it.'
     : topics.includes('Perfectionism')
@@ -10566,6 +10635,13 @@ function genTherapyChartData(patient, tebraNotes) {
 /* Chart and roster labels used to say "Therapist" for everyone. The practice
    has two provider types — psychiatric medication providers (MD / PMHNP-BC)
    and therapists — so label each by the credentials in their name. */
+/* "New Orleans, LA" is wide enough to push the registry's last column off
+   screen; the city alone is unambiguous across the five offices. */
+function shortLocation(loc) {
+  if (!loc) return '—';
+  return String(loc).split(',')[0].split(' — ')[0].trim();
+}
+
 function providerRole(name) {
   const n = String(name || '');
   if (/\bM\.?D\.?\b|\bD\.?O\.?\b/i.test(n)) return 'Psychiatrist';
@@ -11311,6 +11387,9 @@ function PatientsListView({ onBack, onHome }) {
   const [debouncedQ, setDebouncedQ] = React.useState('');
   const [chartPatient, setChartPatient] = React.useState(null);
   const [formsPatient, setFormsPatient] = React.useState(null);
+  const [locFilter, setLocFilter]   = React.useState('all');
+  const [roleFilter, setRoleFilter] = React.useState('all');
+  const [pendingOnly, setPendingOnly] = React.useState(false);
   const searchTimer = React.useRef(null);
 
   React.useEffect(() => {
@@ -11326,11 +11405,22 @@ function PatientsListView({ onBack, onHome }) {
       .finally(() => setLoading(false));
   }, [debouncedQ]);
 
+  const locations = [...new Set(patients.map(p => p.clinic_location).filter(Boolean))].sort();
+  const visible = patients.filter(p => {
+    if (locFilter !== 'all' && p.clinic_location !== locFilter) return false;
+    if (roleFilter !== 'all' && providerRole(p.provider_name) !== roleFilter) return false;
+    if (pendingOnly && !(p.next_forms_total - p.next_forms_completed > 0)) return false;
+    return true;
+  });
+  const filtersOn = locFilter !== 'all' || roleFilter !== 'all' || pendingOnly;
+
   return (
     <div className="clinic-inner">
       <PageNav onBack={onBack} onHome={onHome} crumb="Patient Registry" />
       <div className="clinic-section-title">Patient registry</div>
-      <div className="clinic-section-sub">All patients on file.</div>
+      <div className="clinic-section-sub">
+        {filtersOn ? `${visible.length} of ${patients.length} patients shown.` : 'All patients on file.'}
+      </div>
 
       <div className="clinic-toolbar">
         <div className="clinic-search-wrap">
@@ -11361,10 +11451,36 @@ function PatientsListView({ onBack, onHome }) {
         <span className="clinic-count">{patients.length} patient{patients.length !== 1 ? 's' : ''}</span>
       </div>
 
+      {!loading && patients.length > 0 && (
+        <div className="reg-filters">
+          <select className="reg-select" value={locFilter} onChange={e => setLocFilter(e.target.value)}>
+            <option value="all">All locations</option>
+            {locations.map(l => <option key={l} value={l}>{l}</option>)}
+          </select>
+          <select className="reg-select" value={roleFilter} onChange={e => setRoleFilter(e.target.value)}>
+            <option value="all">All provider types</option>
+            <option value="Psychiatrist">Psychiatrist</option>
+            <option value="Psychiatric NP">Psychiatric NP</option>
+            <option value="Therapist">Therapist</option>
+          </select>
+          <button className={`reg-chip${pendingOnly ? ' active' : ''}`} onClick={() => setPendingOnly(v => !v)}>
+            Pending forms only
+          </button>
+          {filtersOn && (
+            <button className="reg-chip clear"
+              onClick={() => { setLocFilter('all'); setRoleFilter('all'); setPendingOnly(false); }}>
+              Clear filters
+            </button>
+          )}
+        </div>
+      )}
+
       {loading ? (
         <div className="empty-state"><div className="empty-state-icon">↻</div>Loading…</div>
-      ) : patients.length === 0 ? (
-        <div className="empty-state"><div className="empty-state-icon">👤</div>No patients found{debouncedQ ? ` for "${debouncedQ}"` : ''}.</div>
+      ) : visible.length === 0 ? (
+        <div className="empty-state"><div className="empty-state-icon">👤</div>
+          No patients found{debouncedQ ? ` for "${debouncedQ}"` : ''}{filtersOn ? ' with these filters' : ''}.
+        </div>
       ) : (
         <div style={{overflowX:'auto'}}>
           <table className="ct-table">
@@ -11374,8 +11490,8 @@ function PatientsListView({ onBack, onHome }) {
                 <th>DOB</th>
                 <th>Contact</th>
                 <th>Provider</th>
+                <th>Location</th>
                 <th>Last Visit</th>
-                <th>Visits</th>
                 <th>Next Appointment</th>
                 <th>Pending Forms</th>
                 <th>Reminder</th>
@@ -11383,7 +11499,7 @@ function PatientsListView({ onBack, onHome }) {
               </tr>
             </thead>
             <tbody>
-              {patients.map(p => {
+              {visible.map(p => {
                 const nextAppt = p.next_appointment_id ? {
                   id: p.next_appointment_id,
                   patient_name: p.full_name,
@@ -11407,17 +11523,25 @@ function PatientsListView({ onBack, onHome }) {
                         </div>
                       </div>
                     </td>
-                    <td style={{color:'var(--ink-2)',fontSize:13}}>{p.dob ? fmtDateShort(p.dob + 'T00:00:00') : '—'}</td>
+                    <td style={{color:'var(--ink-2)',fontSize:13,whiteSpace:'nowrap'}}>{p.dob ? fmtDateShort(p.dob + 'T00:00:00') : '—'}</td>
                     <td>
                       {p.email && <div style={{fontSize:13,color:'var(--ink-2)'}}>{p.email}</div>}
                       {p.phone && <div style={{fontSize:12,color:'var(--ink-3)'}}>{p.phone}</div>}
                       {!p.email && !p.phone && <span style={{color:'var(--ink-4)',fontSize:12}}>—</span>}
                     </td>
-                    <td style={{color:'var(--ink-2)',fontSize:13}}>{p.provider_name || '—'}</td>
-                    <td style={{color:'var(--ink-2)',fontSize:13}}>{p.last_appointment_date ? fmtDateShort(p.last_appointment_date) : '—'}</td>
                     <td>
-                      <span style={{fontWeight:600,color:'var(--ink)'}}>{p.appointment_count}</span>
-                      <span style={{color:'var(--ink-3)',fontSize:12,marginLeft:4}}>appt{p.appointment_count !== 1 ? 's' : ''}</span>
+                      {p.provider_name ? (
+                        <div className="reg-prov">
+                          <div className="reg-prov-name" title={p.provider_name}>{rptShortProvider(p.provider_name)}</div>
+                          <div className="reg-prov-role">{providerRole(p.provider_name)}</div>
+                        </div>
+                      ) : <span style={{color:'var(--ink-4)',fontSize:12}}>—</span>}
+                    </td>
+                    <td style={{color:'var(--ink-2)',fontSize:13,whiteSpace:'nowrap'}}
+                        title={p.clinic_location || ''}>{shortLocation(p.clinic_location)}</td>
+                    <td style={{color:'var(--ink-2)',fontSize:13,whiteSpace:'nowrap'}}>
+                      {p.last_appointment_date ? fmtDateShort(p.last_appointment_date) : '—'}
+                      <div style={{fontSize:11,color:'var(--ink-4)'}}>{p.appointment_count} visit{p.appointment_count !== 1 ? 's' : ''}</div>
                     </td>
                     <td>
                       {p.next_appointment_date ? (
@@ -11439,9 +11563,7 @@ function PatientsListView({ onBack, onHome }) {
                           <div className="forms-progress">
                             <div className="fp-text" style={{textDecoration:'underline',textDecorationColor:'var(--hair-strong)',textUnderlineOffset:2}}>{p.next_forms_completed}/{p.next_forms_total} done</div>
                             <div className="fp-bar"><div className="fp-fill" style={{width:`${pct}%`}} /></div>
-                            {pending > 0 ? (
-                              <div style={{fontSize:11,color:'oklch(50% 0.12 50)',marginTop:1}}>{pending} remaining</div>
-                            ) : (
+                            {pending === 0 && (
                               <div style={{fontSize:11,color:'var(--sage)',marginTop:1}}>All done ✓</div>
                             )}
                           </div>
@@ -12453,12 +12575,41 @@ function rptFmtMoney(n) {
 function rptFmtPct(n) {
   return Math.round((n || 0) * 100) + '%';
 }
-function rptProviderColor(name) {
-  const n = (name || '').toLowerCase();
-  if (n.includes('vemuluri'))    return 'var(--rpt-provider-1)';
-  if (n.includes('mitchell'))    return 'var(--rpt-provider-2)';
-  if (n.includes('postanowicz')) return 'var(--rpt-provider-3)';
-  return 'var(--ink-4)';
+/* The roster is ~23 providers but only 3 had a colour, so the legend was a
+   wall of identical grey. Assign from the full palette by rank instead. */
+const RPT_PROVIDER_PALETTE = [
+  'var(--rpt-provider-1)', 'var(--rpt-provider-2)', 'var(--rpt-provider-3)',
+  'var(--rpt-ordinal-1)',  'var(--rpt-ordinal-2)',  'var(--rpt-ordinal-3)',
+  'var(--rpt-ordinal-4)',  'var(--rpt-ordinal-5)',
+];
+const RPT_OTHER_COLOR = 'var(--ink-4)';
+
+function rptProviderColor(name, rank) {
+  if (name === 'Other providers') return RPT_OTHER_COLOR;
+  if (typeof rank === 'number') return RPT_PROVIDER_PALETTE[rank % RPT_PROVIDER_PALETTE.length];
+  return RPT_OTHER_COLOR;
+}
+
+/* Psychiatric medication providers bill differently from therapists, so a
+   single bar chart comparing them is not like-for-like. */
+function rptProviderType(name) {
+  const role = providerRole(name);
+  return role === 'Therapist' ? 'therapy' : 'psychiatry';
+}
+
+/* Seventeen near-zero bars drowned the three that matter — keep the top N
+   and roll the tail into one row. */
+function rptTopProviders(list, n) {
+  const sorted = [...list].sort((a, b) => b.revenue_collected - a.revenue_collected);
+  if (sorted.length <= n) return { shown: sorted, otherCount: 0 };
+  const shown = sorted.slice(0, n);
+  const rest  = sorted.slice(n);
+  const other = {
+    provider_name: 'Other providers',
+    revenue_collected: rest.reduce((t, p) => t + (p.revenue_collected || 0), 0),
+    completed_visits:  rest.reduce((t, p) => t + (p.completed_visits || 0), 0),
+  };
+  return { shown: shown.concat([other]), otherCount: rest.length };
 }
 function rptShortProvider(name) {
   return (name || '').split(',')[0].replace(/^Dr\.\s*/, '');
@@ -12481,6 +12632,7 @@ function BusinessReportsView({ onBack, onHome }) {
   const [data, setData]   = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [showTable, setShowTable] = React.useState(false);
+  const [provScope, setProvScope] = React.useState('all'); // all | psychiatry | therapy
 
   React.useEffect(() => {
     apiGet('/reports/dashboard')
@@ -12508,7 +12660,11 @@ function BusinessReportsView({ onBack, onHome }) {
   }
 
   const { overview, providers, retention_funnel, revenue_cycle } = data;
-  const maxProviderRevenue = Math.max(1, ...providers.map(p => p.revenue_collected));
+  const scopedProviders = provScope === 'all'
+    ? providers
+    : providers.filter(p => rptProviderType(p.provider_name) === provScope);
+  const { shown: rankedProviders, otherCount } = rptTopProviders(scopedProviders, 8);
+  const maxProviderRevenue = Math.max(1, ...rankedProviders.map(p => p.revenue_collected));
   const maxFunnel = Math.max(1, ...retention_funnel.map(f => f.count));
   const funnelColors = ['var(--rpt-ordinal-1)','var(--rpt-ordinal-2)','var(--rpt-ordinal-3)','var(--rpt-ordinal-4)','var(--rpt-ordinal-5)','var(--rpt-ordinal-5)'];
   const arBuckets = [
@@ -12558,32 +12714,45 @@ function BusinessReportsView({ onBack, onHome }) {
             <div className="rpt-section-title">Provider scorecard</div>
             <div className="rpt-section-sub">Revenue collected by provider — see the table for full volume, retention, and leakage detail.</div>
           </div>
+          <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+          <div className="rpt-scope">
+            {[['all','All'],['psychiatry','Psychiatry'],['therapy','Therapy']].map(([k, lbl]) => (
+              <button key={k} className={`rpt-scope-btn${provScope === k ? ' active' : ''}`}
+                onClick={() => setProvScope(k)}>{lbl}</button>
+            ))}
+          </div>
           <button className="ct-link-btn" onClick={() => setShowTable(s => !s)}
             style={{border:'1px solid var(--hair)',background:'var(--surface)',borderRadius:20,padding:'5px 12px',fontSize:12,cursor:'pointer',fontFamily:'inherit',color:'var(--ink-3)'}}>
             {showTable ? 'Hide table' : 'Show full table'}
           </button>
+          </div>
         </div>
 
         <div className="rpt-legend">
-          {providers.map(p => (
+          {rankedProviders.map((p, i) => (
             <div key={p.provider_name} className="rpt-legend-item">
-              <span className="rpt-legend-swatch" style={{background: rptProviderColor(p.provider_name)}} />
-              {rptShortProvider(p.provider_name)}
+              <span className="rpt-legend-swatch" style={{background: rptProviderColor(p.provider_name, i)}} />
+              {p.provider_name === 'Other providers' ? `Other (${otherCount})` : rptShortProvider(p.provider_name)}
             </div>
           ))}
         </div>
 
         <div className="rpt-bar-chart">
-          {providers.map(p => (
+          {rankedProviders.map((p, i) => (
             <div key={p.provider_name} className="rpt-bar-row">
-              <div className="rpt-bar-label">{rptShortProvider(p.provider_name)}</div>
+              <div className="rpt-bar-label">
+                {p.provider_name === 'Other providers' ? `Other (${otherCount})` : rptShortProvider(p.provider_name)}
+              </div>
               <div className="rpt-bar-track">
-                <div className="rpt-bar-fill" style={{width: `${(p.revenue_collected / maxProviderRevenue) * 100}%`, background: rptProviderColor(p.provider_name)}} />
+                <div className="rpt-bar-fill" style={{width: `${(p.revenue_collected / maxProviderRevenue) * 100}%`, background: rptProviderColor(p.provider_name, i)}} />
               </div>
               <div className="rpt-bar-value">{rptFmtMoney(p.revenue_collected)}</div>
             </div>
           ))}
         </div>
+        {!scopedProviders.length && (
+          <div className="rpt-section-sub" style={{padding:'10px 0'}}>No providers in this category yet.</div>
+        )}
 
         {showTable && (
           <div style={{overflowX:'auto',marginTop:16}}>
@@ -12604,9 +12773,9 @@ function BusinessReportsView({ onBack, onHome }) {
                 </tr>
               </thead>
               <tbody>
-                {providers.map(p => (
+                {scopedProviders.map((p, i) => (
                   <tr key={p.provider_name}>
-                    <td><span className="rpt-legend-swatch" style={{background: rptProviderColor(p.provider_name), display:'inline-block', marginRight:8, verticalAlign:'middle'}} />{p.provider_name}</td>
+                    <td><span className="rpt-legend-swatch" style={{background: rptProviderColor(p.provider_name, i), display:'inline-block', marginRight:8, verticalAlign:'middle'}} />{p.provider_name}</td>
                     <td className="rpt-num">{p.completed_visits}</td>
                     <td className="rpt-num">{p.scheduled_visits}</td>
                     <td className="rpt-num">{p.new_intakes}</td>

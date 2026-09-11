@@ -204,5 +204,6 @@ class PatientSummary(BaseModel):
     next_forms_completed: int = 0
     next_intake_token: Optional[str] = None
     provider_name: Optional[str] = None
+    clinic_location: Optional[str] = None
 
     model_config = {"from_attributes": True}

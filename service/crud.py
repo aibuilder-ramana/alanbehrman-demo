@@ -292,8 +292,9 @@ def list_patients_with_stats(
                 next_forms_completed = sum(1 for f in form_rows if f.status == "completed")
                 break
 
-        provider_name = (next_appt or (appts[0] if appts else None))
-        provider_name = provider_name.provider_name if provider_name else None
+        ref_appt = next_appt or (appts[0] if appts else None)
+        provider_name = ref_appt.provider_name if ref_appt else None
+        clinic_location = ref_appt.clinic_location if ref_appt else None
 
         result.append(schemas.PatientSummary(
             id=p.id,
@@ -313,6 +314,7 @@ def list_patients_with_stats(
             next_forms_completed=next_forms_completed,
             next_intake_token=next_appt.intake_link_token if next_appt else None,
             provider_name=provider_name,
+            clinic_location=clinic_location,
         ))
     return result
 
