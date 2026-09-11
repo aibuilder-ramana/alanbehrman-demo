@@ -10540,7 +10540,7 @@ function genTherapyChartData(patient, tebraNotes) {
     quickFacts: [
       ['Insurance', 'Blue Cross PPO'],
       ['Primary diagnosis', diagnoses[0] ? diagnoses[0].description : 'On file'],
-      ['Therapist', assignedProvider],
+      [providerRole(assignedProvider), assignedProvider],
       ['Current meds', meds.length ? `${meds.length} active` : 'None documented'],
       ['Allergies', allergies[0]?.substance === 'NKDA' ? 'NKDA' : allergies.map(a => a.substance).join(', ')],
       ['Attendance', noShowRisk],
@@ -10561,6 +10561,16 @@ function genTherapyChartData(patient, tebraNotes) {
       measuresDue: measures.some(m => m.current >= 10) ? 1 : 0,
     },
   };
+}
+
+/* Chart and roster labels used to say "Therapist" for everyone. The practice
+   has two provider types — psychiatric medication providers (MD / PMHNP-BC)
+   and therapists — so label each by the credentials in their name. */
+function providerRole(name) {
+  const n = String(name || '');
+  if (/\bM\.?D\.?\b|\bD\.?O\.?\b/i.test(n)) return 'Psychiatrist';
+  if (/PMHNP|\bAPRN\b|\bNP\b/i.test(n))         return 'Psychiatric NP';
+  return 'Therapist';
 }
 
 const CHART_NAV = [
@@ -10627,7 +10637,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
   const age = dob ? Math.floor((Date.now() - dob) / (365.25 * 24 * 3600 * 1000)) : null;
   const dobStr = dob ? dob.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
   const mrn = 'MRN-' + (patient.id || 'UNKNOWN').toString().slice(-6).toUpperCase().replace(/-/g,'').slice(0,8);
-  const assignedProvider = chartData?.assignedProvider || patient.provider_name || 'Assigned therapist';
+  const assignedProvider = chartData?.assignedProvider || patient.provider_name || 'Assigned provider';
   const preferredName = chartData?.preferredName || patient.first_name || patient.full_name.split(' ')[0];
   const filteredTimeline = React.useMemo(() => {
     if (!chartData) return [];
@@ -11118,7 +11128,7 @@ function ClinicalChartOverlay({ patient, onClose }) {
             <div className="chart-pt-meta">
               <span><strong>DOB</strong> {dobStr}{age ? ` · ${age}` : ''}</span>
               {patient.gender && <span><strong>Gender</strong> {patient.gender}</span>}
-              <span><strong>Therapist</strong> {assignedProvider}</span>
+              <span><strong>{providerRole(assignedProvider)}</strong> {assignedProvider}</span>
             </div>
             {!!chartData?.diagnoses?.length && (
               <div className="chart-pt-dx">
