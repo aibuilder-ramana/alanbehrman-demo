@@ -5427,7 +5427,7 @@ function buildDynamicFormPacket({ selectedAppointment, needsData, basicInfo, pat
 
 /* ── Shared Topbar ───────────────────────────────────────────────────────── */
 const CLINIC_USERS = {
-  marisa: { name: 'Marisa Sharpe', role: 'Front Desk Coordinator', photo: 'assets/marisa-sharpe-profile.jpeg', initials: 'MS' },
+  marisa: { name: 'Marisa Sharpe', role: 'Practice Manager',      photo: 'assets/marisa-sharpe-profile.jpeg', initials: 'MS' },
   alan:   { name: 'Alan Behrman',  role: 'Practice Owner',          photo: null,                                initials: 'AB' },
 };
 
@@ -9313,7 +9313,11 @@ function DocListPage({ onBack, onHome, onSwitchToAI, patient = PATIENT, intakeCt
         </div>
         <div className="side-card">
           <h4>Need help?</h4>
-          <p>Call us at <a href="tel:6789872784">(678) 987-2784</a> — 8 am–6 pm PT — or email <a href="mailto:intake@alanbehrman.com">intake@alanbehrman.com</a>.</p>
+          <p>
+            Call us at <a href="tel:+17703617864">770-361-7864</a> or email{' '}
+            <a href="mailto:info@alanbehrman.com">info@alanbehrman.com</a>.
+          </p>
+          <p>Our intake and admin support is available Monday–Friday from 10am EST – 4pm EST.</p>
         </div>
       </aside>
     </div>
@@ -10030,7 +10034,73 @@ function NotifyDialog({ patientName, patientEmail, patientPhone, intakeUrl, onCl
 }
 
 /* ── Reminder sent confirmation dialog ───────────────────────────────────── */
-function ReminderDialog({ appt, onClose }) {
+/* Reminders used to fire the moment the button was clicked. Staff asked to
+   type a note first, so compose comes before send. */
+function ReminderComposeDialog({ appt, onCancel, onSend }) {
+  const pending = Math.max(0, (appt.forms_total || 0) - (appt.forms_completed || 0));
+  const defaultMsg =
+    `Hi ${(appt.patient_name || '').split(' ')[0] || 'there'}, this is a reminder from Alan Behrman & Associates. `
+    + `You have ${pending} intake form${pending === 1 ? '' : 's'} left to complete before your appointment. `
+    + `Please use the secure link we sent you. Questions? Call 770-361-7864.`;
+  const [msg, setMsg] = React.useState(defaultMsg);
+  const hasEmail = !!appt.patient_email;
+  const hasPhone = !!appt.patient_phone;
+  const taRef = React.useRef(null);
+
+  React.useEffect(() => { taRef.current && taRef.current.focus(); }, []);
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onCancel(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onCancel]);
+
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(20,30,40,0.45)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
+      onClick={e => e.target === e.currentTarget && onCancel()}>
+      <div style={{background:'var(--surface)',borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-lg)',padding:'28px 32px',maxWidth:480,width:'100%',fontFamily:'inherit'}}
+        onClick={e => e.stopPropagation()}>
+        <FbTag id="cl.appointments.reminder_compose" label="Reminder compose" />
+        <div style={{fontFamily:"'Instrument Serif',serif",fontSize:21,color:'var(--ink)',marginBottom:4,letterSpacing:'-0.01em'}}>
+          Send reminder
+        </div>
+        <div style={{fontSize:13,color:'var(--ink-3)',marginBottom:16}}>
+          To <strong style={{color:'var(--ink)'}}>{appt.patient_name || 'this patient'}</strong>
+          {' · '}
+          {[hasEmail && 'email', hasPhone && 'SMS'].filter(Boolean).join(' + ') || 'no contact on file'}
+        </div>
+
+        <label style={{fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:'var(--ink-3)',display:'block',marginBottom:6}}>
+          Message
+        </label>
+        <textarea ref={taRef} value={msg} onChange={e => setMsg(e.target.value)} rows={6}
+          style={{width:'100%',boxSizing:'border-box',resize:'vertical',border:'1px solid var(--hair)',borderRadius:'var(--radius)',
+                  padding:'10px 12px',fontFamily:'inherit',fontSize:13.5,lineHeight:1.5,color:'var(--ink)',background:'var(--bg-tint)',outline:'none'}} />
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:6,marginBottom:20}}>
+          <button onClick={() => setMsg(defaultMsg)}
+            style={{background:'none',border:'none',padding:0,cursor:'pointer',fontFamily:'inherit',fontSize:12,color:'var(--ink-4)',textDecoration:'underline'}}>
+            Reset to default
+          </button>
+          <span style={{fontSize:11.5,color:'var(--ink-4)'}}>{msg.trim().length} characters</span>
+        </div>
+
+        <div style={{display:'flex',gap:10}}>
+          <button onClick={onCancel}
+            style={{flex:'0 0 auto',padding:'11px 18px',background:'var(--surface)',color:'var(--ink-3)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',fontSize:14,cursor:'pointer',fontFamily:'inherit'}}>
+            Cancel
+          </button>
+          <button onClick={() => onSend(msg.trim())} disabled={!msg.trim() || (!hasEmail && !hasPhone)}
+            style={{flex:1,padding:'11px',background: (!msg.trim() || (!hasEmail && !hasPhone)) ? 'var(--hair-strong)' : 'var(--teal)',
+                    color:'#fff',border:'none',borderRadius:'var(--radius)',fontSize:14,fontWeight:600,
+                    cursor:(!msg.trim() || (!hasEmail && !hasPhone)) ? 'not-allowed' : 'pointer',fontFamily:'inherit'}}>
+            Send reminder
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReminderDialog({ appt, onClose, message }) {
   const hasEmail = !!appt.patient_email;
   const hasPhone = !!appt.patient_phone;
   return (
@@ -10041,9 +10111,15 @@ function ReminderDialog({ appt, onClose }) {
         <FbTag id="cl.appointments.reminder_dialog" label="Reminder sent dialog" />
         <div style={{width:48,height:48,borderRadius:'50%',background:'var(--teal-soft)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,marginBottom:20}}>✓</div>
         <div style={{fontFamily:"'Instrument Serif',serif",fontSize:22,color:'var(--ink)',marginBottom:6,letterSpacing:'-0.01em'}}>Reminder sent</div>
-        <div style={{fontSize:13.5,color:'var(--ink-3)',marginBottom:24,lineHeight:1.5}}>
+        <div style={{fontSize:13.5,color:'var(--ink-3)',marginBottom:16,lineHeight:1.5}}>
           The following reminders were sent to <strong style={{color:'var(--ink)'}}>{appt.patient_name || 'the patient'}</strong>:
         </div>
+        {message && (
+          <div style={{fontSize:12.5,color:'var(--ink-2)',lineHeight:1.5,padding:'10px 12px',marginBottom:20,
+                       background:'var(--bg-tint)',border:'1px solid var(--hair)',borderRadius:'var(--radius)',whiteSpace:'pre-wrap'}}>
+            {message}
+          </div>
+        )}
         <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:28}}>
           {hasEmail && (
             <div style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px',background:'var(--bg-tint)',borderRadius:'var(--radius)',border:'1px solid var(--hair)'}}>
@@ -10081,14 +10157,18 @@ function ReminderDialog({ appt, onClose }) {
 /* ── Send Reminder button (per appointment row or patient row) ───────────── */
 function ReminderButton({ appt }) {
   const [sent, setSent]       = React.useState(false);
+  const [composing, setComposing]   = React.useState(false);
+  const [sentMessage, setSentMessage] = React.useState('');
   const [showDialog, setShowDialog] = React.useState(false);
 
   const hasEmail = !!appt.patient_email;
   const hasPhone = !!appt.patient_phone;
   const noPending = appt.forms_total === 0 || appt.forms_completed >= appt.forms_total;
 
-  const send = () => {
+  const send = (message) => {
+    setSentMessage(message);
     setSent(true);
+    setComposing(false);
     setShowDialog(true);
   };
 
@@ -10098,9 +10178,10 @@ function ReminderButton({ appt }) {
 
   return (
     <>
-      {showDialog && <ReminderDialog appt={appt} onClose={() => setShowDialog(false)} />}
+      {composing && <ReminderComposeDialog appt={appt} onCancel={() => setComposing(false)} onSend={send} />}
+      {showDialog && <ReminderDialog appt={appt} message={sentMessage} onClose={() => setShowDialog(false)} />}
       <div style={{display:'flex',flexDirection:'column',gap:4,alignItems:'flex-start'}}>
-        <button className="ct-link-btn" onClick={send}
+        <button className="ct-link-btn" onClick={() => setComposing(true)}
           style={{background:'var(--teal-soft)',borderColor:'var(--teal)',color:'var(--teal-deep)',fontWeight:600}}>
           {[hasEmail && '📧', hasPhone && '📱'].filter(Boolean).join(' ')} Send reminder
         </button>
@@ -10120,6 +10201,7 @@ function AppointmentsListView({ onBack, onHome }) {
   const [appts, setAppts]     = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [filter, setFilter]   = React.useState('all');
+  const [intakesOnly, setIntakesOnly] = React.useState(false);
   const [refreshKey, setRefreshKey] = React.useState(0);
 
   React.useEffect(() => {
@@ -10135,6 +10217,9 @@ function AppointmentsListView({ onBack, onHome }) {
   const weekEnd  = new Date(now); weekEnd.setDate(weekEnd.getDate() + 7);
 
   const filtered = appts.filter(a => {
+    /* An intake is a new-patient visit — the ones whose forms actually need
+       chasing. Composes with the date filters rather than replacing them. */
+    if (intakesOnly && a.patient_type !== 'new') return false;
     if (!a.appointment_date) return filter === 'all';
     const d = new Date(a.appointment_date);
     if (filter === 'today') return d <= todayEnd;
@@ -10156,6 +10241,10 @@ function AppointmentsListView({ onBack, onHome }) {
             <button key={v} className={filter===v?'active':''} onClick={() => setFilter(v)}>{l}</button>
           ))}
         </div>
+        <button className={`reg-chip${intakesOnly ? ' active' : ''}`} onClick={() => setIntakesOnly(v => !v)}
+          title="Show only new-patient intakes">
+          Intakes only
+        </button>
         <button onClick={() => setRefreshKey(k => k+1)} style={{marginLeft:'auto',border:'1px solid var(--hair)',background:'var(--surface)',borderRadius:20,padding:'5px 12px',fontSize:12,cursor:'pointer',fontFamily:'inherit',color:'var(--ink-3)'}}>↻ Refresh</button>
         <button disabled={filtered.length === 0} onClick={() => {
           const rows = filtered.map(a => ({
