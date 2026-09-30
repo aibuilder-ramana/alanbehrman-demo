@@ -47,6 +47,7 @@ class AppointmentCreate(BaseModel):
     provider_name: Optional[str] = None
     clinic_location: Optional[str] = None
     appointment_description: Optional[str] = None
+    modality: Optional[str] = "in_person"
 
 
 class AppointmentOut(BaseModel):
@@ -61,6 +62,8 @@ class AppointmentOut(BaseModel):
     status: str
     intake_link_token: str
     created_at: datetime
+
+    modality: Optional[str] = "in_person"
 
     model_config = {"from_attributes": True}
 
@@ -150,13 +153,34 @@ class ClinicalNoteOut(BaseModel):
 
 # ── Intake context (returned by /intake/{token}) ─────────────────────────────
 
+class IntakeRule(BaseModel):
+    """Provider × modality × location specifics — fee, logistics, payers."""
+    provider: str
+    modality: str
+    modality_label: str
+    location_label: Optional[str] = None
+    address: Optional[str] = None
+    address_note: Optional[str] = None
+    session_link: Optional[str] = None
+    session_link_note: Optional[str] = None
+    consent_label: Optional[str] = None
+    insurance_payers: List[str] = []
+    release_note: Optional[str] = None
+    fee_amount: Optional[int] = None
+    fee_text: Optional[str] = None
+    policy: Optional[str] = None
+
+
 class IntakeContext(BaseModel):
     patient: PatientOut
     appointment: AppointmentOut
     forms: List[FormStatus]
+    rule: Optional[IntakeRule] = None
 
 
 # ── Clinic portal views ───────────────────────────────────────────────────────
+    rule: Optional[IntakeRule] = None
+
 
 class AppointmentSummary(BaseModel):
     """Appointment enriched with patient name + form counts — for clinic list."""

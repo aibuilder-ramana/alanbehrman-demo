@@ -1,11 +1,11 @@
 from __future__ import annotations
 import uuid
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from service.database import get_db
-from service import crud, schemas, models, notifications
+from service import crud, schemas, models, notifications, intake_rules
 
 router = APIRouter()
 
@@ -84,6 +84,64 @@ def send_reminder(appointment_id: uuid.UUID, db: Session = Depends(get_db)):
     return schemas.ReminderResult(**result)
 
 
+def _rule_payload(provider_name, modality, clinic_location):
+    """The provider/modality/location specifics a patient needs to see —
+    fee, where to go or which link to join, and which payers are accepted."""
+    rule = intake_rules.resolve(provider_name, modality, clinic_location)
+    if not rule:
+        return None
+    return schemas.IntakeRule(
+        provider=rule["provider"],
+        modality=rule["modality"],
+        modality_label=intake_rules.MODALITY_LABELS[rule["modality"]],
+        location_label=rule["location_label"],
+        address=rule["address"],
+        address_note=rule["address_note"],
+        session_link=rule["session_link"],
+        session_link_note=rule["session_link_note"],
+        consent_label=rule["consent_label"],
+        insurance_payers=rule["insurance_payers"],
+        release_note=rule["release_note"],
+        fee_amount=rule["fee_amount"],
+        fee_text=rule["fee_text"],
+        policy=rule["policy"],
+    )
+
+
+@router.get("/intake-rule", response_model=Optional[schemas.IntakeRule])
+def preview_intake_rule(
+    provider_name: str,
+    modality: str = "in_person",
+    clinic_location: Optional[str] = None,
+):
+    """Lets the booking screen preview the packet, fee and logistics before
+    the appointment is created."""
+    return _rule_payload(provider_name, modality, clinic_location)
+
+
+@router.get("/intake-rule/forms")
+def preview_intake_forms(
+    provider_name: str,
+    modality: str = "in_person",
+    clinic_location: Optional[str] = None,
+    db: Session = Depends(get_db),
+) -> dict:
+    rule = intake_rules.resolve(provider_name, modality, clinic_location)
+    if not rule:
+        return {"templated": False, "forms": []}
+    defs = {
+        d.id: d for d in db.execute(select(models.FormDefinition)).scalars().all()
+    }
+    out = []
+    for fid in rule["forms"]:
+        d = defs.get(fid)
+        title = d.title if d else fid
+        if fid == "provider_consent" and rule.get("consent_label"):
+            title = rule["consent_label"]
+        out.append({"form_id": fid, "title": title})
+    return {"templated": True, "forms": out, "fee_amount": rule["fee_amount"]}
+
+
 @router.get("/intake/{token}", response_model=schemas.IntakeContext)
 def get_intake_context(token: str, db: Session = Depends(get_db)):
     appt = crud.get_appointment_by_token(db, token)
@@ -113,4 +171,5 @@ def get_intake_context(token: str, db: Session = Depends(get_db)):
         patient=schemas.PatientOut.model_validate(patient),
         appointment=schemas.AppointmentOut.model_validate(appt),
         forms=forms,
+        rule=_rule_payload(appt.provider_name, appt.modality, appt.clinic_location),
     )

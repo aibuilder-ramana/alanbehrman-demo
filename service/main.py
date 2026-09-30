@@ -15,12 +15,25 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from sqlalchemy import text
+
 from service.database import engine
 from service import models
 from service.routes import patients, appointments, forms, reports, feedback
 
 # Create all tables on first run
 models.Base.metadata.create_all(bind=engine)
+
+# create_all adds missing tables but never missing columns, so a new column on
+# an existing table has to be stated here. Idempotent — safe on every boot.
+_ADD_COLUMNS = [
+    "ALTER TABLE appointments ADD COLUMN IF NOT EXISTS "
+    "modality VARCHAR(20) NOT NULL DEFAULT 'in_person'",
+]
+
+with engine.begin() as _conn:
+    for _stmt in _ADD_COLUMNS:
+        _conn.execute(text(_stmt))
 
 app = FastAPI(
     title="AlanBehrman — Patient Intake Service",

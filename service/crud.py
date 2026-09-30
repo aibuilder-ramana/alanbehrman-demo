@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 from typing import Optional, List
 from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
-from service import models, schemas
+from service import models, schemas, intake_rules
 
 
 def _now():
@@ -32,6 +32,8 @@ _COACHING_KW = [
     'coach', 'coaching', 'career', 'leadership', 'executive', 'life goal',
     'goal',
 ]
+_CONDITIONAL_FORM_IDS = {'phq9', 'gad7', 'relational_intake', 'coaching_consent', 'release_information'}
+
 _RELEASE_KW = [
     'release', 'records', 'coordinate', 'school', 'attorney', 'court',
     'doctor', 'physician', 'psychiatrist',
@@ -119,7 +121,27 @@ def create_appointment(db: Session, data: schemas.AppointmentCreate) -> models.A
         select(models.FormDefinition).order_by(models.FormDefinition.sort_order)
     ).scalars().all()
 
+    # Providers with a scheduling template get the exact packet that template
+    # specifies for this modality and office. Screeners are still layered on
+    # below, since those are driven by the presenting concern, not the office.
+    rule = intake_rules.resolve(
+        data.provider_name,
+        getattr(data, "modality", None),
+        data.clinic_location,
+    )
+    rule_forms = set(rule["forms"]) if rule else None
+
     for f in all_forms:
+        if rule_forms is not None and f.id in rule_forms:
+            db.add(models.PatientForm(
+                patient_id=data.patient_id,
+                appointment_id=appt.id,
+                form_id=f.id,
+            ))
+            continue
+        if rule_forms is not None and f.id not in _CONDITIONAL_FORM_IDS:
+            # Template is authoritative for the standard packet.
+            continue
         # Appointment-type filter (skip forms restricted to other visit types)
         if f.id != 'update' and f.appointment_types and data.appointment_type not in f.appointment_types:
             continue

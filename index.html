@@ -3522,6 +3522,43 @@ textarea.basic-input {
 .rpt-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; transition: width 0.4s; }
 .rpt-bar-value { font-size: 12.5px; color: var(--ink-2); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
 
+.pt-rule-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.pt-rule-row span { color: var(--ink-3); }
+.pt-rule-p { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; margin: 0 0 8px; }
+.pt-rule-policy {
+  font-size: 11.5px; color: var(--ink-3); line-height: 1.5; margin: 8px 0 0;
+  padding-top: 8px; border-top: 1px solid var(--hair);
+}
+
+.irp {
+  border: 1px solid var(--teal); background: var(--teal-soft);
+  border-radius: var(--radius); padding: 12px 14px; margin-top: 14px;
+}
+.irp-default { border-color: var(--hair); background: var(--bg-tint); }
+.irp-head {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.irp-fee {
+  margin-left: auto; font-size: 14px; font-weight: 700; color: var(--teal-deep);
+  font-variant-numeric: tabular-nums;
+}
+.irp-sub { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+.irp-row { display: flex; gap: 10px; font-size: 12.5px; padding: 3px 0; align-items: flex-start; }
+.irp-k {
+  flex: 0 0 68px; color: var(--ink-4); text-transform: uppercase;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; padding-top: 2px;
+}
+.irp-v { flex: 1; color: var(--ink-2); line-height: 1.5; min-width: 0; word-break: break-word; }
+.irp-v a { color: var(--teal-deep); }
+.irp-note { font-size: 11.5px; color: var(--ink-4); margin-top: 2px; }
+.irp-forms { margin: 0; padding-left: 18px; }
+.irp-forms li { margin: 1px 0; }
+.irp-fee-text {
+  font-size: 12px; color: var(--ink-3); line-height: 1.5;
+  margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair);
+}
+
 .reg-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
 .reg-select {
   font-family: inherit; font-size: 12.5px; color: var(--ink-2);
@@ -9302,6 +9339,34 @@ function DocListPage({ onBack, onHome, onSwitchToAI, patient = PATIENT, intakeCt
             <I.sparkle /> Switch to AI intake
           </button>
         </div>
+        {intakeCtx?.rule && (
+          <div className="side-card">
+            <h4>Your appointment</h4>
+            <div className="pt-rule-row"><span>Format</span><strong>{intakeCtx.rule.modality_label}</strong></div>
+            {intakeCtx.rule.address && (
+              <p className="pt-rule-p">
+                <strong>{intakeCtx.rule.address}</strong>
+                {intakeCtx.rule.address_note ? <><br />{intakeCtx.rule.address_note}</> : null}
+              </p>
+            )}
+            {intakeCtx.rule.session_link && (
+              <p className="pt-rule-p">
+                <a href={intakeCtx.rule.session_link} target="_blank" rel="noopener noreferrer">
+                  Join your video visit
+                </a>
+                {intakeCtx.rule.session_link_note ? <><br />{intakeCtx.rule.session_link_note}</> : null}
+              </p>
+            )}
+            {intakeCtx.rule.insurance_payers?.length > 0 && (
+              <p className="pt-rule-p">
+                Insurance authorization applies if you are using{' '}
+                {intakeCtx.rule.insurance_payers.join(', ')}.
+              </p>
+            )}
+            {intakeCtx.rule.fee_text && <p className="pt-rule-p">{intakeCtx.rule.fee_text}</p>}
+            {intakeCtx.rule.policy && <p className="pt-rule-policy">{intakeCtx.rule.policy}</p>}
+          </div>
+        )}
         <div className="side-card">
           <h4>What to have ready</h4>
           <ul className="ready-list">
@@ -9659,16 +9724,35 @@ function AIIntakePage({ onBack, onHome, intakeCtx, patient = PATIENT }) {
 /* ── Clinic Portal ───────────────────────────────────────────────────────── */
 
 const APPT_TYPES = [
-  { value: 'therapy_consultation', label: 'Therapy Consultation' },
-  { value: 'psychiatry_consultation',   label: 'Psychiatry Consultation' },
-  { value: 'primary_care',             label: 'Primary Care Visit' },
-  { value: 'annual_physical',          label: 'Annual Physical' },
-  { value: 'pre_employment',           label: 'Pre-Employment Physical' },
-  { value: 'follow_up',                label: 'Follow-Up' },
-  { value: 'urgent_care',              label: 'Urgent Care' },
+  { value: 'therapy_consultation',    label: 'Therapy Consultation' },
+  { value: 'psychiatry_consultation', label: 'Psychiatry Consultation' },
+  { value: 'follow_up',               label: 'Follow-Up' },
 ];
-const PROVIDERS = ['Dr. Ramakanth Vemuluri, MD', 'Meredith Mitchell, PMHNP-BC', 'Patty Postanowicz, PhD, LMFT'];
-const LOCATIONS = ['Marietta, GA', 'Duluth, GA'];
+
+/* A visit is either in the office or on video. Staff and patients both say
+   "virtual" for telehealth, so the label carries both. */
+const MODALITIES = [
+  { value: 'in_person',  label: 'In Person' },
+  { value: 'telehealth', label: 'Telehealth (virtual)' },
+];
+/* Derived from the real roster in LOCATION_PROVIDERS so every provider is
+   bookable — the old hardcoded trio could not even reach Ashley Lee. */
+const LOCATION_STATE = {
+  'marietta-johnson-ferry': 'GA', 'alpharetta-cambridge-square': 'GA',
+  'duluth-river-green': 'GA', 'dunwoody-peachford': 'GA', 'new-orleans-jena': 'LA',
+};
+const LOCATIONS = INTAKE_LOCATIONS.map(l => `${l.name}, ${LOCATION_STATE[l.id] || 'GA'}`);
+
+function providersAtLocation(locationLabel) {
+  const city = String(locationLabel || '').split(',')[0].trim();
+  const loc = INTAKE_LOCATIONS.find(l => l.name === city);
+  const list = (loc && LOCATION_PROVIDERS[loc.id]) || [];
+  return list.map(p => p.name);
+}
+
+const PROVIDERS = [...new Set(
+  Object.values(LOCATION_PROVIDERS).flat().map(p => p.name)
+)].sort();
 
 function apptTypeLabel(val) {
   return (APPT_TYPES.find(t => t.value === val) || { label: val.replace(/_/g,' ') }).label;
@@ -9705,11 +9789,95 @@ function downloadExcel(rows, filename) {
 }
 
 /* Client Intake panel */
+/* Shows the packet, fee and logistics this provider/format/office combination
+   produces, before the appointment is created. Providers without a template
+   fall back to the standard packet, and we say so rather than implying a fee. */
+function IntakeRulePreview({ providerName, modality, clinicLocation }) {
+  const [rule, setRule]   = React.useState(null);
+  const [forms, setForms] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!providerName) return;
+    let cancelled = false;
+    const qs = `provider_name=${encodeURIComponent(providerName)}`
+             + `&modality=${encodeURIComponent(modality || 'in_person')}`
+             + (clinicLocation ? `&clinic_location=${encodeURIComponent(clinicLocation)}` : '');
+    setLoading(true);
+    Promise.all([
+      apiGet(`/intake-rule?${qs}`).catch(() => null),
+      apiGet(`/intake-rule/forms?${qs}`).catch(() => null),
+    ]).then(([r, f]) => {
+      if (cancelled) return;
+      setRule(r); setForms(f);
+    }).finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [providerName, modality, clinicLocation]);
+
+  if (loading && !rule) return null;
+
+  if (!rule) {
+    return (
+      <div className="irp irp-default">
+        <div className="irp-head">Standard intake packet</div>
+        <div className="irp-sub">
+          No provider-specific template on file for {providerName || 'this provider'} yet —
+          the standard packet applies and the fee is set by the office.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="irp">
+      <div className="irp-head">
+        {rule.provider} · {rule.modality_label}
+        {rule.location_label && rule.modality === 'in_person' ? ` · ${rule.location_label}` : ''}
+        <span className="irp-fee">${rule.fee_amount}</span>
+      </div>
+
+      {rule.address && (
+        <div className="irp-row">
+          <span className="irp-k">Where</span>
+          <span className="irp-v">{rule.address}{rule.address_note ? ` — ${rule.address_note}` : ''}</span>
+        </div>
+      )}
+      {rule.session_link && (
+        <div className="irp-row">
+          <span className="irp-k">Link</span>
+          <span className="irp-v">
+            <a href={rule.session_link} target="_blank" rel="noopener noreferrer">{rule.session_link}</a>
+            {rule.session_link_note ? <div className="irp-note">{rule.session_link_note}</div> : null}
+          </span>
+        </div>
+      )}
+      {rule.insurance_payers?.length > 0 && (
+        <div className="irp-row">
+          <span className="irp-k">Insurance</span>
+          <span className="irp-v">{rule.insurance_payers.join(', ')}</span>
+        </div>
+      )}
+      {forms?.forms?.length > 0 && (
+        <div className="irp-row">
+          <span className="irp-k">Packet</span>
+          <span className="irp-v">
+            <ol className="irp-forms">
+              {forms.forms.map(f => <li key={f.form_id}>{f.title}</li>)}
+            </ol>
+            <div className="irp-note">Screeners are added automatically from the reason for visit.</div>
+          </span>
+        </div>
+      )}
+      {rule.fee_text && <div className="irp-fee-text">{rule.fee_text}</div>}
+    </div>
+  );
+}
+
 function CreateAppointmentView({ onBack, onHome, onCreated }) {
   const [step, setStep]               = React.useState(0); // 0=patient 1=appt 2=success
   const [mode, setMode]               = React.useState('new'); // new | existing
   const [pData, setPData]             = React.useState({ gender:'Female' });
-  const [aData, setAData]             = React.useState({ appointment_type:'primary_care', clinic_location:'Marietta, GA', provider_name: PROVIDERS[0] });
+  const [aData, setAData]             = React.useState({ appointment_type:'psychiatry_consultation', clinic_location:'Marietta, GA', modality:'in_person', provider_name: providersAtLocation('Marietta, GA')[0] || PROVIDERS[0] });
   const [searchQ, setSearchQ]         = React.useState('');
   const [searchRes, setSearchRes]     = React.useState([]);
   const [searching, setSearching]     = React.useState(false);
@@ -9813,7 +9981,7 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
           </button>
         </div>
         <div style={{display:'flex',gap:10,justifyContent:'center',marginTop:20,flexWrap:'wrap'}}>
-          <button className="btn btn-ghost" onClick={() => { setStep(0); setMode('new'); setPData({gender:'Female'}); setAData({appointment_type:'primary_care',clinic_location:'Marietta, GA',provider_name:PROVIDERS[0]}); setSelectedPt(null); setResult(null); setNotified(false); }}>
+          <button className="btn btn-ghost" onClick={() => { setStep(0); setMode('new'); setPData({gender:'Female'}); setAData({appointment_type:'psychiatry_consultation',clinic_location:'Marietta, GA',modality:'in_person',provider_name:providersAtLocation('Marietta, GA')[0]||PROVIDERS[0]}); setSelectedPt(null); setResult(null); setNotified(false); }}>
             + Create another intake
           </button>
           <button className="btn btn-accent" onClick={() => setShowNotify(true)}
@@ -9940,18 +10108,41 @@ function CreateAppointmentView({ onBack, onHome, onCreated }) {
               <input className="ca-input" type="datetime-local" value={aData.appointment_date||''} onChange={e => setA('appointment_date', e.target.value)} />
             </div>
             <div className="ca-field">
-              <label className="ca-label">Clinic Location</label>
-              <select className="ca-input" value={aData.clinic_location} onChange={e => setA('clinic_location', e.target.value)}>
+              <label className="ca-label">Visit Format *</label>
+              <select className="ca-input" value={aData.modality || 'in_person'} onChange={e => setA('modality', e.target.value)}>
+                {MODALITIES.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+              </select>
+            </div>
+            <div className="ca-field">
+              <label className="ca-label">Clinic Location{aData.modality === 'telehealth' ? ' (billing office)' : ''}</label>
+              <select className="ca-input" value={aData.clinic_location}
+                onChange={e => {
+                  const loc = e.target.value;
+                  const atLoc = providersAtLocation(loc);
+                  setAData(d => ({
+                    ...d,
+                    clinic_location: loc,
+                    provider_name: atLoc.includes(d.provider_name) ? d.provider_name : (atLoc[0] || d.provider_name),
+                  }));
+                }}>
                 {LOCATIONS.map(l => <option key={l}>{l}</option>)}
               </select>
             </div>
             <div className="ca-field" style={{gridColumn:'span 2'}}>
               <label className="ca-label">Provider</label>
               <select className="ca-input" value={aData.provider_name} onChange={e => setA('provider_name', e.target.value)}>
-                {PROVIDERS.map(p => <option key={p}>{p}</option>)}
+                {(providersAtLocation(aData.clinic_location).length
+                    ? providersAtLocation(aData.clinic_location)
+                    : PROVIDERS).map(p => <option key={p}>{p}</option>)}
               </select>
             </div>
           </div>
+
+          <IntakeRulePreview
+            providerName={aData.provider_name}
+            modality={aData.modality || 'in_person'}
+            clinicLocation={aData.clinic_location}
+          />
           <div className="ca-field">
             <label className="ca-label">Appointment Description / Reason for Visit</label>
             <textarea className="ca-input" rows={3} style={{resize:'vertical'}}

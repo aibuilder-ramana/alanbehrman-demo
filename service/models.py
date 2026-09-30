@@ -38,6 +38,7 @@ class Appointment(Base):
     appointment_date  = Column(DateTime(timezone=True))
     provider_name     = Column(String(255))
     clinic_location   = Column(String(255))
+    modality          = Column(String(20), nullable=False, default="in_person")  # in_person | telehealth
     appointment_description = Column(Text)
     patient_type      = Column(String(30), nullable=False, default="new")  # new | returning_recent | returning_stale
     status            = Column(String(30), nullable=False, default="scheduled")
